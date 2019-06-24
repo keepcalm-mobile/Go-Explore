@@ -1,0 +1,3 @@
+rootProject.name = 'goExploreApp'
+
+include ':app'
