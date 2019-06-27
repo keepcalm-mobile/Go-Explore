@@ -26,7 +26,6 @@ class ButtonOrange extends Component {
 
 const styles = StyleSheet.create({
     linearGradient: {
-        // flex: 1,
         marginBottom: verticalScale(24),
         marginLeft: 15,
         marginRight: 15,

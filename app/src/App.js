@@ -1,5 +1,6 @@
 import React from 'react';
-import {Platform, StyleSheet, Text, View, ActivityIndicator, StatusBar, AsyncStorage, TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, View, ActivityIndicator, StatusBar, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { TextInput } from 'react-native-gesture-handler';
 import {scale, verticalScale} from './utils/resize';
 import AppBackground from './components/AppBackground';
@@ -9,9 +10,8 @@ import LogoFb from "../assets/logoFacebook.svg";
 import LogoG from "../assets/logoGoogle.svg";
 import ButtonOrange from "./components/ButtonOrange";
 import {createSwitchNavigator, createStackNavigator, createAppContainer} from "react-navigation";
+import {signIn, Auth, logOut} from "./api/Auth";
 
-
-const userInfo = {email:'aa@aa.aa', password:'123321'};
 
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -63,7 +63,7 @@ class LoginScreen extends React.Component {
                     />
                     <Text style={styles.forgot} onPress={this.onForgotPress}>Forgot Password?</Text>
 
-                    <ButtonOrange onPress={this._signin} title={'LOGIN'}/>
+                    <ButtonOrange onPress={this._signIn} title={'LOGIN'}/>
                     <Text style={styles.socialTitle}>or login with</Text>
 
                     <View style={styles.socialArea}>
@@ -84,14 +84,20 @@ class LoginScreen extends React.Component {
         );
     }
 
-    _signin = async () => {
-        if(userInfo.email===this.state.email && userInfo.password===this.state.password){
-            alert('Logged');
-            await AsyncStorage.setItem('logged', true);
+    _signIn = async () => {
+        const resp = await signIn(this.state.email, this.state.password);
+        if(Auth.AUTH_COMPLETE === resp){
             this.props.navigation.navigate('App');
         }else{
             alert('Wrong all');
         }
+        // if(userInfo.email===this.state.email && userInfo.password===this.state.password){
+        //     alert('Logged');
+        //     await AsyncStorage.setItem('logged', '1');
+        //     this.props.navigation.navigate('App');
+        // }else{
+        //     alert('Wrong all');
+        // }
     };
 
     onGooglePress = () => {
@@ -123,9 +129,18 @@ class HomeScreen extends React.Component{
         return(
             <View style={styles.container}>
                 <Text style={styles.welcome}>Welcome to GoExplore City</Text>
+                <ButtonOrange onPress={this._logOut} title={'LOGOUT'}/>
             </View>
         );
     }
+
+    _logOut = async () => {
+        const resp = await logOut();
+        if(Auth.AUTH_LOGOUT === resp) {
+            this.props.navigation.navigate('Auth');
+        }
+        // await AsyncStorage.clear();
+    };
 }
 
 class AuthLoadingScreen extends React.Component{
@@ -145,8 +160,8 @@ class AuthLoadingScreen extends React.Component{
     }
 
     _loadData = async () => {
-        const logged = await AsyncStorage.getItem('logged');
-        this.props.navigation.navigate(logged !== true ? 'Auth' : 'App');
+        const logged = await AsyncStorage.getItem('logged2');
+        this.props.navigation.navigate(logged !== '1' ? 'Auth' : 'App');
     }
 }
 
@@ -206,7 +221,7 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
     },
 
-    input: {
+    input:{
         margin:15,
         height:40,
         padding:5,
@@ -217,7 +232,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
     },
 
-    forgot:{
+    forgot: {
         fontFamily: 'Poppins-Regular',
         textAlign: 'right',
         color: '#FFFFFF',
@@ -227,7 +242,7 @@ const styles = StyleSheet.create({
         marginBottom: verticalScale(73),
     },
 
-    socialTitle:{
+    socialTitle: {
         fontFamily: 'Poppins-Regular',
         textAlign: 'center',
         color: '#FFFFFF',
@@ -257,7 +272,7 @@ const styles = StyleSheet.create({
         fontSize: scale(16),
     },
 
-    bottom:{
+    bottom: {
         flex: 1,
         justifyContent: 'flex-end',
         marginBottom: verticalScale(16),
