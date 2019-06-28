@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from '../utils/resize';
 
 
-class ButtonOrange extends Component {
+class ButtonOrange extends React.Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
         onPress: PropTypes.func.isRequired,
