@@ -1,0 +1,5 @@
+export default {
+  INVALIDATE_KEY : 'INVALIDATE_KEY',
+  REQUEST_KEY : 'REQUEST_KEY',
+  RECEIVE_KEY : 'RECEIVE_KEY',
+};

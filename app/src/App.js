@@ -1,9 +1,9 @@
 import React from 'react';
-import {createSwitchNavigator, createStackNavigator, createAppContainer, createNavigationContainer} from "react-navigation";
-import HomeScreen from "./screens/main/ScreenMain";
-import {AuthLoadingScreen, LoginMng} from "./screens/auth/LoginMng";
-
-
+import {createSwitchNavigator, createAppContainer} from "react-navigation";
+import {AuthLoader, AuthMng, HomeScreen} from "./screens";
+import {connect, Provider} from 'react-redux';
+import store from './store';
+import {screens} from "./constants";
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
 //   android:
@@ -12,20 +12,26 @@ import {AuthLoadingScreen, LoginMng} from "./screens/auth/LoginMng";
 // });
 //var logoW = Dimensions.get('window').width * .85;//Dimensions.get('window').width * .85 > 330 ? 330 : Dimensions.get('window').width * .85;
 
-
-const AppStack = createStackNavigator({Home: HomeScreen});
-// const AuthStack = createStackNavigator({Login: LoginMng});//createStackNavigator
-
-
-
-export default createAppContainer(
+const RootNavigationView = createAppContainer(
     createSwitchNavigator(
         {
-            AuthLoading: AuthLoadingScreen,
-            App: AppStack,
-            Auth: LoginMng
+            [screens.InitialSetup]: AuthLoader,
+            [screens.App]: HomeScreen,
+            [screens.AuthMng]: AuthMng
         },{
-            initialRouteName:'AuthLoading'
+            initialRouteName:screens.InitialSetup
         }
     )
-)
+);
+
+// const RootNavigator = connect(state => ({ count: state.count }))(RootNavigationView);//connect(mapStateToProps)(NavigatorView);
+// const RootNavigator = connect(mapStateToProps)(NavigatorView);
+const RootNavigation = connect(state => (state))(RootNavigationView);
+
+const App = () => (
+    <Provider store={store}>
+        <RootNavigation />
+    </Provider>
+);
+
+export default App;

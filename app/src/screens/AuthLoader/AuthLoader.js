@@ -1,0 +1,51 @@
+import React from "react";
+import {ActivityIndicator, Text, View} from "react-native";
+import s from './styles';
+// import {auth, Auth} from "../../api/Auth";
+import {screens} from "../../constants";
+import {ModMap} from "../../modules";
+import AuthBackground from "../../components/AppBackground";
+
+
+
+class AuthLoader extends React.Component<Props> {
+    constructor(props){
+        super(props);
+
+        this._checkAuth(props[ModMap.Auth]);
+        console.log(" AuthLoader : " + JSON.stringify(props));
+
+        console.log("style : " + JSON.stringify(s))
+        // this._auth();
+    }
+
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        this._checkAuth(nextProps[ModMap.Auth]);
+        // nextProps.navigation.navigate( nextProps[ModMap.Auth].didInvalidate ? screens.AuthMng : screens.App);
+        console.log(" componentWillReceiveProps : " + JSON.stringify(nextProps));
+    }
+
+
+    render() {
+        return(
+            <View style={s.container}>
+                <AuthBackground/>
+                <ActivityIndicator size={30} color={"#FFFFFF"}/>
+                <Text style={[s.welcome, s.row]}>Loading</Text>
+            </View>
+        );
+    }
+
+    _checkAuth(iAuth) {
+        if(iAuth === undefined || iAuth.isReading) return;
+        this.props.navigation.navigate(iAuth.didInvalidate ? screens.AuthMng : screens.App);
+    }
+    // _auth = async () => {
+    //     console.log("AuthLoader !1");
+    //     const logged = await auth();
+    //     this.props.dispatch({ type: 'LOADER_COMPLETE' });
+    //     this.props.navigation.navigate(logged !== Auth.AUTH_COMPLETE ? screens.AuthMng : screens.App);
+    // }
+}
+
+export default AuthLoader;

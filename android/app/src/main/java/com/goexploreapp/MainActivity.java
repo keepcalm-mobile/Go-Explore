@@ -17,12 +17,12 @@ public class MainActivity extends ReactActivity {
     }
 
     @Override
-    protected ReactActivityDelegate createReactActivityDelegate() {
+      protected ReactActivityDelegate createReactActivityDelegate() {
         return new ReactActivityDelegate(this, getMainComponentName()) {
-            @Override
-            protected ReactRootView createRootView() {
-            return new RNGestureHandlerEnabledRootView(MainActivity.this);
-            }
+          @Override
+          protected ReactRootView createRootView() {
+           return new RNGestureHandlerEnabledRootView(MainActivity.this);
+          }
         };
-    }
+      }
 }
