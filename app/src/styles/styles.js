@@ -4,8 +4,8 @@ import {indent, doubleIndent} from './dimensions';
 
 const styles = StyleSheet.create({
     container: {
-        paddingLeft: doubleIndent,
-        paddingRight: doubleIndent,
+        paddingLeft: indent,
+        paddingRight: indent,
     },
     fillAll: {
         flex: 1,
@@ -58,14 +58,14 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
     },
     withLightBackground: {
-        backgroundColor: colors.athensGray,
+        backgroundColor: colors.darkMain,
     },
     withSecondaryTextColor: {
         color: colors.secondaryText,
     },
     withVerticalBorder: {
         borderTopWidth: StyleSheet.hairlineWidth,
-        borderTopColor: colors.borderd,
+        borderTopColor: colors.border,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderBottomColor: colors.border,
     },

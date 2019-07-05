@@ -14,15 +14,13 @@ class AuthLoader extends React.Component<Props> {
 
         this._checkAuth(props[ModMap.Auth]);
         console.log(" AuthLoader : " + JSON.stringify(props));
-
-        console.log("style : " + JSON.stringify(s))
         // this._auth();
     }
 
     componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        console.log(" componentWillReceiveProps : " + JSON.stringify(nextProps));
         this._checkAuth(nextProps[ModMap.Auth]);
         // nextProps.navigation.navigate( nextProps[ModMap.Auth].didInvalidate ? screens.AuthMng : screens.App);
-        console.log(" componentWillReceiveProps : " + JSON.stringify(nextProps));
     }
 
 
@@ -30,7 +28,7 @@ class AuthLoader extends React.Component<Props> {
         return(
             <View style={s.container}>
                 <AuthBackground/>
-                <ActivityIndicator size={30} color={"#FFFFFF"}/>
+                <ActivityIndicator size={'small'} color={"#FFFFFF"}/>
                 <Text style={[s.welcome, s.row]}>Loading</Text>
             </View>
         );

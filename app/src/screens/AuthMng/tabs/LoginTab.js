@@ -1,83 +1,138 @@
 import React from "react";
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-// import s from "../styles";
+import { Animated, Dimensions, Keyboard, LayoutAnimation, Text, TouchableOpacity, View } from "react-native";
+import s from "../styles";
 import {TextInput} from "react-native-gesture-handler";
 import ButtonOrange from "../../../components/ButtonOrange";
 import LogoG from "../../../../assets/logoGoogle.svg";
 import {scale, verticalScale} from "../../../utils/resize";
 import LogoFb from "../../../../assets/logoFacebook.svg";
 import {Auth, signIn} from "../../../api/Auth";
-import {colors, doubleIndent, fontNames, fontSizes} from "../../../styles";
+import {screens} from "../../../constants";
+import TabResizer from "./TabResizer";
 
-class LoginTab extends React.Component<Props> {
+const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
+class LoginTab extends TabResizer {//React.Component<Props> {
     constructor(props){
         super(props);
 
         console.log("LoginTab : " + JSON.stringify(props));
 
         this.state = {
+            ...this.state,
             email:'',
-            password:''
+            password:'',
+            animSocialHeight: verticalScale(100),
+            alpha:0,
         };
     }
 
-    static navigationOptions = {
-        header:null
+    updateStateLayoutProps(iLayout, iAnim = false) {
+        // LayoutAnimation.easeInEaseOut();
+        // Animated.parallel([
+        //     Animated.timing(this.state.animOpacity, {
+        //         toValue: 0.0,
+        //         duration: 500,
+        //         useNativeDriver: true,
+        //     }),
+        //     // Animated.timing(this.state.animLogoTop, {
+        //     //     toValue: verticalScale(25),
+        //     //     duration: 500,
+        //     //     useNativeDriver: true,
+        //     // }),
+        // ]).start();
+
+        super.updateStateLayoutProps(iLayout, iAnim);
+        let socHeight = this.keyboardShown ? 0 : verticalScale(100);
+
+        if(iAnim) LayoutAnimation.easeInEaseOut();
+        this.setState({animSocialHeight: socHeight});
+    }
+
+
+    _socialArea = () => {
+        if (this.state.animSocialHeight > 1) {
+            return (
+                <>
+                    <Text style={s.socialTitle}>or login with</Text>
+                    <View style={s.socialArea}>
+                        <TouchableOpacity activeOpacity={0.5} style={s.socialBtn} onPress={this.onGooglePress}>
+                            <LogoG width={scale(43)}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={0.5} style={s.socialBtn} onPress={this.onFacebookPress}>
+                            <LogoFb width={scale(43)}/>
+                        </TouchableOpacity>
+                    </View>
+                </>
+            )
+        } else {
+            return null;
+        }
     };
 
+    _forgotArea = () => {
+        if (this.state.animSocialHeight > 1) {
+            return (
+                <Text style={[s.forgot]} onPress={() => this.props.navigation.push(screens.ForgotTab)}>Forgot Password?</Text>
+            )
+        }else{
+            return null;
+        }
+    };
+
+
     render() {
-        const { navigation } = this.props;
-        const { push, replace, popToTop, pop, dismiss } = navigation;
+        const {bgStyle, textStyle} = super.render();
 
         return (
-            // {/*<View style={s.container}>*/}
+            //{/*<KeyboardAvoidingView style={s.bottom} behavior="padding">*/} // , justifyContent:'space-between', flexDirection:'column'
+            <View style={[{height:this.state.areaHeight}]}>
+                <View style={{height:this.state.separatorsHeight}}/>
+                <View onLayout={this.calcCMax}>
+                    <View onLayout={this.calcCMin}>
+                        <Animated.View style={[s.inputBg, bgStyle]}/>
+                        <AnimatedInput
+                            style={[s.input, textStyle]}
+                            placeholder="Email"
+                            placeholderTextColor={'#B7B7B7'}
+                            keyboardType={'email-address'}
+                            onChangeText={(email)=>this.setState({email})}
+                            value={this.state.email}
+                        />
+                        <Animated.View style={[s.inputBg, bgStyle]}/>
+                        <AnimatedInput
+                            style={[s.input, textStyle]}
+                            placeholder="Password"
+                            placeholderTextColor={'#B7B7B7'}
+                            onChangeText={(password)=>this.setState({password})}
+                            value={this.state.password}
+                            secureTextEntry={true}
+                        />
+                    </View>
+                    {this._forgotArea()}
+                </View>
+                <View style={{height:this.state.separatorsHeight}}/>
+                <View onLayout={this.calcBMax}>
 
+                    <ButtonOrange onLayout={this.calcBMin} onPress={this._signIn} title={'LOGIN'}/>
 
-            <View style={s.bottom}>
-                <TextInput
-                    style={s.input}
-                    placeholder="Email"
-                    placeholderTextColor={'#B7B7B7'}
-                    keyboardType={'email-address'}
-                    onChangeText={(email)=>this.setState({email})}
-                    value={this.state.email}
-                />
-                <TextInput
-                    style={s.input}
-                    placeholder="Password"
-                    placeholderTextColor={'#B7B7B7'}
-                    onChangeText={(password)=>this.setState({password})}
-                    value={this.state.password}
-                    secureTextEntry={true}
-                />
-                <Text style={s.forgot} onPress={() => push('Forgot')}>Forgot Password?</Text>
+                    {this._socialArea()}
 
-                <ButtonOrange onPress={this._signIn} title={'LOGIN'}/>
-                <Text style={s.socialTitle}>or login with</Text>
-
-                <View style={s.socialArea}>
-                    <TouchableOpacity activeOpacity={0.5} style={s.socialBtn} onPress={this.onGooglePress}>
-                        <LogoG width={scale(43)}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.5} style={s.socialBtn} onPress={this.onFacebookPress}>
-                        <LogoFb width={scale(43)}/>
-                    </TouchableOpacity>
+                    <Text onLayout={this.calcBMin} style={[s.signUp, s.bottom]}>New to Capi Restaurant?
+                        <Text style={{color: '#ff0058'}} onPress={() => this.props.navigation.push(screens.SignUpTab)}> Sign up</Text>
+                    </Text>
                 </View>
 
-                <Text style={s.signUp}>New to Capi Restaurant?
-                    <Text style={{color: '#ff0058'}} onPress={() => push('Signup')}> Sign up</Text>
-                </Text>
             </View>
-
-            // </View>
+        //{/*<View style={{height:this.state.animEmpty}}/>*/}
+            //{/*</KeyboardAvoidingView>*/}
         );
     }
 
     _signIn = async () => {
         const resp = await signIn(this.state.email, this.state.password);
         if(Auth.AUTH_COMPLETE === resp){
-            this.props.navigation.navigate('App');
+            this.props.navigation.navigate(screens.App);
         }else{
             alert('Wrong all');
         }
@@ -95,111 +150,3 @@ class LoginTab extends React.Component<Props> {
 }
 
 export default LoginTab;
-
-
-const s = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-
-    logo: {
-        // position: 'absolute',
-        left: '6.29%',
-        marginTop: verticalScale(55),
-        marginBottom: verticalScale(15.5),
-        // top: '6.77%',
-    },
-
-    welcome: {
-        // position: 'absolute',
-        left: '5.6%',
-        fontFamily: fontNames.bold,
-        fontSize: fontSizes.heading,
-        lineHeight: 36,
-        color: colors.white,
-        // paddingTop:20,
-        // height: 36,
-        // top:'18%',
-        // textAlign: 'center',
-        // margin: 10,
-    },
-
-    signIn:{
-        fontFamily: 'Poppins-Regular',
-        left: '5.6%',
-        fontSize: fontSizes.small,
-        color: colors.white,
-    },
-
-    input:{
-        margin:15,
-        height:40,
-        padding:5,
-        fontSize: fontSizes.medium,
-        borderBottomWidth:1,
-        borderBottomColor:'#ffa83b',
-        color: colors.white,
-        fontFamily: fontNames.regular,
-    },
-
-    forgot: {
-        fontFamily: fontNames.regular,
-        textAlign: 'right',
-        color: colors.white,
-        fontSize: fontSizes.medium,
-        right: '5.6%',
-        // paddingBottom: verticalScale(73),
-        marginBottom: verticalScale(73),
-    },
-
-    socialTitle: {
-        fontFamily: fontNames.regular,
-        textAlign: 'center',
-        color: colors.white,
-        fontSize: fontSizes.big,
-        // paddingBottom: verticalScale(73),
-    },
-
-    socialArea: {
-        // paddingLeft: '30%',
-        // paddingRight: '30%',
-        flexWrap: 'wrap',
-        // alignItems: 'flex-start',
-        alignItems: 'center',
-        flexDirection:'row',
-        justifyContent: 'center',//'space-evenly',
-    },
-
-    socialBtn: {
-        flexDirection:'column',
-        padding: scale(12)
-    },
-
-    signUp: {
-        fontFamily: 'Poppins-Regular',
-        textAlign: 'center',
-        color: '#EEF6FF',
-        fontSize: fontSizes.medium,
-    },
-
-    bottom: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        marginBottom: verticalScale(16),
-    },
-
-    // container2: {
-    //     backgroundColor:'green',
-    //     flex: 1,
-    // },
-    // child: {
-    //     flex: 1,
-    //     backgroundColor: 'blue',
-    //     transform: [
-    //         { perspective: 850 },
-    //         { translateX: - Dimensions.get('window').width * 0.24 },
-    //         { rotateY: '60deg'},
-    //
-    //     ],
-    // }
-});

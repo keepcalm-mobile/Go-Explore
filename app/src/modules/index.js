@@ -3,11 +3,13 @@ import ModMap from './map';
 
 import auth, {authTypes} from './auth';
 import reg, {regTypes} from './reg';
+import regAnim, {regAnimTypes} from "./regAnim";
 
 
 const reducers = combineReducers({
   [ModMap.Auth]:auth,
   [ModMap.Reg]:reg,
+  [ModMap.RegAnim]:regAnim,
 });
 
 

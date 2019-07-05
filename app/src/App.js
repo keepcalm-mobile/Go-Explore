@@ -2,8 +2,10 @@ import React from 'react';
 import {createSwitchNavigator, createAppContainer} from "react-navigation";
 import {AuthLoader, AuthMng, HomeScreen} from "./screens";
 import {connect, Provider} from 'react-redux';
+import {Platform, NativeModules, LayoutAnimation, StyleSheet} from "react-native"
 import store from './store';
 import {screens} from "./constants";
+import s from "./screens/AuthMng/styles";
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
 //   android:
@@ -11,6 +13,14 @@ import {screens} from "./constants";
 //     'Shake or press menu button for dev menu',
 // });
 //var logoW = Dimensions.get('window').width * .85;//Dimensions.get('window').width * .85 > 330 ? 330 : Dimensions.get('window').width * .85;
+
+
+if(Platform.OS === 'android'){
+    const { UIManager } = NativeModules;
+
+    UIManager.setLayoutAnimationEnabledExperimental &&
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const RootNavigationView = createAppContainer(
     createSwitchNavigator(
@@ -30,7 +40,7 @@ const RootNavigation = connect(state => (state))(RootNavigationView);
 
 const App = () => (
     <Provider store={store}>
-        <RootNavigation />
+        <RootNavigation/>
     </Provider>
 );
 

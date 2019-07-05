@@ -1,27 +1,29 @@
 import {StyleSheet} from "react-native";
 import {scale, verticalScale} from "../../utils/resize";
-import s, {colors, doubleIndent, fontNames, fontSizes} from "../../styles";
+import s, {colors, indent, fontNames, fontSizes} from "../../styles";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // paddingLeft: doubleIndent,
-        // paddingRight: doubleIndent,
-    },
+    // container://s.container,
+    //     {
+    //     flex: 1,
+    //     marginLeft: indent,
+    //     marginRight: indent,
+    // },
+    fillAll: s.fillAll,
     logo: {
         // position: 'absolute',
-        left: '6.29%',
-        marginTop: verticalScale(55),
+        left: indent,//'6.29%',
+        // marginTop: verticalScale(55),
         marginBottom: verticalScale(15.5),
         // top: '6.77%',
     },
 
     welcome: {
         // position: 'absolute',
-        left: '5.6%',
+        left: indent,//'5.6%',
         fontFamily: fontNames.bold,
         fontSize: fontSizes.heading,
-        lineHeight: 36,
+        lineHeight: scale(36),
         color: colors.white,
         // paddingTop:20,
         // height: 36,
@@ -31,21 +33,41 @@ const styles = StyleSheet.create({
     },
 
     signIn:{
-        fontFamily: 'Poppins-Regular',
-        left: '5.6%',
+        fontFamily: fontNames.regular,
+        left: indent,//'5.6%',
         fontSize: fontSizes.small,
         color: colors.white,
     },
 
     input:{
-        margin:15,
-        height:40,
-        padding:5,
+        marginLeft:indent,
+        marginRight:indent,
+        marginBottom:indent,
+        marginTop:(-scale(56)),
+
+        paddingLeft:scale(15),
+        paddingRight:scale(15),
+        // paddingTop:scale(10),
+        height:scale(56),
         fontSize: fontSizes.medium,
+
+        // borderWidth:1,
+        // borderColor: colors.border,
+        // borderRadius: 10,
+        // backgroundColor: '#F1F1F630',
         borderBottomWidth:1,
-        borderBottomColor:'#ffa83b',
+        borderBottomColor: colors.border,
         color: colors.white,
         fontFamily: fontNames.regular,
+    },
+
+    inputBg:{
+        marginLeft:indent,
+        marginRight:indent,
+        height:scale(56),
+        borderRadius: 10,
+        backgroundColor: '#F1F1F6',
+        opacity: 0,
     },
 
     forgot: {
@@ -53,9 +75,9 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         color: colors.white,
         fontSize: fontSizes.medium,
-        right: '5.6%',
+        right: indent,//'5.6%',
         // paddingBottom: verticalScale(73),
-        marginBottom: verticalScale(73),
+        // marginBottom: verticalScale(73),
     },
 
     socialTitle: {
@@ -78,20 +100,20 @@ const styles = StyleSheet.create({
 
     socialBtn: {
         flexDirection:'column',
-        padding: scale(12)
+        margin: scale(12)
     },
 
     signUp: {
-        fontFamily: 'Poppins-Regular',
+        fontFamily: fontNames.regular,
         textAlign: 'center',
         color: '#EEF6FF',
         fontSize: fontSizes.medium,
     },
 
     bottom: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        marginBottom: verticalScale(16),
+        // flex: 1,
+        // justifyContent: 'flex-end',
+        marginBottom: indent,
     },
 
     // container2: {
