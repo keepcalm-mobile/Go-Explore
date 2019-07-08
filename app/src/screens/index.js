@@ -3,5 +3,5 @@ import AuthMng from './AuthMng';
 import HomeScreen from './MainMng';
 
 export {
-    AuthLoader, AuthMng, HomeScreen
+    AuthLoader, AuthMng, HomeScreen,
 };

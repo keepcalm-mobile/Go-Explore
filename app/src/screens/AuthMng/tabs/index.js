@@ -5,8 +5,8 @@ import SignupTab from './SignupTab';
 import ForgotTab from './ForgotTab';
 import OptTab from './OptTab';
 import TermsTab from './TermsTab';
-import {ModMap} from "../../../modules";
-import {setCntHeight} from "../../../modules/regAnim";
+import {ModMap} from '../../../modules';
+import {setCntHeight} from '../../../modules/regAnim';
 
 // const enhance = compose(
 //     connect(state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }, { setCntHeight })),
@@ -18,6 +18,4 @@ const ForgotScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], 
 const OptScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { setCntHeight } )(OptTab);//enhance(OptTab);
 const TermsScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { setCntHeight } )(TermsTab);//enhance(TermsTab);
 
-export {
-    LoginScreen, SignupScreen, ForgotScreen, OptScreen, TermsScreen
-};
+export { LoginScreen, SignupScreen, ForgotScreen, OptScreen, TermsScreen, };

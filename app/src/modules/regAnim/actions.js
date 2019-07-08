@@ -2,7 +2,7 @@ import types from "./types";
 
 export const setCntHeight = value => ({
     type: types.SET_HEIGHT,
-    payload : value
+    payload : value,
 });
 
 

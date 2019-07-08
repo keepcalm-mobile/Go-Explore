@@ -1,8 +1,8 @@
 import React from 'react';
-import {createSwitchNavigator, createAppContainer} from "react-navigation";
-import {AuthLoader, AuthMng, HomeScreen} from "./screens";
+import {createSwitchNavigator, createAppContainer} from 'react-navigation';
+import {AuthLoader, AuthMng, HomeScreen} from './screens';
 import {connect, Provider} from 'react-redux';
-import {Platform, NativeModules, LayoutAnimation, StyleSheet} from "react-native"
+import {Platform, NativeModules, LayoutAnimation, StyleSheet} from 'react-native';
 import store from './store';
 import {screens} from "./constants";
 import s from "./screens/AuthMng/styles";
@@ -15,7 +15,7 @@ import s from "./screens/AuthMng/styles";
 //var logoW = Dimensions.get('window').width * .85;//Dimensions.get('window').width * .85 > 330 ? 330 : Dimensions.get('window').width * .85;
 
 
-if(Platform.OS === 'android'){
+if (Platform.OS === 'android'){
     const { UIManager } = NativeModules;
 
     UIManager.setLayoutAnimationEnabledExperimental &&
@@ -27,9 +27,9 @@ const RootNavigationView = createAppContainer(
         {
             [screens.InitialSetup]: AuthLoader,
             [screens.App]: HomeScreen,
-            [screens.AuthMng]: AuthMng
+            [screens.AuthMng]: AuthMng,
         },{
-            initialRouteName:screens.InitialSetup
+            initialRouteName:screens.InitialSetup,
         }
     )
 );

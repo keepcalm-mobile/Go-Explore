@@ -1,57 +1,43 @@
-import React from "react";
-import { Animated, Dimensions, Keyboard, LayoutAnimation, Text, TouchableOpacity, View } from "react-native";
-import s from "../styles";
-import {TextInput} from "react-native-gesture-handler";
-import ButtonOrange from "../../../components/ButtonOrange";
-import LogoG from "../../../../assets/logoGoogle.svg";
-import {scale, verticalScale} from "../../../utils/resize";
-import LogoFb from "../../../../assets/logoFacebook.svg";
-import {Auth, signIn} from "../../../api/Auth";
-import {screens} from "../../../constants";
-import TabResizer from "./TabResizer";
+import React from 'react';
+import { Animated, Dimensions, Keyboard, LayoutAnimation, Text, TouchableOpacity, View } from 'react-native';
+import s from '../styles';
+import {TextInput} from 'react-native-gesture-handler';
+import ButtonOrange from '../../../components/ButtonOrange';
+import LogoG from '../../../../assets/logoGoogle.svg';
+import {scale, verticalScale} from '../../../utils/resize';
+import LogoFb from '../../../../assets/logoFacebook.svg';
+import {Auth, signIn} from '../../../api/Auth';
+import {screens} from '../../../constants';
+import TabResizer from './TabResizer';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
-class LoginTab extends TabResizer {//React.Component<Props> {
+class LoginTab extends TabResizer {
     constructor(props){
         super(props);
 
-        console.log("LoginTab : " + JSON.stringify(props));
+        console.log('LoginTab : ' + JSON.stringify(props));
 
         this.state = {
             ...this.state,
+            animSocialHeight: verticalScale(100),
+            itemsMinCount:3,
             email:'',
             password:'',
-            animSocialHeight: verticalScale(100),
-            alpha:0,
         };
     }
 
-    updateStateLayoutProps(iLayout, iAnim = false) {
-        // LayoutAnimation.easeInEaseOut();
-        // Animated.parallel([
-        //     Animated.timing(this.state.animOpacity, {
-        //         toValue: 0.0,
-        //         duration: 500,
-        //         useNativeDriver: true,
-        //     }),
-        //     // Animated.timing(this.state.animLogoTop, {
-        //     //     toValue: verticalScale(25),
-        //     //     duration: 500,
-        //     //     useNativeDriver: true,
-        //     // }),
-        // ]).start();
+    updateStateLayoutProps(iLayout, iAnim = false, iKeyboard = false) {
+        super.updateStateLayoutProps(iLayout, iAnim, iKeyboard);
+        let socHeight = iKeyboard ? 0 : verticalScale(100);
 
-        super.updateStateLayoutProps(iLayout, iAnim);
-        let socHeight = this.keyboardShown ? 0 : verticalScale(100);
-
-        if(iAnim) LayoutAnimation.easeInEaseOut();
+        // if (iAnim) LayoutAnimation.easeInEaseOut();
         this.setState({animSocialHeight: socHeight});
     }
 
 
     _socialArea = () => {
-        if (this.state.animSocialHeight > 1) {
+        if (this.state.animSocialHeight > 50) {
             return (
                 <>
                     <Text style={s.socialTitle}>or login with</Text>
@@ -64,18 +50,16 @@ class LoginTab extends TabResizer {//React.Component<Props> {
                         </TouchableOpacity>
                     </View>
                 </>
-            )
+            );
         } else {
             return null;
         }
     };
 
     _forgotArea = () => {
-        if (this.state.animSocialHeight > 1) {
-            return (
-                <Text style={[s.forgot]} onPress={() => this.props.navigation.push(screens.ForgotTab)}>Forgot Password?</Text>
-            )
-        }else{
+        if (this.state.animSocialHeight > 50) {
+            return ( <Text style={[s.forgot]} onPress={this.onForgotPress}>Forgot Password?</Text> );
+        } else {
             return null;
         }
     };
@@ -86,10 +70,11 @@ class LoginTab extends TabResizer {//React.Component<Props> {
 
         return (
             //{/*<KeyboardAvoidingView style={s.bottom} behavior="padding">*/} // , justifyContent:'space-between', flexDirection:'column'
-            <View style={[{height:this.state.areaHeight}]}>
-                <View style={{height:this.state.separatorsHeight}}/>
-                <View onLayout={this.calcCMax}>
-                    <View onLayout={this.calcCMin}>
+            <View style={{flex:1, justifyContent:'space-between', flexDirection:'column'}}>
+                <View style={{height:1}}/>
+
+                <View>
+                    <View onLayout={this.itemsMinCount}>
                         <Animated.View style={[s.inputBg, bgStyle]}/>
                         <AnimatedInput
                             style={[s.input, textStyle]}
@@ -111,41 +96,49 @@ class LoginTab extends TabResizer {//React.Component<Props> {
                     </View>
                     {this._forgotArea()}
                 </View>
-                <View style={{height:this.state.separatorsHeight}}/>
-                <View onLayout={this.calcBMax}>
 
-                    <ButtonOrange onLayout={this.calcBMin} onPress={this._signIn} title={'LOGIN'}/>
+                <View>
+                    <ButtonOrange onLayout={this.itemsMinCount} onPress={this.onSignInPress} title={'LOGIN'}/>
 
                     {this._socialArea()}
 
-                    <Text onLayout={this.calcBMin} style={[s.signUp, s.bottom]}>New to Capi Restaurant?
-                        <Text style={{color: '#ff0058'}} onPress={() => this.props.navigation.push(screens.SignUpTab)}> Sign up</Text>
+                    <Text onLayout={this.itemsMinCount} style={[s.signUp, s.bottom]}>New to Capi Restaurant?
+                        <Text style={{color: '#ff0058'}} onPress={this.onSignUpPress}> Sign up</Text>
                     </Text>
                 </View>
 
             </View>
-        //{/*<View style={{height:this.state.animEmpty}}/>*/}
             //{/*</KeyboardAvoidingView>*/}
         );
     }
 
-    _signIn = async () => {
-        const resp = await signIn(this.state.email, this.state.password);
-        if(Auth.AUTH_COMPLETE === resp){
+    onSignInPress = async () => {
+        // const resp = await signIn(this.state.email, this.state.password);
+        // if (Auth.AUTH_COMPLETE === resp){
             this.props.navigation.navigate(screens.App);
-        }else{
-            alert('Wrong all');
-        }
+        // } else {
+        //     alert('Wrong all');
+        // }
+    };
+
+    onForgotPress = () => {
+        this.props.navigation.navigate({ routeName: screens.ForgotTab, key:screens.ForgotTab + 'Key'});
+        // this.props.navigation.push(screens.ForgotTab);
+    };
+
+    onSignUpPress = () => {
+        this.props.navigation.navigate({ routeName: screens.SignUpTab, key:screens.SignUpTab + 'Key'});
     };
 
     onGooglePress = () => {
-        alert("Google login");
+        alert('Google login');
         // this.setState({
         //     count: this.state.count+1
         // })
     };
+
     onFacebookPress = () => {
-        alert("Facebook login");
+        alert('Facebook login');
     };
 }
 

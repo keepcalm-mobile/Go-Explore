@@ -1,43 +1,36 @@
-import React from "react";
-import {Animated, Dimensions, Keyboard, LayoutAnimation, Platform, TextInput} from "react-native";
-import {verticalScale} from "../../../utils/resize";
-import {ModMap} from "../../../modules";
-import {getStatusBarHeight} from "react-native-status-bar-height";
+import React from 'react';
+import {Animated, Dimensions, Keyboard, LayoutAnimation, Platform, TextInput} from 'react-native';
+import {verticalScale} from '../../../utils/resize';
+import {ModMap} from '../../../modules';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const barH = (Platform.OS === 'android') ? getStatusBarHeight() : 0;
 
 class TabResizer extends React.Component<Props> {
     static navigationOptions = {header: null};
-    static CENTER_MIN : String = "cMin";
-    static CENTER_MAX : String = "cMax";
-    static BOTTOM_MIN : String = "bMin";
-    static BOTTOM_MAX : String = "bMax";
 
     static calcLayout(iLayout) {
         let total = 0;
-        for (let prop in iLayout) total += iLayout[prop];
+        for (let prop in iLayout) {total += iLayout[prop];}
+        return Math.round(total);
+    }
+
+    static layoutLength(iLayout) {
+        let total = 0;
+        for (let prop in iLayout) {total += 1;}
         return total;
     }
 
     state = {
-        // animOpacity: new Animated.Value(0.999),
-        animBtnMargin: verticalScale(73),//new Animated.Value(),
-        animEmpty: 0,
-        areaHeight: 358,
-        separatorsHeight: 0,
-        borderBottomWidth: 0,
+        animBtnMargin: verticalScale(73),
+        opacityValue: new Animated.Value(0.0),
         animatedValue: new Animated.Value(0.0),
+        itemsMinCount:1,
     };
 
-    keyboardShown = false;
-    keyboardHeight = 0;
-    layoutValues = {};
-    _layoutsCMin = {};
-    _layoutsCMax = {};
-    _layoutsBMin = {};
-    _layoutsBMax = {};
-    // animatedStyle = {};
-
+    // keyboardShown = false;
+    // keyboardHeight = 0;
+    _layoutsMin = {};
 
 
     componentDidMount() {
@@ -51,89 +44,79 @@ class TabResizer extends React.Component<Props> {
     }
 
 
-    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        console.log("REG componentWillReceiveProps : " + JSON.stringify(nextProps));
-        this.updateStateLayoutProps( nextProps[ModMap.RegAnim] );
-    }
+    // componentDidUpdate(prevProps, prevState) {
+    //     if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
+    //         console.log('RESIZER DidUpdate : ' + JSON.stringify(this.props));
+    //         this.updateStateLayoutProps(this.props[ModMap.RegAnim]);
+    //     }
+    // }
 
 
     _keyboardWillShow = (e) => {
-        this.keyboardShown = true;
-        this.keyboardHeight = e.endCoordinates.height;
-        this.updateStateLayoutProps(this.props[ModMap.RegAnim], true);
+        // this.keyboardShown = true;
+        // this.keyboardHeight = e.endCoordinates.height;
+        this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, true);
     };
 
     _keyboardWillHide = (e) => {
-        this.keyboardShown = false;
-        this.keyboardHeight = 0;
-        this.updateStateLayoutProps(this.props[ModMap.RegAnim], true);
+        // this.keyboardShown = false;
+        // this.keyboardHeight = 0;
+        this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, false);
     };
 
 
-    updateStateLayoutProps(iLayout, iAnim = false) {
-        let btnMargin = this.keyboardShown ? 0 : verticalScale(73);
-        let cntViewsH = this.keyboardShown ? (this.layoutValues[TabResizer.CENTER_MIN] + this.layoutValues[TabResizer.BOTTOM_MIN]) : (this.layoutValues[TabResizer.CENTER_MAX] + this.layoutValues[TabResizer.BOTTOM_MAX]);
-        if(!cntViewsH) cntViewsH = 358;
+    updateStateLayoutProps(iLayout, iAnim = false, iKeyboard = false) {
+        let toValue = iKeyboard ? 1.0 : 0.0;
 
-        let curH = Dimensions.get("window").height - barH - this.keyboardHeight - (this.keyboardShown ? iLayout.tMin : iLayout.tMax);
-
-        let seps = 0;
-        if(cntViewsH < curH){
-            seps = (curH - cntViewsH) * .5;
-        }else{
-            curH = cntViewsH;
-        }
-
-        if(iAnim){
-            Animated.timing(this.state.animatedValue, {
-                toValue: (this.keyboardShown ? 1.0 : 0.0),
-                duration: 500,
-                // useNativeDriver: true,
-            }).start();
+        if (iAnim){
+            Animated.parallel([
+                Animated.timing(this.state.animatedValue, {
+                    toValue: toValue,
+                    duration: 500,
+                }),
+                Animated.timing(this.state.opacityValue, {
+                    toValue: toValue,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+            ]).start();
 
             LayoutAnimation.easeInEaseOut();
-        }else{
-            this.state.animatedValue.setValue(this.keyboardShown ? 100 : 0);
+        } else {
+            this.state.animatedValue.setValue(toValue);
+            this.state.opacityValue.setValue(toValue);
         }
 
-        this.setState({animBtnMargin: btnMargin, areaHeight: curH, separatorsHeight:seps, borderBottomWidth : this.keyboardShown ? 0 : 1});
+        this.setState({animBtnMargin: this.keyboardShown ? 0 : verticalScale(73)});
     }
 
+    itemsMinCount = (event) => {
+        let iTarget = event.nativeEvent.target;
+        let iValue = event.nativeEvent.layout.height;
 
-    calcCMin = (event) => { this._updateLayout(this._layoutsCMin, event.nativeEvent.target, event.nativeEvent.layout.height, TabResizer.CENTER_MIN) };
-    calcCMax = (event) => { this._updateLayout(this._layoutsCMax, event.nativeEvent.target, event.nativeEvent.layout.height, TabResizer.CENTER_MAX) };
-    calcBMin = (event) => { this._updateLayout(this._layoutsBMin, event.nativeEvent.target, event.nativeEvent.layout.height, TabResizer.BOTTOM_MIN) };
-    calcBMax = (event) => { this._updateLayout(this._layoutsBMax, event.nativeEvent.target, event.nativeEvent.layout.height, TabResizer.BOTTOM_MAX) };
+        if (this._layoutsMin[iTarget] && this._layoutsMin[iTarget] >= iValue) {return;}
+        this._layoutsMin[iTarget] = iValue;
 
+        if (this.state.itemsMinCount === TabResizer.layoutLength(this._layoutsMin)) {
+            // this.props.setCntHeight({areaMin: TabResizer.calcLayout(this._layoutsMin)});
+            this.props.navigation.setParams({ minSize: TabResizer.calcLayout(this._layoutsMin) });
+        }
+    };
 
-    _updateLayout(iLayout, iTarget, iValue, iId) {
-        if(iLayout[iTarget] && iLayout[iTarget] >= iValue) return;
-        iLayout[iTarget] = iValue;
-
-        this.layoutValues[iId] = TabResizer.calcLayout(iLayout);
-        if(iId === TabResizer.CENTER_MIN || iId === TabResizer.BOTTOM_MIN)
-            this._updateAreaProps();
-        else
-            this.updateStateLayoutProps(this.props[ModMap.RegAnim]);
-    }
-
-    _updateAreaProps() {
-        this.props.setCntHeight({areaMin:(TabResizer.calcLayout(this._layoutsCMin) + TabResizer.calcLayout(this._layoutsBMin))});
-    }
 
     render() {
         return {
             bgStyle: {
-                opacity: this.state.animatedValue
+                opacity: this.state.opacityValue,
             },
             textStyle: {
                 borderBottomColor : this.state.animatedValue.interpolate({ inputRange: [0, 1], outputRange: ['rgba(255, 168, 59, 1.0)', 'rgba(255, 168, 59, 0.0)'] }),
                 color : this.state.animatedValue.interpolate({ inputRange: [0, 1], outputRange: ['rgb(255, 255, 255)', 'rgb(0, 0, 0)'] }),
-            }
+            },
             // backgroundColor : this.state.animatedValue.interpolate({ inputRange: [0, 100], outputRange: ['rgba(241, 241, 246, 0.0)', 'rgba(241, 241, 246, 1.0)'] }),
             // borderBottomWidth : this.state.animatedValue.interpolate({ inputRange: [0, 100], outputRange: [1.0, 0.0] }),
             // borderRadius : this.state.borderRadius,
-        }
+        };
     }
 }
 

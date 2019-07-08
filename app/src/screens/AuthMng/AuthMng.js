@@ -1,35 +1,32 @@
-import React from "react";
-import {Keyboard, Text, View, Animated, Easing, LayoutAnimation, StyleSheet, Dimensions, Platform, ScrollView} from "react-native";
-import {createStackNavigator} from "react-navigation";
+import React from 'react';
+import {Keyboard, Text, View, Animated, Easing, LayoutAnimation, StyleSheet, Dimensions, Platform, ScrollView} from 'react-native';
+import {createStackNavigator} from 'react-navigation';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import Background from "../../components/AppBackground";
-import Waves from "../../components/Waves";
-import Logo from "../../../assets/logo.svg";
-import {scale, verticalScale} from "../../utils/resize";
-import {doubleIndent, indent} from "../../styles";
+import Background from '../../components/AppBackground';
+import Waves from '../../components/Waves';
+import Logo from '../../../assets/logo.svg';
+import {scale, verticalScale} from '../../utils/resize';
+import {doubleIndent, indent} from '../../styles';
 import s from './styles';
-import {ForgotScreen, LoginScreen, TermsScreen, OptScreen, SignupScreen} from "./tabs";
-import {screens} from "../../constants";
-import {ModMap} from "../../modules";
-
-const startY = (Platform.OS === 'android') ? 0 : getStatusBarHeight();
-const barH = (Platform.OS === 'android') ? getStatusBarHeight() : 0;
-const topMargMin = indent + startY;
-const topMargMax = (Dimensions.get("window").height*.04) + startY;//verticalScale(15)
+import {ForgotScreen, LoginScreen, TermsScreen, OptScreen, SignupScreen} from './tabs';
+import {screens} from '../../constants';
+import {ModMap} from '../../modules';
 
 
 const AuthTabs = createStackNavigator({
-    [screens.LoginTab]  : LoginScreen,
-    [screens.ForgotTab] : ForgotScreen,
-    [screens.SignUpTab] : SignupScreen,
-    [screens.OptTab]    : OptScreen,
-    [screens.TermsTab]  : TermsScreen,
+    [screens.LoginTab]  : { screen: LoginScreen},
+    [screens.ForgotTab] : { screen: ForgotScreen},
+    [screens.SignUpTab] : { screen: SignupScreen},
+    [screens.OptTab]    : { screen: OptScreen},
+    [screens.TermsTab]  : { screen: TermsScreen},
 }
 ,{
+    initialRouteName: screens.LoginTab,
+    initialRouteKey: screens.LoginTab + 'Key',
     headerMode: 'none',
     transparentCard: true,
     // mode: 'modal',
-        // cardStyle: {
+    // cardStyle: {
         // backgroundColor: 'transparent',
         // opacity: 1,
     // },
@@ -71,86 +68,94 @@ const AuthTabs = createStackNavigator({
 
 
 
+const startY = (Platform.OS === 'android') ? 0 : getStatusBarHeight();
+const barH = (Platform.OS === 'android') ? getStatusBarHeight() : 0;
+const windowH = Dimensions.get('window').height - barH;
+const topMargMin = indent + startY;
+const topMargMax = Math.round(Dimensions.get('window').height * 0.04) + startY;//verticalScale(15)
+
 class AuthMng extends React.Component<Props> {
     static router = AuthTabs.router;
+
+    topLayoutH = 0;//Math.round(windowH * 0.1);
 
     state = {
         animOpacity : new Animated.Value(0.999),
         animLogoTop : topMargMax,
-        animScrollH : (Dimensions.get("window").height - barH),
-        animAreaH : (Dimensions.get("window").height - barH),
-        animCntH : Dimensions.get("window").height*.65,//385,
+        animScrollH : windowH,
+        animAreaH : windowH,
+        animCntH : 0,//Math.round(windowH * 0.9),
         scrollEnabled : false,
     };
 
-    topLayoutH = 0;
-    keyboardShown = false;
-    viewAreaH = this.state.animAreaH;
-
     constructor(props) {
         super(props);
-        console.log("AuthMng : " + JSON.stringify(props));
+        console.log('AuthMng : ' + JSON.stringify(props));
+        console.log('router : ' + JSON.stringify(AuthTabs.router));
+
+        console.log('WINDOW H : ' + windowH);
     }
 
-    // _updateStateLayoutProps(iLayout, iAnim = false) {
-    //     let center = this.keyboardShown ? iLayout.cMaxHeight : iLayout.cMaxHeight;
-    //     let bottom = this.keyboardShown ? iLayout.bMinHeight : iLayout.bMaxHeight;
-    //
-    //     let topMargin = (this.keyboardShown ? indent : (Dimensions.get("window").height*.04)) + startY;
-    //     let scrollH = this.viewAreaH;
-    //
-    //     let cntH = center + bottom + indent;
-    //     let itemsH = cntH + this.topLayoutH + topMargin;//
-    //
-    //
-    //     if(this.viewAreaH > itemsH){
-    //         console.log(" > : ");
-    //         cntH += (this.viewAreaH - itemsH) * .5;
-    //     }else{
-    //         console.log(" < : ");
-    //         scrollH = itemsH;
-    //     }
-    //
-    //     console.log("itemsH : " + itemsH);
-    //     console.log("viewAreaH : " + this.viewAreaH);
-    //     console.log("animCntH : " + cntH);
-    //     console.log("animScrollH : " + scrollH);
-    //
-    //     if(iAnim) LayoutAnimation.easeInEaseOut();
-    //     if(iLayout.cMinHeight!==0 && iLayout.cMaxHeight!==0 && iLayout.bMinHeight!==0 && iLayout.bMaxHeight!==0)
-    //     this.setState({animLogoTop: topMargin, animAreaH: this.viewAreaH, animCntH:cntH, animScrollH:scrollH});
-    // }
-
-    _updateStateLayoutProps(iLayout, iAnim = false) {
-        let topMargin = this.keyboardShown ? topMargMin : topMargMax;
-        let scrollH = this.viewAreaH;
+    _updateStateLayoutProps(iAnim = false, iKey = false, iKeyH = 0) {
+        // console.log("!!! - ROUT STATE : " + this.props.navigation._childrenNavigation[this.props.navigation.state.routes[this.props.navigation.state.index].key].getParam('minSize', '213') );
+        const areaMin = this._getCurrentRouteSize(this.props.navigation.state);//this.props.navigation.state.routes[this.props.navigation.state.index].params.minSize;
+        let viewAreaH = windowH - iKeyH;
+        let scrollH = windowH - iKeyH;
+        let topMargin = iKey ? topMargMin : topMargMax;
 
         let topAreaH = this.topLayoutH + topMargin;
         let cntH = scrollH - topAreaH;
 
-        if(this.keyboardShown && (iLayout.areaMin) > cntH){
-            cntH = iLayout.areaMin;
+        if (iKey && areaMin > cntH){
+            cntH = areaMin;
             scrollH = cntH + topAreaH;
         }
 
-        if(iAnim) LayoutAnimation.easeInEaseOut();
-        this.setState({animLogoTop: topMargin, animAreaH: this.viewAreaH, animCntH:cntH, animScrollH:scrollH, scrollEnabled: scrollH > this.viewAreaH });
+        if (iAnim) {LayoutAnimation.easeInEaseOut();}
+        this.setState({animLogoTop: topMargin, animAreaH: viewAreaH, animCntH:cntH, animScrollH:scrollH, scrollEnabled: scrollH > viewAreaH });
     }
 
+    _getCurrentRouteSize(navState):number {
+        let value = 0;
+        if (navState.routes[navState.index].hasOwnProperty('params')){
+            value = navState.routes[navState.index].params.minSize;
+        }
+        return value ? value : 0;
+    }
 
     _calcLayouts = (event) => {
-        if(this.topLayoutH >= event.nativeEvent.layout.height)return;
-        this.topLayoutH = event.nativeEvent.layout.height;
-        this.props.setCntHeight({tMin:this.topLayoutH+topMargMin, tMax: this.topLayoutH+topMargMax});
+        const topHeight = Math.round(event.nativeEvent.layout.height);
+        if (this.topLayoutH >= topHeight) {return;}
+        this.topLayoutH = topHeight;
+        this._updateStateLayoutProps();
+        // this.props.setCntHeight({tMin:this.topLayoutH + topMargMin, tMax: this.topLayoutH + topMargMax});
     };
 
-    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        console.log("REG componentWillReceiveProps : " + JSON.stringify(nextProps));
 
-        this._updateStateLayoutProps( nextProps[ModMap.RegAnim] );
-        // LayoutAnimation.easeInEaseOut();
-        // this.setState({animCntH: nextProps[ModMap.RegAnim].curCntHeight});
-    }
+    // static getDerivedStateFromProps(props, state) {
+    //     let iLayout = props[ModMap.RegAnim];
+    //
+    //     let topMargin = state.keyboardShown ? topMargMin : topMargMax;
+    //     let scrollH = state.viewAreaH;
+    //
+    //     let topAreaH = state.topLayoutH + topMargin;
+    //     let cntH = scrollH - topAreaH;
+    //
+    //     if(state.keyboardShown && (iLayout.areaMin) > cntH){
+    //         cntH = iLayout.areaMin;
+    //         scrollH = cntH + topAreaH;
+    //     }
+    //
+    //     if(state.isAnim) LayoutAnimation.easeInEaseOut();
+    //     return {animLogoTop: topMargin, animAreaH: state.viewAreaH, animCntH:cntH, animScrollH:scrollH, scrollEnabled: scrollH > state.viewAreaH };
+    // }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
+    //         console.log('AUTH MNG : ' + JSON.stringify(this.props));
+    //         this._updateStateLayoutProps(this.props[ModMap.RegAnim]);
+    //     }
+    // }
 
     componentDidMount() {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardWillShow);
@@ -163,41 +168,23 @@ class AuthMng extends React.Component<Props> {
     }
 
     _keyboardWillShow = (e) => {
-        Animated.parallel([
-            Animated.timing(this.state.animOpacity, {
-                toValue: 0.0,
-                duration: 500,
-                useNativeDriver: true,
-            }),
-            // Animated.timing(this.state.animLogoTop, {
-            //     toValue: verticalScale(25),
-            //     duration: 500,
-            //     useNativeDriver: true,
-            // }),
-        ]).start();
+        Animated.timing(this.state.animOpacity, {
+            toValue: 0.0,
+            duration: 500,
+            useNativeDriver: true,
+        }).start();
 
-        this.keyboardShown = true;
-        this.viewAreaH = Dimensions.get("window").height - barH - e.endCoordinates.height;
-        this._updateStateLayoutProps(this.props[ModMap.RegAnim], true);
+        this._updateStateLayoutProps(true, true, e.endCoordinates.height);
     };
 
     _keyboardWillHide = () => {
-        Animated.parallel([
-            Animated.timing(this.state.animOpacity, {
-                toValue: 1.0,
-                duration: 500,
-                useNativeDriver: true,
-            }),
-            // Animated.timing(this.state.animLogoTop, {
-            //     toValue: verticalScale(55),
-            //     duration: 500,
-            //     useNativeDriver: true,
-            // }),
-        ]).start();
+        Animated.timing(this.state.animOpacity, {
+            toValue: 1.0,
+            duration: 500,
+            useNativeDriver: true,
+        }).start();
 
-        this.keyboardShown = false;
-        this.viewAreaH = Dimensions.get("window").height - barH;
-        this._updateStateLayoutProps(this.props[ModMap.RegAnim], true);
+        this._updateStateLayoutProps(true, false);
     };
 
 
@@ -234,6 +221,6 @@ class AuthMng extends React.Component<Props> {
 //flex:.68//flex:.32//height:this.state.animAreaH,
 //height:this.state.animAreaH,z
 //flex:1, justifyContent:'flex-end', alignContent:"space-between", flexDirection:'column', flexWrap:'wrap'
+//<SafeAreaView style={{ flex: 1 }} forceInset={{ horizontal: 'always', top: 'always' }} >
 export default AuthMng;
 
-//<SafeAreaView style={{ flex: 1 }} forceInset={{ horizontal: 'always', top: 'always' }} >
