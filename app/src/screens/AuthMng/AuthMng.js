@@ -2,11 +2,10 @@ import React from 'react';
 import {Keyboard, Text, View, Animated, Easing, LayoutAnimation, StyleSheet, Dimensions, Platform, ScrollView} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import Background from '../../components/AppBackground';
-import Waves from '../../components/Waves';
+import {AppBg, Waves, OverlayLoader} from '../../components';
 import Logo from '../../../assets/logo.svg';
 import {scale, verticalScale} from '../../utils/resize';
-import {doubleIndent, indent} from '../../styles';
+import {colors, doubleIndent, fontNames, fontSizes, indent} from '../../styles';
 import s from './styles';
 import {ForgotScreen, LoginScreen, TermsScreen, OptScreen, SignupScreen} from './tabs';
 import {screens} from '../../constants';
@@ -86,6 +85,7 @@ class AuthMng extends React.Component<Props> {
         animAreaH : windowH,
         animCntH : 0,//Math.round(windowH * 0.9),
         scrollEnabled : false,
+        isLoading:false,
     };
 
     constructor(props) {
@@ -132,29 +132,21 @@ class AuthMng extends React.Component<Props> {
     };
 
 
-    // static getDerivedStateFromProps(props, state) {
-    //     let iLayout = props[ModMap.RegAnim];
-    //
-    //     let topMargin = state.keyboardShown ? topMargMin : topMargMax;
-    //     let scrollH = state.viewAreaH;
-    //
-    //     let topAreaH = state.topLayoutH + topMargin;
-    //     let cntH = scrollH - topAreaH;
-    //
-    //     if(state.keyboardShown && (iLayout.areaMin) > cntH){
-    //         cntH = iLayout.areaMin;
-    //         scrollH = cntH + topAreaH;
-    //     }
-    //
-    //     if(state.isAnim) LayoutAnimation.easeInEaseOut();
-    //     return {animLogoTop: topMargin, animAreaH: state.viewAreaH, animCntH:cntH, animScrollH:scrollH, scrollEnabled: scrollH > state.viewAreaH };
-    // }
+    static getDerivedStateFromProps(props, state) {
+        console.log('GET Derived AUTH MNG : ' + JSON.stringify(props));
+        // console.log('GET Derived AUTH MNG : ' + JSON.stringify(state));
+        if (props.loginIsLoading !== state.isLoading){
+            return {isLoading : props.loginIsLoading};
+        } else {
+            return null;
+        }
+    }
 
     // componentDidUpdate(prevProps, prevState) {
-    //     if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
-    //         console.log('AUTH MNG : ' + JSON.stringify(this.props));
-    //         this._updateStateLayoutProps(this.props[ModMap.RegAnim]);
-    //     }
+    // // if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
+    //     console.log('DID AUTH MNG : ' + JSON.stringify(this.props));
+    //     // this._updateStateLayoutProps(this.props[ModMap.RegAnim]);
+    // // }
     // }
 
     componentDidMount() {
@@ -196,7 +188,7 @@ class AuthMng extends React.Component<Props> {
         return (//{height:this.state.animAreaH},
             <View style={[s.fillAll, {backgroundColor: '#000000'}]}>
                 <Animated.View style={[StyleSheet.absoluteFill, {opacity: this.state.animOpacity}]}>
-                    <Background/>
+                    <AppBg/>
                     <Waves/>
                 </Animated.View>
                 <View style={{height:this.state.animAreaH}}>
@@ -211,8 +203,12 @@ class AuthMng extends React.Component<Props> {
                         </View>
                     </ScrollView>
                 </View>
+                <OverlayLoader
+                    visible={this.state.isLoading}
+                    message="Loading... 😀😀😀"
+                />
             </View>
-        );//
+        );
     }
 }
 

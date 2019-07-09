@@ -1,10 +1,10 @@
-import React from "react";
-import {ActivityIndicator, Text, View} from "react-native";
+import React from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
 import s from './styles';
 // import {auth, Auth} from "../../api/Auth";
-import {screens} from "../../constants";
-import {ModMap} from "../../modules";
-import AuthBackground from "../../components/AppBackground";
+import {screens} from '../../constants';
+import {ModMap} from '../../modules';
+import AuthBackground from '../../components/AppBackground';
 
 
 

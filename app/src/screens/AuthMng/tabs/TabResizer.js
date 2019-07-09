@@ -45,10 +45,10 @@ class TabResizer extends React.Component<Props> {
 
 
     // componentDidUpdate(prevProps, prevState) {
-    //     if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
-    //         console.log('RESIZER DidUpdate : ' + JSON.stringify(this.props));
-    //         this.updateStateLayoutProps(this.props[ModMap.RegAnim]);
-    //     }
+    // //     if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
+    //         console.log('DID RESIZER : ' + JSON.stringify(this.props));
+    // //         this.updateStateLayoutProps(this.props[ModMap.RegAnim]);
+    // //     }
     // }
 
 
@@ -102,7 +102,6 @@ class TabResizer extends React.Component<Props> {
             this.props.navigation.setParams({ minSize: TabResizer.calcLayout(this._layoutsMin) });
         }
     };
-
 
     render() {
         return {

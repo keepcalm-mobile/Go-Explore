@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 // import { compose } from 'recompose';
 // import { compose } from 'redux';
 import AuthMng from './AuthMng';
-import { setCntHeight } from "../../modules/regAnim";
+import { login } from "../../modules/reg";
 import ModMap from "../../modules/map";
 
 // // const enhance = compose(
@@ -30,4 +30,4 @@ import ModMap from "../../modules/map";
 // export default AuthMngContainer;
 
 // export default connect(state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }))(AuthMng);
-export default connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { setCntHeight } )(AuthMng);
+export default connect( state => (state[ ModMap.Reg ]), { login } )(AuthMng);

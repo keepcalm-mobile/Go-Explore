@@ -57,9 +57,13 @@ class LoginTab extends TabResizer {
     };
 
     _forgotArea = () => {
-        if (this.state.animSocialHeight > 50) {
-            return ( <Text style={[s.forgot]} onPress={this.onForgotPress}>Forgot Password?</Text> );
-        } else {
+        if (!this.props.isLoading) {
+            if (this.state.animSocialHeight > 50) {
+                return (<Text style={[s.forgot]} onPress={this.onForgotPress}>Forgot Password?</Text>);
+            } else {
+                return null;
+            }
+        }else{
             return null;
         }
     };
@@ -112,10 +116,14 @@ class LoginTab extends TabResizer {
         );
     }
 
-    onSignInPress = async () => {
+    onSignInPress = () => {
         // const resp = await signIn(this.state.email, this.state.password);
         // if (Auth.AUTH_COMPLETE === resp){
-            this.props.navigation.navigate(screens.App);
+        if(this.props.isLoading) return;
+
+        this.props.login({email:this.state.email, pass:this.state.password});
+
+        // this.props.navigation.navigate(screens.App);
         // } else {
         //     alert('Wrong all');
         // }

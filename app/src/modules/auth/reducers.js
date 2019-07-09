@@ -1,6 +1,6 @@
-import types from './types'
-import { combineReducers } from 'redux'
-
+import types from './types';
+//import { combineReducers } from 'redux';
+//
 // function selectedSubreddit(state = 'reactjs', action) {
 //     switch (action.type) {
 //         case types.SELECT_SUBREDDIT:
@@ -14,29 +14,29 @@ function keyData(
     state = {
         isReading: false,
         didInvalidate: false,
-        key: ''
+        key: '',
     },
     action
 ) {
     switch (action.type) {
         case types.INVALIDATE_KEY:
             return Object.assign({}, state, {
-                didInvalidate: true
+                didInvalidate: true,
             });
         case types.REQUEST_KEY:
             return Object.assign({}, state, {
                 isReading: true,
-                didInvalidate: false
+                didInvalidate: false,
             });
         case types.RECEIVE_KEY:
             return Object.assign({}, state, {
                 isReading: false,
                 didInvalidate: action.key === null ? true : false,
                 key: action.key,
-                lastUpdated: action.receivedAt
+                lastUpdated: action.receivedAt,
             });
         default:
-            return state
+            return state;
     }
 }
 
@@ -47,7 +47,7 @@ function keyStore(state = {}, action) {
         case types.REQUEST_KEY:
             return Object.assign({}, state, keyData(state, action) );
         default:
-            return state
+            return state;
     }
 }
 

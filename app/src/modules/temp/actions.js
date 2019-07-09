@@ -29,7 +29,7 @@ export function invalidateSubreddit(subreddit) {
 
 
 export function fetchPosts(subreddit) {
-    console.log("generateKey !!!");
+    console.log("readKey !!!");
     return function(dispatch) {
         dispatch(requestPosts(subreddit));
 

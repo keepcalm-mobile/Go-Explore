@@ -1,65 +1,48 @@
-import types from "./types";
-import modMap from "../map";
-import AsyncStorage from "@react-native-community/async-storage";
+import t from './types';
+import api from '../../constants';
+import md5 from 'md5';
+import modMap from '../map';
+import AsyncStorage from '@react-native-community/async-storage';
 
-function requestKey() {
-    console.log("requestKey !!!");
+export function loginHasErrored(iBool) {
+    console.log(">> action loginHasErrored : " + iBool);
     return {
-        type: types.REQUEST_KEY
-    }
+        type: t.LOGIN_HAS_ERRORED,
+        loginHasErrored: iBool,
+    };
 }
 
-function receiveKey(key) {
-    console.log("receiveKey !!!");
+export function loginIsLoading(iBool) {
+    console.log(">> action loginIsLoading : " + iBool);
     return {
-        type: types.RECEIVE_KEY,
-        key: key,
-        receivedAt: Date.now()
-    }
+        type: t.LOGIN_IS_LOADING,
+        loginIsLoading: iBool,
+    };
 }
 
-export function invalidateKey() {
-    console.log("invalidateKey !!!");
+export function loginSuccess(iData) {
     return {
-        type: types.INVALIDATE_KEY
-    }
+        type: t.LOGIN_SUCCESS,
+        user:{key:'qw543wer4g16f', uid:'00001'},//iData,
+    };
 }
 
+export function login(iUser) {
+    return (dispatch) => {
+        dispatch(loginIsLoading(true));
 
-export function generateKey() {
-    console.log("generateKey !!!");
-    return function(dispatch) {
-        dispatch(requestKey());
+        fetch(api + '/users')//'?user='+iUser.email+'&pass='+md5(iUser.pass)
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
 
-        return AsyncStorage.getItem('key')
-            .then(key =>
-                dispatch(receiveKey(key))
-            )
-    }
-}
+                dispatch(loginIsLoading(false));
 
-function shouldGenerateKey(state) {
-    console.log("shouldGenerateKey ? : " + JSON.stringify(state));
-
-    if (state.key === undefined) {
-        console.log("shouldGenerateKey = true");
-        return true
-    } else if (state.isReading) {
-        console.log("shouldGenerateKey = false");
-        return false
-    } else {
-        console.log("shouldGenerateKey = ERROR");
-        return state.didInvalidate
-    }
-}
-
-export function getAuthKey() {
-    console.log("getAuthKey : ");
-    return (dispatch, getState) => {
-        if (shouldGenerateKey(getState()[modMap.Auth])) {
-            return dispatch(generateKey())
-        } else {
-            return Promise.resolve()
-        }
-    }
+                return response;
+            })
+            .then((response) => response.json())
+            .then((data) => dispatch(loginSuccess(data)))
+            .catch(() => dispatch(loginHasErrored(true)));
+    };
 }
