@@ -19,10 +19,47 @@ function loginIsLoading(state = false, action) {
     }
 }
 
-function user(state = {}, action) {
+
+function loginSuccess(state = false, action) {
     switch (action.type) {
         case t.LOGIN_SUCCESS:
-            return action.user;
+            return action.loginSuccess;
+        default:
+            return state;
+    }
+}
+
+function restoreSuccess(state = false, action) {
+    switch (action.type) {
+        case t.RESTORE_SUCCESS:
+            return action.restoreSuccess;
+        default:
+            return state;
+    }
+}
+
+function registrationSuccess(state = false, action) {
+    switch (action.type) {
+        case t.REGISTRATION_SUCCESS:
+            return action.registrationSuccess;
+        default:
+            return state;
+    }
+}
+
+function otpSuccess(state = false, action) {
+    switch (action.type) {
+        case t.OTP_SUCCESS:
+            return action.otpSuccess;
+        default:
+            return state;
+    }
+}
+
+function termsSuccess(state = false, action) {
+    switch (action.type) {
+        case t.TERMS_SUCCESS:
+            return action.termsSuccess;
         default:
             return state;
     }
@@ -32,7 +69,11 @@ function user(state = {}, action) {
 const rootReducer = combineReducers({
     loginHasErrored,
     loginIsLoading,
-    user,
+    loginSuccess,
+    restoreSuccess,
+    registrationSuccess,
+    otpSuccess,
+    termsSuccess
 });
 
 export default rootReducer;

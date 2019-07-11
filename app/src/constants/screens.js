@@ -5,6 +5,6 @@ export default class {
         static LoginTab = 'LoginTab';
         static SignUpTab = 'SignUpTab';
         static ForgotTab = 'ForgotTab';
-        static OptTab = 'OptTab';
+        static OtpTab = 'OtpTab';
         static TermsTab = 'TermsTab';
 }

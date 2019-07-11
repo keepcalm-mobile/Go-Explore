@@ -4,6 +4,7 @@ import s from '../styles';
 import TabResizer from './TabResizer';
 import ButtonOrange from '../../../components/ButtonOrange';
 import {TextInput} from 'react-native-gesture-handler';
+import {screens} from "../../../constants";
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
@@ -23,6 +24,12 @@ class SignupTab extends TabResizer {
         };
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if ( props.isSuccess ){
+            props.navigation.navigate({ routeName: screens.OtpTab, key:screens.OtpTab + 'Key'});
+        }
+        return null;
+    }
 
     render() {
         const {bgStyle, textStyle} = super.render();
@@ -31,6 +38,15 @@ class SignupTab extends TabResizer {
             <View style={{flex:1, justifyContent:'space-between', flexDirection:'column'}}>
                 <View style={{height:1}}/>
                 <View onLayout={this.itemsMinCount}>
+                    <Animated.View style={[s.inputBg, bgStyle]}/>
+                    <AnimatedInput
+                        style={[s.input, textStyle]}
+                        placeholder="Full Name"
+                        placeholderTextColor={'#B7B7B7'}
+                        keyboardType={'default'}
+                        onChangeText={(fullName)=>this.setState({fullName})}
+                        value={this.state.fullName}
+                    />
                     <Animated.View style={[s.inputBg, bgStyle]}/>
                     <AnimatedInput
                         style={[s.input, textStyle]}
@@ -52,15 +68,6 @@ class SignupTab extends TabResizer {
                     <Animated.View style={[s.inputBg, bgStyle]}/>
                     <AnimatedInput
                         style={[s.input, textStyle]}
-                        placeholder="Full Name"
-                        placeholderTextColor={'#B7B7B7'}
-                        keyboardType={'default'}
-                        onChangeText={(fullName)=>this.setState({fullName})}
-                        value={this.state.fullName}
-                    />
-                    <Animated.View style={[s.inputBg, bgStyle]}/>
-                    <AnimatedInput
-                        style={[s.input, textStyle]}
                         placeholder="Password"
                         placeholderTextColor={'#B7B7B7'}
                         onChangeText={(password)=>this.setState({password})}
@@ -74,13 +81,8 @@ class SignupTab extends TabResizer {
         );
     }
 
-    _onSignUpPress = async () => {
-        // const resp = await signIn(this.state.email, this.state.password);
-        // if (Auth.AUTH_COMPLETE === resp){
-        //     this.props.navigation.navigate(screens.App);
-        // } else {
-        //     alert('Wrong all');
-        // }
+    _onSignUpPress = () => {
+        this.props.registration({login:this.state.fullName, email:this.state.email, phone:this.state.phoneNumber, password:this.state.password});
     };
 }
 

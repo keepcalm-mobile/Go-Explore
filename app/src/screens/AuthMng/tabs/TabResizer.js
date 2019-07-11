@@ -28,8 +28,6 @@ class TabResizer extends React.Component<Props> {
         itemsMinCount:1,
     };
 
-    // keyboardShown = false;
-    // keyboardHeight = 0;
     _layoutsMin = {};
 
 
@@ -52,17 +50,9 @@ class TabResizer extends React.Component<Props> {
     // }
 
 
-    _keyboardWillShow = (e) => {
-        // this.keyboardShown = true;
-        // this.keyboardHeight = e.endCoordinates.height;
-        this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, true);
-    };
+    _keyboardWillShow = (e) => this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, true);
 
-    _keyboardWillHide = (e) => {
-        // this.keyboardShown = false;
-        // this.keyboardHeight = 0;
-        this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, false);
-    };
+    _keyboardWillHide = (e) => this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, false);
 
 
     updateStateLayoutProps(iLayout, iAnim = false, iKeyboard = false) {
@@ -87,7 +77,7 @@ class TabResizer extends React.Component<Props> {
             this.state.opacityValue.setValue(toValue);
         }
 
-        this.setState({animBtnMargin: this.keyboardShown ? 0 : verticalScale(73)});
+        this.setState({animBtnMargin: iKeyboard ? 0 : verticalScale(73)});
     }
 
     itemsMinCount = (event) => {
@@ -98,7 +88,6 @@ class TabResizer extends React.Component<Props> {
         this._layoutsMin[iTarget] = iValue;
 
         if (this.state.itemsMinCount === TabResizer.layoutLength(this._layoutsMin)) {
-            // this.props.setCntHeight({areaMin: TabResizer.calcLayout(this._layoutsMin)});
             this.props.navigation.setParams({ minSize: TabResizer.calcLayout(this._layoutsMin) });
         }
     };

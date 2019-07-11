@@ -3,6 +3,11 @@ export default class {
   static LOGIN_IS_LOADING = 'LOGIN_IS_LOADING';
   static LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
+  static RESTORE_SUCCESS = 'RESTORE_SUCCESS';
+  static REGISTRATION_SUCCESS = 'REGISTRATION_SUCCESS';
+  static OTP_SUCCESS = 'OTP_SUCCESS';
+  static TERMS_SUCCESS = 'TERMS_SUCCESS';
+
   static SIGN_OUT = 'SIGN_OUT';
   static SIGN_IN = 'SIGN_IN';
   static SIGN_UP = 'SIGN_UP';

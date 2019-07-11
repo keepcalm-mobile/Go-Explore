@@ -7,16 +7,15 @@ import Logo from '../../../assets/logo.svg';
 import {scale, verticalScale} from '../../utils/resize';
 import {colors, doubleIndent, fontNames, fontSizes, indent} from '../../styles';
 import s from './styles';
-import {ForgotScreen, LoginScreen, TermsScreen, OptScreen, SignupScreen} from './tabs';
+import {ForgotScreen, LoginScreen, TermsScreen, OtpScreen, SignupScreen} from './tabs';
 import {screens} from '../../constants';
-import {ModMap} from '../../modules';
 
 
 const AuthTabs = createStackNavigator({
     [screens.LoginTab]  : { screen: LoginScreen},
     [screens.ForgotTab] : { screen: ForgotScreen},
     [screens.SignUpTab] : { screen: SignupScreen},
-    [screens.OptTab]    : { screen: OptScreen},
+    [screens.OtpTab]    : { screen: OtpScreen},
     [screens.TermsTab]  : { screen: TermsScreen},
 }
 ,{
@@ -79,7 +78,8 @@ class AuthMng extends React.Component<Props> {
     topLayoutH = 0;//Math.round(windowH * 0.1);
 
     state = {
-        animOpacity : new Animated.Value(0.999),
+        bgOpacity : new Animated.Value(0.999),
+        titleOpacity : new Animated.Value(0.999),
         animLogoTop : topMargMax,
         animScrollH : windowH,
         animAreaH : windowH,
@@ -96,9 +96,32 @@ class AuthMng extends React.Component<Props> {
         console.log('WINDOW H : ' + windowH);
     }
 
+    static getCurrentRouteSize(navState):number {
+        let value = 0;
+        if (navState.routes[navState.index].hasOwnProperty('params')){
+            value = navState.routes[navState.index].params.minSize;
+        }
+        return value ? value : 0;
+    }
+
+    static getCurrentRouteName(navState):string {
+        return navState.routes[navState.index].routeName;
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        console.log('GET Derived AUTH MNG : ' + JSON.stringify(props));
+
+        if (props.loginIsLoading !== state.isLoading){
+            return {isLoading : props.loginIsLoading};
+        } else {
+            return null;
+        }
+    }
+
+
     _updateStateLayoutProps(iAnim = false, iKey = false, iKeyH = 0) {
         // console.log("!!! - ROUT STATE : " + this.props.navigation._childrenNavigation[this.props.navigation.state.routes[this.props.navigation.state.index].key].getParam('minSize', '213') );
-        const areaMin = this._getCurrentRouteSize(this.props.navigation.state);//this.props.navigation.state.routes[this.props.navigation.state.index].params.minSize;
+        const areaMin = AuthMng.getCurrentRouteSize(this.props.navigation.state);//this.props.navigation.state.routes[this.props.navigation.state.index].params.minSize;
         let viewAreaH = windowH - iKeyH;
         let scrollH = windowH - iKeyH;
         let topMargin = iKey ? topMargMin : topMargMax;
@@ -111,17 +134,13 @@ class AuthMng extends React.Component<Props> {
             scrollH = cntH + topAreaH;
         }
 
-        if (iAnim) {LayoutAnimation.easeInEaseOut();}
+        if (iAnim) {
+            this._setBgOpacity(iKey ? 0.0 : 1.0);
+            LayoutAnimation.easeInEaseOut();
+        }
         this.setState({animLogoTop: topMargin, animAreaH: viewAreaH, animCntH:cntH, animScrollH:scrollH, scrollEnabled: scrollH > viewAreaH });
     }
 
-    _getCurrentRouteSize(navState):number {
-        let value = 0;
-        if (navState.routes[navState.index].hasOwnProperty('params')){
-            value = navState.routes[navState.index].params.minSize;
-        }
-        return value ? value : 0;
-    }
 
     _calcLayouts = (event) => {
         const topHeight = Math.round(event.nativeEvent.layout.height);
@@ -132,26 +151,18 @@ class AuthMng extends React.Component<Props> {
     };
 
 
-    static getDerivedStateFromProps(props, state) {
-        console.log('GET Derived AUTH MNG : ' + JSON.stringify(props));
-        // console.log('GET Derived AUTH MNG : ' + JSON.stringify(state));
-        if (props.loginIsLoading !== state.isLoading){
-            return {isLoading : props.loginIsLoading};
-        } else {
-            return null;
+    componentDidUpdate(prevProps, prevState) {
+        if (AuthMng.getCurrentRouteName(this.props.navigation.state) === screens.TermsTab){
+            this._setBgOpacity(0);
+        } else if (AuthMng.getCurrentRouteName(prevProps.navigation.state) === screens.TermsTab && this.opacity === 0.0){
+            this._setBgOpacity(1.0);
         }
+        this._changeTitle(null);
     }
 
-    // componentDidUpdate(prevProps, prevState) {
-    // // if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
-    //     console.log('DID AUTH MNG : ' + JSON.stringify(this.props));
-    //     // this._updateStateLayoutProps(this.props[ModMap.RegAnim]);
-    // // }
-    // }
-
     componentDidMount() {
-        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardWillShow);
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardWillHide);
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) =>  this._updateStateLayoutProps(true, true, e.endCoordinates.height));//this._keyboardWillShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this._updateStateLayoutProps(true, false));//this._keyboardWillHide);
     }
 
     componentWillUnmount() {
@@ -159,25 +170,36 @@ class AuthMng extends React.Component<Props> {
         this.keyboardDidHideListener.remove();
     }
 
-    _keyboardWillShow = (e) => {
-        Animated.timing(this.state.animOpacity, {
-            toValue: 0.0,
+
+    _setBgOpacity(iValue){
+        if (iValue === 1.0 && AuthMng.getCurrentRouteName(this.props.navigation.state) === screens.TermsTab) return;
+
+        this.opacity = iValue;
+        Animated.timing(this.state.bgOpacity, {
+            toValue: iValue,
             duration: 500,
             useNativeDriver: true,
         }).start();
+    }
 
-        this._updateStateLayoutProps(true, true, e.endCoordinates.height);
-    };
+    _changeTitle(iProps){
+            Animated.timing(this.state.titleOpacity, {
+                toValue: 0.0,
+                duration: 300,
+                useNativeDriver: true,
+            }).start(() => {
+                this._titleHiddenHandler(iProps);
+            });
+    }
 
-    _keyboardWillHide = () => {
-        Animated.timing(this.state.animOpacity, {
+    _titleHiddenHandler(iProps){
+
+        Animated.timing(this.state.titleOpacity, {
             toValue: 1.0,
-            duration: 500,
+            duration: 300,
             useNativeDriver: true,
         }).start();
-
-        this._updateStateLayoutProps(true, false);
-    };
+    }
 
 
     render() {
@@ -187,16 +209,21 @@ class AuthMng extends React.Component<Props> {
 
         return (//{height:this.state.animAreaH},
             <View style={[s.fillAll, {backgroundColor: '#000000'}]}>
-                <Animated.View style={[StyleSheet.absoluteFill, {opacity: this.state.animOpacity}]}>
+                <Animated.View style={[StyleSheet.absoluteFill, {opacity: this.state.bgOpacity}]}>
                     <AppBg/>
                     <Waves/>
                 </Animated.View>
                 <View style={{height:this.state.animAreaH}}>
-                    <ScrollView contentContainerStyle={{height:this.state.animScrollH, justifyContent:'space-between', flexDirection:'column'}} scrollEnabled={this.state.scrollEnabled}>
+                    <ScrollView contentContainerStyle={{height:this.state.animScrollH, justifyContent:'space-between', flexDirection:'column'}}
+                                scrollEnabled={this.state.scrollEnabled}
+                                keyboardShouldPersistTaps={'handled'}
+                                removeClippedSubviews={false}>
                         <View style={{marginTop: this.state.animLogoTop}} onLayout={this._calcLayouts}>
                             <Logo width={scale(330)} style={s.logo}/>
-                            <Text style={s.welcome}>Welcome to GoExplore City</Text>
-                            <Text style={s.signIn}>Sign in to continue</Text>
+                            <Animated.View style={{opacity: this.state.titleOpacity}}>
+                                <Text style={s.welcome}>Welcome to GoExplore City</Text>
+                                <Text style={s.signIn}>Sign in to continue</Text>
+                            </Animated.View>
                         </View>
                         <View style={[{height:this.state.animCntH}]}>
                             <AuthTabs navigation={navigation}/>
@@ -205,7 +232,7 @@ class AuthMng extends React.Component<Props> {
                 </View>
                 <OverlayLoader
                     visible={this.state.isLoading}
-                    message="Loading... 😀😀😀"
+                    message="Loading..."
                 />
             </View>
         );

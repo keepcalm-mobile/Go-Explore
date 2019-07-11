@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
 
     socialBtn: {
         flexDirection:'column',
-        margin: scale(12)
+        margin: scale(12),
     },
 
     signUp: {
@@ -115,6 +115,15 @@ const styles = StyleSheet.create({
         // justifyContent: 'flex-end',
         marginBottom: indent,
     },
+
+    terms: {
+        marginLeft:indent,
+        marginRight:indent,
+        fontFamily: fontNames.regular,
+        color: colors.secondaryText,
+        fontSize: fontSizes.medium,
+    },
+
 
     // container2: {
     //     backgroundColor:'green',

@@ -1,9 +1,7 @@
 import React from 'react';
 import {ActivityIndicator, Text, View} from 'react-native';
 import s from './styles';
-// import {auth, Auth} from "../../api/Auth";
 import {screens} from '../../constants';
-import {ModMap} from '../../modules';
 import AuthBackground from '../../components/AppBackground';
 
 
@@ -22,7 +20,7 @@ class AuthLoader extends React.Component<Props> {
     // componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
     //     console.log(" componentWillReceiveProps : " + JSON.stringify(nextProps));
     //     this._checkAuth(nextProps[ModMap.Auth]);
-    //     // nextProps.navigation.navigate( nextProps[ModMap.Auth].didInvalidate ? screens.AuthMng : screens.App);
+    //     // nextProps.navigation.navigate( nextProps[ModMap.Auth].userInvalidate ? screens.AuthMng : screens.App);
     // }
 
 
@@ -37,13 +35,13 @@ class AuthLoader extends React.Component<Props> {
     }
 
     // _checkAuth(iAuth) {
-    //     if(iAuth === undefined || iAuth.isReading) return;
-    //     this.props.navigation.navigate(iAuth.didInvalidate ? screens.AuthMng : screens.App);
+    //     if(iAuth === undefined || iAuth.userIsReading) return;
+    //     this.props.navigation.navigate(iAuth.userInvalidate ? screens.AuthMng : screens.App);
     // }
 
     static getDerivedStateFromProps(props, state) {
-        if (props[ModMap.Auth] !== undefined && !props[ModMap.Auth].isReading) {
-            props.navigation.navigate(props[ModMap.Auth].didInvalidate ? screens.AuthMng : screens.App);
+        if (!props.userIsReading) {
+            props.navigation.navigate(props.userInvalidate ? screens.AuthMng : screens.App);
         }
         return null;
     }

@@ -6,7 +6,7 @@ import { handleActions } from 'redux-actions';
 // };
 //
 // const settingsReducer = handleActions({
-//     [types.SET_PROP]: mergeIn(action => action.payload),
+//     [t.SET_PROP]: mergeIn(action => action.payload),
 // }, initialState);
 //
 // export default settingsReducer;

@@ -4,6 +4,7 @@ import s from '../styles';
 import TabResizer from './TabResizer';
 import {TextInput} from 'react-native-gesture-handler';
 import ButtonOrange from '../../../components/ButtonOrange';
+import {screens} from "../../../constants";
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
@@ -20,6 +21,13 @@ class ForgotTab extends TabResizer {
         };
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if ( props.isSuccess ){
+            props.navigation.goBack();
+        }
+        return null;
+    }
+
     render() {
         const {bgStyle, textStyle} = super.render();
 
@@ -27,18 +35,16 @@ class ForgotTab extends TabResizer {
             //{/*<SafeAreaView forceInset={{ horizontal: 'always', top: 'always' }}>*/}
             <View style={{flex:1, justifyContent:'space-between', flexDirection:'column'}}>
                 <View style={{height:1}}/>
-                <View>
-                    <View onLayout={this.itemsMinCount}>
-                        <Animated.View style={[s.inputBg, bgStyle]}/>
-                        <AnimatedInput
-                            style={[s.input, textStyle]}
-                            placeholder="Email"
-                            placeholderTextColor={'#B7B7B7'}
-                            keyboardType={'email-address'}
-                            onChangeText={(email)=>this.setState({email})}
-                            value={this.state.email}
-                        />
-                    </View>
+                <View onLayout={this.itemsMinCount}>
+                    <Animated.View style={[s.inputBg, bgStyle]}/>
+                    <AnimatedInput
+                        style={[s.input, textStyle]}
+                        placeholder="Email"
+                        placeholderTextColor={'#B7B7B7'}
+                        keyboardType={'email-address'}
+                        onChangeText={(email)=>this.setState({email})}
+                        value={this.state.email}
+                    />
                 </View>
 
                 <ButtonOrange onLayout={this.itemsMinCount} onPress={this._sendEmail} title={'SUBMIT'}/>
@@ -47,7 +53,8 @@ class ForgotTab extends TabResizer {
         );
     }
 
-    _sendEmail = async () => {
+    _sendEmail = () => {
+        this.props.restore(this.state.email);
         // const resp = await signIn(this.state.email, this.state.password);
         // if (Auth.AUTH_COMPLETE === resp){
         //     this.props.navigation.navigate(screens.App);

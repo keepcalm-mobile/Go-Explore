@@ -27,6 +27,13 @@ class LoginTab extends TabResizer {
         };
     }
 
+    static getDerivedStateFromProps(props, state) {
+        if ( props.isSuccess ){
+            props.navigation.navigate(screens.App);
+        }
+        return null;
+    }
+
     updateStateLayoutProps(iLayout, iAnim = false, iKeyboard = false) {
         super.updateStateLayoutProps(iLayout, iAnim, iKeyboard);
         let socHeight = iKeyboard ? 0 : verticalScale(100);
@@ -57,13 +64,9 @@ class LoginTab extends TabResizer {
     };
 
     _forgotArea = () => {
-        if (!this.props.isLoading) {
-            if (this.state.animSocialHeight > 50) {
-                return (<Text style={[s.forgot]} onPress={this.onForgotPress}>Forgot Password?</Text>);
-            } else {
-                return null;
-            }
-        }else{
+        if (this.state.animSocialHeight > 50) {
+            return (<Text style={[s.forgot]} onPress={this.onForgotPress}>Forgot Password?</Text>);
+        } else {
             return null;
         }
     };
@@ -117,12 +120,10 @@ class LoginTab extends TabResizer {
     }
 
     onSignInPress = () => {
-        // const resp = await signIn(this.state.email, this.state.password);
-        // if (Auth.AUTH_COMPLETE === resp){
-        if(this.props.isLoading) return;
-
         this.props.login({email:this.state.email, pass:this.state.password});
 
+        // const resp = await signIn(this.state.email, this.state.password);
+        // if (Auth.AUTH_COMPLETE === resp){
         // this.props.navigation.navigate(screens.App);
         // } else {
         //     alert('Wrong all');
@@ -140,9 +141,6 @@ class LoginTab extends TabResizer {
 
     onGooglePress = () => {
         alert('Google login');
-        // this.setState({
-        //     count: this.state.count+1
-        // })
     };
 
     onFacebookPress = () => {

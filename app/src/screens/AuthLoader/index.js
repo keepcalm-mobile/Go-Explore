@@ -8,4 +8,4 @@ import { ModMap } from '../../modules';
 //     connect(),
 // );
 
-export default connect(state => ({ [ ModMap.Auth ] : state[ ModMap.Auth ] }))(AuthLoader);//enhance(AuthLoader);
+export default connect(state => (state[ ModMap.Auth ]))(AuthLoader);//enhance(AuthLoader);

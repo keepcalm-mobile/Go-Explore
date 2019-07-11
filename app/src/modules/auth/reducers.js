@@ -1,9 +1,9 @@
-import types from './types';
+import t from './types';
 //import { combineReducers } from 'redux';
 //
 // function selectedSubreddit(state = 'reactjs', action) {
 //     switch (action.type) {
-//         case types.SELECT_SUBREDDIT:
+//         case t.SELECT_SUBREDDIT:
 //             return action.subreddit;
 //         default:
 //             return state
@@ -12,51 +12,46 @@ import types from './types';
 
 function keyData(
     state = {
-        isReading: false,
-        didInvalidate: false,
-        key: '',
+        userIsReading: false,
+        userInvalidate: false,
+        user: null,
     },
     action
 ) {
     switch (action.type) {
-        case types.INVALIDATE_KEY:
-            return Object.assign({}, state, {
-                didInvalidate: true,
-            });
-        case types.REQUEST_KEY:
-            return Object.assign({}, state, {
-                isReading: true,
-                didInvalidate: false,
-            });
-        case types.RECEIVE_KEY:
-            return Object.assign({}, state, {
-                isReading: false,
-                didInvalidate: action.key === null ? true : false,
-                key: action.key,
+        case t.USER_INVALIDATE:
+            return {
+                userIsReading: false,
+                userInvalidate: action.userInvalidate,
+            };
+        case t.USER_REQUEST:
+            return {
+                userIsReading: true,
+                userInvalidate: false,
+            };
+        case t.USER_RECEIVE:
+            return {
+                userIsReading: false,
+                userInvalidate: action.user === null ? true : false,
+                user: action.user,
                 lastUpdated: action.receivedAt,
-            });
+            };
         default:
             return state;
     }
 }
 
-function keyStore(state = {}, action) {
+function userStore(state = {}, action) {
     switch (action.type) {
-        case types.INVALIDATE_KEY:
-        case types.RECEIVE_KEY:
-        case types.REQUEST_KEY:
+        case t.USER_INVALIDATE:
+        case t.USER_RECEIVE:
+        case t.USER_REQUEST:
             return Object.assign({}, state, keyData(state, action) );
         default:
             return state;
     }
 }
 
-// export {keyStore, selectedSubreddit};
+const userReducer = userStore;
 
-const rootReducer = keyStore;
-//     combineReducers({
-//     postsBySubreddit: keyStore,
-//     // selectedSubreddit
-// });
-
-export default rootReducer
+export default userReducer

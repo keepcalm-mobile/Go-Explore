@@ -1,65 +1,78 @@
 import types from './types';
 import modMap from '../map';
 import AsyncStorage from '@react-native-community/async-storage';
+import t from "../reg/types";
 
-function requestKey() {
-    console.log('requestKey !!!');
+function userInvalidate(iBool) {
+    console.log('userInvalidate !!!');
     return {
-        type: types.REQUEST_KEY,
+        type: types.USER_INVALIDATE,
+        userInvalidate: iBool,
     };
 }
 
-function receiveKey(key) {
-    console.log('receiveKey !!!');
+function userRequest() {
+    console.log('userRequest !!!');
     return {
-        type: types.RECEIVE_KEY,
-        key: key,
+        type: types.USER_REQUEST,
+    };
+}
+
+function userReceive(iData) {
+    console.log('userReceive !!!');
+    return {
+        type: types.USER_RECEIVE,
+        user: iData,
         receivedAt: Date.now(),
     };
 }
 
-function shouldReadKey(state) {
-    console.log('shouldReadKey ? : ' + JSON.stringify(state));
+function shouldReadData(state) {
+    console.log('shouldReadData ? : ' + JSON.stringify(state));
 
-    if (state.key === undefined) {
-        console.log('shouldReadKey = true');
+    if (state.user === undefined) {
+        console.log('shouldReadData = true');
         return true;
-    } else if (state.isReading) {
-        console.log('shouldReadKey = false');
+    } else if (state.userIsReading) {
+        console.log('shouldReadData = false');
         return false;
     } else {
-        console.log('shouldReadKey = ERROR');
-        return state.didInvalidate;
+        console.log('shouldReadData = ERROR');
+        return state.userInvalidate;
     }
 }
 
 
-export function invalidateKey() {
-    console.log('invalidateKey !!!');
-    return {
-        type: types.INVALIDATE_KEY,
-    };
-}
-
-export function readKey() {
-    console.log('readKey !!!');
+function readUserData() {
+    console.log('readUserData !!!');
     return function(dispatch) {
-        dispatch(requestKey());
+        dispatch(userRequest());
 
-        return AsyncStorage.getItem('key')
-            .then(key =>
-                dispatch(receiveKey(key))
-            );
+        return AsyncStorage.getItem('user').then( user => {
+            if (user === null) {
+                dispatch(userInvalidate(true));
+            } else {
+                dispatch(userReceive(JSON.parse(user)));
+            }
+        });
     };
 }
 
-export function getAuthKey() {
-    console.log('getAuthKey : ');
+
+export function getUserData() {
+    console.log('getUserData : ');
     return (dispatch, getState) => {
-        if (shouldReadKey(getState()[modMap.Auth])) {
-            return dispatch(readKey());
+        if (shouldReadData(getState()[modMap.Auth])) {
+            return dispatch(readUserData());
         } else {
             return Promise.resolve();
         }
     };
+}
+
+export function writeUserData(iData) {
+    return AsyncStorage.setItem('user', JSON.stringify(iData)).then( () => {
+            return userReceive(iData);
+        }
+    );
 }
