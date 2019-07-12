@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 // import { compose } from 'recompose';
 // import { compose } from 'redux';
 import AuthMng from './AuthMng';
-import { login } from "../../modules/reg";
-import ModMap from "../../modules/map";
+import { login } from '../../modules/reg';
+import ModMap from '../../modules/map';
 
 // // const enhance = compose(
 // //     connect(),

@@ -122,7 +122,7 @@ class LoginTab extends TabResizer {
     onSignInPress = () => {
         this.props.login({email:this.state.email, pass:this.state.password});
 
-        // const resp = await signIn(this.state.email, this.state.password);
+        // const resp = await subTitle(this.state.email, this.state.password);
         // if (Auth.AUTH_COMPLETE === resp){
         // this.props.navigation.navigate(screens.App);
         // } else {

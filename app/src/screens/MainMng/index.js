@@ -1,10 +1,6 @@
 import { connect } from 'react-redux';
-// import { compose } from 'recompose';
-import { compose } from 'redux';
-import HomeScreen from './ScreenMain';
+import MainMng from './MainMng';
+import ModMap from '../../modules/map';
+import {login} from '../../modules/reg';
 
-const enhance = compose(
-    connect(),
-);
-
-export default enhance(HomeScreen);
+export default connect( state => (state[ ModMap.Reg ]), { login } )(MainMng);

@@ -6,7 +6,8 @@ const colors = {
     lightSecondary: '#3A3A3A',
     secondaryText: '#939393',
     highlight: '#9B68FF',
-    border: '#ffa83b'
+    border: '#ffa83b',
+    background: '#212121',
 };
 
 export default colors;

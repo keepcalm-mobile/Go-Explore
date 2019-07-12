@@ -55,7 +55,7 @@ class ForgotTab extends TabResizer {
 
     _sendEmail = () => {
         this.props.restore(this.state.email);
-        // const resp = await signIn(this.state.email, this.state.password);
+        // const resp = await subTitle(this.state.email, this.state.password);
         // if (Auth.AUTH_COMPLETE === resp){
         //     this.props.navigation.navigate(screens.App);
         // } else {

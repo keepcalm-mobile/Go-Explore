@@ -22,7 +22,7 @@ class ButtonOrange extends React.Component<Props> {
                     <Text style={styles.buttonText}> {title} </Text>
                 </LinearGradient>
             </TouchableOpacity>
-        )
+        );
     }
 }
 

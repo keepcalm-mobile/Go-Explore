@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         // margin: 10,
     },
 
-    signIn:{
+    subTitle:{
         fontFamily: fontNames.regular,
         left: indent,//'5.6%',
         fontSize: fontSizes.small,

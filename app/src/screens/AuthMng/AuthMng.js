@@ -71,6 +71,20 @@ const barH = (Platform.OS === 'android') ? getStatusBarHeight() : 0;
 const windowH = Dimensions.get('window').height - barH;
 const topMargMin = indent + startY;
 const topMargMax = Math.round(Dimensions.get('window').height * 0.04) + startY;//verticalScale(15)
+const titles = {
+    default:{
+        title:{ text:'Welcome to GoExplore City', style:{color:colors.white} },
+        subTitle:{ text:'Sign in to continue', style:{color:colors.white, fontSize: fontSizes.small} },
+    },
+    [screens.OtpTab]:{
+        title:{ text:'Verify your Mobile', style:{color:colors.highlight} },
+        subTitle:{ text:'Enter your OTP code here', style:{color:colors.secondaryText, fontSize: fontSizes.medium} },
+    },
+    [screens.TermsTab]:{
+        title:{ text:'Terms of service', style:{color:colors.highlight} },
+        subTitle:{ text:'For User Capi Bar', style:{color:colors.secondaryText, fontSize: fontSizes.medium} },
+    },
+};
 
 class AuthMng extends React.Component<Props> {
     static router = AuthTabs.router;
@@ -86,22 +100,26 @@ class AuthMng extends React.Component<Props> {
         animCntH : 0,//Math.round(windowH * 0.9),
         scrollEnabled : false,
         isLoading:false,
+        titleID : 'default',
     };
 
     constructor(props) {
         super(props);
+        this.prevTitle = this.state.titleID;//;
+
         console.log('AuthMng : ' + JSON.stringify(props));
         console.log('router : ' + JSON.stringify(AuthTabs.router));
-
         console.log('WINDOW H : ' + windowH);
     }
 
     static getCurrentRouteSize(navState):number {
         let value = 0;
-        if (navState.routes[navState.index].hasOwnProperty('params')){
-            value = navState.routes[navState.index].params.minSize;
+        if (navState.routes[navState.index].params !== undefined) {
+            if (navState.routes[navState.index].params.minSize !== undefined) {
+                value = navState.routes[navState.index].params.minSize;
+            }
         }
-        return value ? value : 0;
+        return value;
     }
 
     static getCurrentRouteName(navState):string {
@@ -147,17 +165,23 @@ class AuthMng extends React.Component<Props> {
         if (this.topLayoutH >= topHeight) {return;}
         this.topLayoutH = topHeight;
         this._updateStateLayoutProps();
-        // this.props.setCntHeight({tMin:this.topLayoutH + topMargMin, tMax: this.topLayoutH + topMargMax});
     };
 
 
     componentDidUpdate(prevProps, prevState) {
-        if (AuthMng.getCurrentRouteName(this.props.navigation.state) === screens.TermsTab){
+        const newRouteName = AuthMng.getCurrentRouteName(this.props.navigation.state);
+        if (newRouteName === screens.TermsTab){
             this._setBgOpacity(0);
         } else if (AuthMng.getCurrentRouteName(prevProps.navigation.state) === screens.TermsTab && this.opacity === 0.0){
             this._setBgOpacity(1.0);
         }
-        this._changeTitle(null);
+
+        let nextTitle = (newRouteName === screens.TermsTab || newRouteName === screens.OtpTab) ? newRouteName : 'default';
+
+        if (this.prevTitle !== nextTitle ) {
+            this.prevTitle = nextTitle;
+            this._changeTitle(nextTitle);
+        }
     }
 
     componentDidMount() {
@@ -193,7 +217,7 @@ class AuthMng extends React.Component<Props> {
     }
 
     _titleHiddenHandler(iProps){
-
+        this.setState({titleID : iProps});
         Animated.timing(this.state.titleOpacity, {
             toValue: 1.0,
             duration: 300,
@@ -221,8 +245,8 @@ class AuthMng extends React.Component<Props> {
                         <View style={{marginTop: this.state.animLogoTop}} onLayout={this._calcLayouts}>
                             <Logo width={scale(330)} style={s.logo}/>
                             <Animated.View style={{opacity: this.state.titleOpacity}}>
-                                <Text style={s.welcome}>Welcome to GoExplore City</Text>
-                                <Text style={s.signIn}>Sign in to continue</Text>
+                                <Text style={[s.welcome, titles[this.state.titleID].title.style]}>{titles[this.state.titleID].title.text}</Text>
+                                <Text style={[s.subTitle, titles[this.state.titleID].subTitle.style]}>{titles[this.state.titleID].subTitle.text}</Text>
                             </Animated.View>
                         </View>
                         <View style={[{height:this.state.animCntH}]}>
@@ -238,8 +262,6 @@ class AuthMng extends React.Component<Props> {
         );
     }
 }
-
-// , scrollEnabled:false
 //contentContainerStyle={{flex:1, justifyContent:'space-between', flexDirection:'column'}, flexWrap:'wrap'
 //flex:.68//flex:.32//height:this.state.animAreaH,
 //height:this.state.animAreaH,z
