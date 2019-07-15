@@ -1,5 +1,4 @@
 export default class {
-    static App = 'App';
     static InitialSetup = 'InitialSetup';
     static AuthMng = 'AuthMng';
         static LoginTab = 'LoginTab';
@@ -7,4 +6,17 @@ export default class {
         static ForgotTab = 'ForgotTab';
         static OtpTab = 'OtpTab';
         static TermsTab = 'TermsTab';
+    static App = 'App';
+        static Notifications = 'Notifications';
+        static Calendar = 'Calendar';
+        static DataPages = 'DataPages';
+            static HotPicks = 'HotPicks';
+            static Cinema = 'Cinema';
+            static Attraction = 'Attraction';
+            static Travel = 'Travel';
+            static Shopping = 'Shopping';
+            static Dining = 'Dining';
+            static HealthBeauty = 'HealthBeauty';
+        static Bookmarks = 'Bookmarks';
+        static VirtualReality = 'VirtualReality';
 }

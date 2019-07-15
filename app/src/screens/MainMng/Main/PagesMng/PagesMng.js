@@ -13,7 +13,7 @@ class PagesMng extends React.Component<Props> {
 
     render() {
         return (
-            <View>
+            <View style={{flex:1}}>
                 <CategoriesMng />
             </View>
         );
