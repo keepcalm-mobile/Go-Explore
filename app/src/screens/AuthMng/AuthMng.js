@@ -1,5 +1,17 @@
 import React from 'react';
-import {Keyboard, Text, View, Animated, Easing, LayoutAnimation, StyleSheet, Dimensions, Platform, ScrollView} from 'react-native';
+import {
+    Keyboard,
+    Text,
+    View,
+    Animated,
+    Easing,
+    LayoutAnimation,
+    StyleSheet,
+    Dimensions,
+    Platform,
+    ScrollView,
+    PermissionsAndroid, ToastAndroid
+} from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import {AppBg, Waves, OverlayLoader} from '../../components';
@@ -10,6 +22,34 @@ import s from './styles';
 import {ForgotScreen, LoginScreen, TermsScreen, OtpScreen, SignupScreen} from './tabs';
 import {screens} from '../../constants';
 
+async function requestPermission() {
+    try {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+                title: 'Location Permission',
+                message:
+                    'We need access to your geolocation, ' +
+                    'so you can find things nearby.',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+            },
+        );
+
+        // if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
+        //
+        //     ToastAndroid.showWithGravity(
+        //         'Permissions granted',
+        //         ToastAndroid.LONG,
+        //         ToastAndroid.CENTER,
+        //     );
+        // }
+
+    } catch (err) {
+        console.warn(err);
+    }
+}
 
 const AuthTabs = createStackNavigator({
     [screens.LoginTab]  : { screen: LoginScreen},
@@ -187,6 +227,8 @@ class AuthMng extends React.Component<Props> {
     componentDidMount() {
         this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) =>  this._updateStateLayoutProps(true, true, e.endCoordinates.height));//this._keyboardWillShow);
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => this._updateStateLayoutProps(true, false));//this._keyboardWillHide);
+
+        requestPermission();
     }
 
     componentWillUnmount() {

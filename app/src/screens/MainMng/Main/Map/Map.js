@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Animated, PanResponder} from 'react-native';
+import {View, Animated, PanResponder, AsyncStorage} from 'react-native';
 import {scale} from '../../../../utils/resize';
 import {indent, windowH, windowW} from '../../../../styles';
 
@@ -19,6 +19,9 @@ const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
+
+const GPS_TIMEOUT = 60000;
+const GPS_MAXIMUM_AGE = 600000; // adjust these values
 
 async function requestPermission() {
     try {
@@ -49,15 +52,6 @@ async function requestPermission() {
                 gpsGranted: 'true',
             });
         }
-
-
-        //Alert.alert("", "Requesting ok");
-
-    } catch (err) {
-        console.warn(err);
-
-        //Alert.alert("", "Requesting NOT ok");
-    }
 }
 
 class Map extends React.Component<Props> {
@@ -86,6 +80,7 @@ class Map extends React.Component<Props> {
             map: null,
             targetMarker: null,
             route: null,
+            lastGeolocation: null
         };
 
     // }
@@ -172,12 +167,23 @@ class Map extends React.Component<Props> {
                 target.coords.longitude += 0.0020;
                 this.setTargetPosition(target);
 
+                AsyncStorage.setItem('LastGPS', JSON.stringify(position));
+
                 setTimeout(() => {
 
                     if (this.state.map != null)
                         {this.state.map.animateToCoordinate(position.coords, 0);} // deprecated, but works
 
                 }, 300);
+
+                Geolocation.watchPosition(position => this.setPosition(position), error => {
+                        ToastAndroid.showWithGravity(
+                            'Watch position error: ' + JSON.stringify(error),
+                            ToastAndroid.LONG,
+                            ToastAndroid.CENTER,
+                        );
+                    },
+                    {enableHighAccuracy: true, timeout: GPS_TIMEOUT, maximumAge: GPS_MAXIMUM_AGE});
 
             },
             error => {
@@ -189,34 +195,12 @@ class Map extends React.Component<Props> {
 
                 this.getCurrentPosition();
             },
-            {enableHighAccuracy: true, timeout: 50000, maximumAge: 8000},
+            {enableHighAccuracy: true, timeout: GPS_TIMEOUT, maximumAge: GPS_TIMEOUT},
         );
-
-        Geolocation.watchPosition(position => this.setPosition(position), error => {
-            ToastAndroid.showWithGravity(
-                'Watch position error: ' + JSON.stringify(error),
-                ToastAndroid.LONG,
-                ToastAndroid.CENTER,
-            );
-        },
-            {enableHighAccuracy: true, timeout: 50000, maximumAge: 8000});
     }
 
-    componentDidMount() {
-
-        if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))
-        {
-            ToastAndroid.showWithGravity(
-                'GPS granted',
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-            );
-
-            this.getCurrentPosition();
-        }
-        else
-            {requestPermission();}
-
+    async componentDidMount() {
+        this.state.lastGeolocation = await AsyncStorage.getItem('LastGPS');
     }
 
     render() {
@@ -229,18 +213,11 @@ class Map extends React.Component<Props> {
                     style={{flex: 1}}
                     initialRegion={this.state.region}
                     customMapStyle={mapStyles}
+                    loadingEnabled={true}
                     ref={ref => {
                         this.state.map = ref;
                     }}
                     onPress={(e) => {
-
-                        let str = '(' + e.nativeEvent.coordinate.latitude + ';' + e.nativeEvent.coordinate.longitude + ')';
-
-                        ToastAndroid.showWithGravity(
-                            'Clicked on ' + str,
-                            ToastAndroid.SHORT,
-                            ToastAndroid.CENTER,
-                        );
 
                         this.state.targetPosition = e.nativeEvent.coordinate;
 
@@ -252,6 +229,21 @@ class Map extends React.Component<Props> {
                                 {this.state.route.destination = this.state.targetPosition;}
                         }, 400);
 
+                    }}
+                    onMapReady={result => {
+                        if (this.state.lastGeolocation != null)
+                        {
+                            let position = JSON.parse(this.state.lastGeolocation);
+
+                            this.setPosition(position);
+                            if (this.state.map != null)
+                                this.state.map.animateToCoordinate(position.coords, 300); // deprecated, but works
+                        }
+
+                        if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))
+                        {
+                            this.getCurrentPosition();
+                        }
                     }}
                 >
                     <Marker
@@ -271,25 +263,17 @@ class Map extends React.Component<Props> {
                         origin={this.state.currentPosition}
                         destination={this.state.targetPosition}
                         apikey={GOOGLE_MAPS_APIKEY}
-                        strokeWidth={3}
-                        strokeColor="hotpink"
-                        optimizeWaypoints={false}
+                        strokeWidth={5}
+                        strokeColor="#eaeaea"
+                        optimizeWaypoints={false} // if true - more optimized route, but costs more (higher Google API tariff)
                         ref={ref => {
                             this.state.route = ref;
                         }}
                         onStart={(params) => {
-                            ToastAndroid.showWithGravity(
-                                'Started making your route',
-                                ToastAndroid.LONG,
-                                ToastAndroid.CENTER,
-                            );
+
                         }}
                         onReady={result => {
-                            ToastAndroid.showWithGravity(
-                                'Your route is ready',
-                                ToastAndroid.LONG,
-                                ToastAndroid.CENTER,
-                            );
+
                         }}
                         onError={err => {
                             ToastAndroid.showWithGravity(
