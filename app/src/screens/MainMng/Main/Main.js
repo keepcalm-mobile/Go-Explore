@@ -35,7 +35,7 @@ class Main extends React.Component {
                 <SlidingUpPanel ref={c => this._panel = c}>
                     <View style={{flex:1, backgroundColor:'#000000', alignItems: 'center', justifyContent: 'center'}}>
                         {/*<LinearGradient colors={['#00000000', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={{height:(windowH*.8), width:'100%'}} />*/}
-                        <Text>Here is the content inside panel</Text>
+                        <Text style={{color: '#ffffff', fontSize: 25}}>Here is the content inside panel</Text>
                     </View>
                 </SlidingUpPanel>
             </View>
