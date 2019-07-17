@@ -1,18 +1,12 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {colors} from '../../../../styles';
-import {scale} from '../../../../utils/resize';
-import s from './style';
 import type {Props} from 'react-native/Libraries/Components/View/View';
 import PropTypes from 'prop-types';
-
-import IconNotifGray from '../../../../../assets/bottomIcons/iconNotifGray.svg';
-import IconCalendarGray from '../../../../../assets/bottomIcons/iconCalendarGray.svg';
-import IconMainGray from '../../../../../assets/bottomIcons/iconMainGray.svg';
-import IconMainColor from '../../../../../assets/bottomIcons/iconMainColor.svg';
-import IconBookmarkGray from '../../../../../assets/bottomIcons/iconBookmarkGray.svg';
-import IconArGray from '../../../../../assets/bottomIcons/iconArGray.svg';
+import LinearGradient from 'react-native-linear-gradient';
+import {colors, doubleIndent, indent, bottomIndent} from '../../../../styles';
+import {scale} from '../../../../utils/resize';
+import s from './style';
+import {screens} from '../../../../constants';
 
 
 
@@ -25,10 +19,10 @@ import IconArGray from '../../../../../assets/bottomIcons/iconArGray.svg';
 //         {/*</TouchableOpacity>*/}
 //     </View>
 // );
-const button = (IconG, onPress = null) => {
+const button = (Icon, onPress, iId) => {
     return (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.5} style={{width: scale(28), height: scale(24), alignItems:'center'}}>
-            <IconG/>
+        <TouchableOpacity onPress = {() => onPress(iId)} activeOpacity={0.5} style={{width: scale(35), height: scale(35), alignItems:'center', justifyContent:'center'}}>
+            <Icon height={scale(26)}/>
         </TouchableOpacity>
     );
 };
@@ -36,11 +30,21 @@ const button = (IconG, onPress = null) => {
 
 class MenuBottom extends React.Component<Props> {
     static propTypes = {
-        openPanel: PropTypes.func.isRequired,
+        onButtonPress: PropTypes.func.isRequired,
         // onPress: PropTypes.func.isRequired,
         // onLayout: PropTypes.func,
         // icon: PropTypes.object,
     };
+
+    state = {
+        [screens.Notifications]:screens.AppPages[screens.Notifications].iconG,
+        [screens.Calendar]:screens.AppPages[screens.Calendar].iconG,
+        [screens.DataPages]:screens.AppPages[screens.DataPages].iconC,
+        [screens.Bookmarks]:screens.AppPages[screens.Bookmarks].iconG,
+        [screens.VirtualReality]:screens.AppPages[screens.VirtualReality].iconG,
+        prevPage:screens.DataPages,
+    };
+
 
     constructor(props) {
         super(props);
@@ -48,15 +52,25 @@ class MenuBottom extends React.Component<Props> {
     }
 
 
+    changeIcon = (iId) => {
+        console.log('>>>>>>>CHANGE ICON');
+        if (this.state.prevPage !== iId){
+            this.setState({[this.state.prevPage]:screens.AppPages[this.state.prevPage].iconG, [iId]:screens.AppPages[iId].iconC, prevPage:iId});
+        }
+    };
+
     render = () => {
-        const { openPanel } = this.props;
+        const { onButtonPress } = this.props;
         return (
-            <View style={{width:'100%', height:scale(45), backgroundColor:'#1D1D1D', justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>
-                {button(IconNotifGray)}
-                {button(IconCalendarGray)}
-                {button(IconMainColor, openPanel)}
-                {button(IconBookmarkGray)}
-                {button(IconArGray)}
+            <View style={{width:'100%', height:scale(45)+bottomIndent, backgroundColor:'#1D1D1D'}}>
+                <LinearGradient colors={['#00000000', '#00000050']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} pointerEvents='none' style={{width:'100%', height:indent*.5, marginTop: -indent*.5}} />
+                <View  style={{flex:1, justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>
+                    {button(this.state[screens.Notifications], onButtonPress, screens.Notifications)}
+                    {button(this.state[screens.Calendar], onButtonPress, screens.Calendar)}
+                    {button(this.state[screens.DataPages], onButtonPress, screens.DataPages)}
+                    {button(this.state[screens.Bookmarks], onButtonPress, screens.Bookmarks)}
+                    {button(this.state[screens.VirtualReality], onButtonPress, screens.VirtualReality)}
+                </View>
             </View>
         );
     }

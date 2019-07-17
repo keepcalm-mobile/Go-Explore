@@ -1,6 +1,6 @@
 import React from 'react';
 import {createSwitchNavigator, createAppContainer} from 'react-navigation';
-import {AuthLoader, AuthMng, HomeScreen} from './screens';
+import {AuthLoader, AuthMng, MainMng} from './screens';
 import {connect, Provider} from 'react-redux';
 import {Platform, NativeModules, LayoutAnimation, StyleSheet} from 'react-native';
 import store from './store';
@@ -26,7 +26,7 @@ const RootNavigationView = createAppContainer(
     createSwitchNavigator(
         {
             [screens.InitialSetup]: AuthLoader,
-            [screens.App]: HomeScreen,
+            [screens.App]: MainMng,
             [screens.AuthMng]: AuthMng,
         },{
             initialRouteName:screens.InitialSetup,

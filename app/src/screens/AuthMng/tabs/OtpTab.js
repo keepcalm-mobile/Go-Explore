@@ -6,6 +6,7 @@ import TabResizer from './TabResizer';
 import ButtonOrange from '../../../components/ButtonOrange';
 import {screens} from '../../../constants';
 import {fontNames, fontSizes} from '../../../styles';
+import {scale} from "../../../utils/resize";
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 
@@ -50,7 +51,7 @@ class OtpTab extends TabResizer {
                         // selectTextOnFocus={true}
                         blurOnSubmit={false}
                         clearTextOnFocus={true}
-                        style={[s.input, textStyle, {textAlign: 'center', fontFamily: fontNames.bold, fontSize: fontSizes.heading}]}
+                        style={[s.input, textStyle, {textAlign: 'center', fontFamily: fontNames.bold, fontSize: fontSizes.heading, width: scale(45)}]}
                         keyboardType={'phone-pad'}
                         onFocus={ () => this._onFocusField(i) }
                         onKeyPress={ (iValue) => this._onKeyPress(iValue, i) }

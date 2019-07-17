@@ -1,7 +1,7 @@
 import AuthLoader from './AuthLoader';
 import AuthMng from './AuthMng';
-import HomeScreen from './MainMng';
+import MainMng from './MainMng';
 
 export {
-    AuthLoader, AuthMng, HomeScreen,
+    AuthLoader, AuthMng, MainMng,
 };
