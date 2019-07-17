@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Animated, PanResponder} from 'react-native';
 import {scale} from '../../../../utils/resize';
 import {indent, windowH, windowW} from '../../../../styles';
-import SwipeUpDown from 'react-native-swipe-up-down-fix';
 
 import {PermissionsAndroid} from 'react-native';
 import MapView from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
@@ -11,10 +10,10 @@ import {ToastAndroid} from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import Geolocation from '@react-native-community/geolocation';
 
-import mapStyles from './mapStyles.json'
+import mapStyles from './mapStyles.json';
 
 
-const GOOGLE_MAPS_APIKEY = "AIzaSyBY5YtcHzrgq0ypfGbej6H8lJE9mJQN8aw"; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
+const GOOGLE_MAPS_APIKEY = 'AIzaSyBY5YtcHzrgq0ypfGbej6H8lJE9mJQN8aw'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
@@ -47,7 +46,7 @@ async function requestPermission() {
             this.getCurrentPosition();
 
             this.setState({
-                gpsGranted: 'true'
+                gpsGranted: 'true',
             });
         }
 
@@ -86,7 +85,7 @@ class Map extends React.Component<Props> {
             },
             map: null,
             targetMarker: null,
-            route: null
+            route: null,
         };
 
     // }
@@ -143,13 +142,13 @@ class Map extends React.Component<Props> {
     setPosition(position) {
         this.setState({
             initialPosition: ('\nlongitude = ' + position.coords.longitude + '\nlatitude = ' + position.coords.latitude),
-            currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude}
+            currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude},
         });
     }
 
     setTargetPosition(position) {
         this.setState({
-            targetPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude}
+            targetPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude},
         });
     }
 
@@ -158,7 +157,7 @@ class Map extends React.Component<Props> {
         if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
 
             this.setState({
-                gpsGranted: 'true'
+                gpsGranted: 'true',
             });
         }
         else {
@@ -176,17 +175,17 @@ class Map extends React.Component<Props> {
                 setTimeout(() => {
 
                     if (this.state.map != null)
-                        this.state.map.animateToCoordinate(position.coords, 0); // deprecated, but works
+                        {this.state.map.animateToCoordinate(position.coords, 0);} // deprecated, but works
 
                 }, 300);
 
             },
             error => {
-                ToastAndroid.showWithGravity(
-                    'Get current location error: ' + JSON.stringify(error),
-                    ToastAndroid.LONG,
-                    ToastAndroid.CENTER,
-                );
+                // ToastAndroid.showWithGravity(
+                //     'Get current location error: ' + JSON.stringify(error),
+                //     ToastAndroid.LONG,
+                //     ToastAndroid.CENTER,
+                // );
 
                 this.getCurrentPosition();
             },
@@ -216,7 +215,7 @@ class Map extends React.Component<Props> {
             this.getCurrentPosition();
         }
         else
-            requestPermission();
+            {requestPermission();}
 
     }
 
@@ -246,24 +245,24 @@ class Map extends React.Component<Props> {
                         this.state.targetPosition = e.nativeEvent.coordinate;
 
                         if (this.state.targetMarker != null)
-                            this.state.targetMarker.animateMarkerToCoordinate(this.state.targetPosition, 300);
+                            {this.state.targetMarker.animateMarkerToCoordinate(this.state.targetPosition, 300);}
 
                         setTimeout(() => {
                             if (this.state.route != null)
-                                this.state.route.destination = this.state.targetPosition;
+                                {this.state.route.destination = this.state.targetPosition;}
                         }, 400);
 
                     }}
                 >
                     <Marker
                         coordinate={this.state.currentPosition}
-                        title={"Point A"}
-                        description={"Imagine you are here"}
+                        title={'Point A'}
+                        description={'Imagine you are here'}
                     />
                     <Marker
                         coordinate={this.state.targetPosition}
-                        title={"Point B"}
-                        description={"This is where you want to get"}
+                        title={'Point B'}
+                        description={'This is where you want to get'}
                         ref={ref => {
                             this.state.targetMarker = ref;
                         }}
@@ -305,23 +304,6 @@ class Map extends React.Component<Props> {
                     <View style={{width:50, height:7, backgroundColor:'#000000', borderRadius:5, alignSelf:'center', marginTop:12}}/>
                 </View>
             </Animated.View>
-            // <SwipeUpDown
-            //     itemMini={<View style={{width:50, height:7, backgroundColor:'#000000', borderRadius:5, alignSelf:'center' , marginTop:-12}}/>}
-            //     itemFull={ <View style={{backgroundColor:'#D0D0D0' }}>
-            //         <MapView
-            //             style={{width:'100%', height:'100%'}}
-            //             initialRegion={{
-            //                 latitude: 37.78825,
-            //                 longitude: -122.4324,
-            //                 latitudeDelta: 0.0922,
-            //                 longitudeDelta: 0.0421,
-            //             }}
-            //         />
-            //     </View>}
-            //     style={{marginLeft:indent, width:windowW}}
-            //     animation="easeInEaseOut"
-            //     swipeHeight={75}
-            // />
         );
     }
 }

@@ -37,7 +37,6 @@ target 'goExploreApp' do
 
 
 
-  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
   target 'goExploreAppTests' do
     inherit! :search_paths

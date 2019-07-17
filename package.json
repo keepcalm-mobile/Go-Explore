@@ -22,14 +22,12 @@
     "react-native-maps-directions": "^1.7.0",
     "react-native-status-bar-height": "^2.3.1",
     "react-native-svg": "^9.5.1",
-    "react-native-swipe-up-down-fix": "^1.0.8",
     "react-navigation": "^3.11.0",
     "react-redux": "^7.1.0",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.5",
     "redux-persist": "^5.10.0",
-    "redux-thunk": "^2.3.0",
-    "rn-sliding-up-panel": "^2.3.1"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.0",
