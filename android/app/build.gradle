@@ -164,9 +164,14 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-geolocation-service')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
+    implementation(project(':react-native-geolocation-service')) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 
     // JSC from node_modules
     if (useIntlJsc) {

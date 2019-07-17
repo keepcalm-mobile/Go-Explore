@@ -8,7 +8,7 @@ import MapView from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not
 import { Marker } from 'react-native-maps';
 import {ToastAndroid} from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 
 import mapStyles from './mapStyles.json';
 
@@ -21,7 +21,7 @@ const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
 
 const GPS_TIMEOUT = 60000;
-const GPS_MAXIMUM_AGE = 600000; // adjust these values
+const GPS_MAXIMUM_AGE = 60000; // current location caching duration in milliseconds
 
 async function requestPermission() {
     try {
@@ -52,6 +52,11 @@ async function requestPermission() {
                 gpsGranted: 'true',
             });
         }
+    }
+    catch(ex)
+    {
+        //console.log(ex);
+    }
 }
 
 class Map extends React.Component<Props> {
