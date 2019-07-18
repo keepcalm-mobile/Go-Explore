@@ -17,27 +17,31 @@ import IconShopping from '../../assets/categoriesIcons/iconShopping.svg';
 import IconDining from '../../assets/categoriesIcons/iconDining.svg';
 import IconHealthBeauty from '../../assets/categoriesIcons/iconHealth.svg';
 
+import IconSettings from '../../assets/topIcons/settingsIcon.svg';
+
 export default class {
     static InitialSetup = 'InitialSetup';
     static AuthMng = 'AuthMng';
-        static LoginTab = 'LoginTab';
-        static SignUpTab = 'SignUpTab';
-        static ForgotTab = 'ForgotTab';
-        static OtpTab = 'OtpTab';
-        static TermsTab = 'TermsTab';
+    static LoginTab = 'LoginTab';
+    static SignUpTab = 'SignUpTab';
+    static ForgotTab = 'ForgotTab';
+    static OtpTab = 'OtpTab';
+    static TermsTab = 'TermsTab';
     static App = 'App';
-        static Notifications = 'Notifications';
-        static Calendar = 'Calendar';
-        static DataPages = 'DataPages';
-            static HotPicks = 'HotPicks';
-            static Cinema = 'Cinema';
-            static Attraction = 'Attraction';
-            static Travel = 'Travel';
-            static Shopping = 'Shopping';
-            static Dining = 'Dining';
-            static HealthBeauty = 'HealthBeauty';
-        static Bookmarks = 'Bookmarks';
-        static VirtualReality = 'VirtualReality';
+    static Notifications = 'Notifications';
+    static Calendar = 'Calendar';
+    static DataPages = 'DataPages';
+    static HotPicks = 'HotPicks';
+    static Cinema = 'Cinema';
+    static Attraction = 'Attraction';
+    static Travel = 'Travel';
+    static Shopping = 'Shopping';
+    static Dining = 'Dining';
+    static HealthBeauty = 'HealthBeauty';
+    static Bookmarks = 'Bookmarks';
+    static VirtualReality = 'VirtualReality';
+    static UserProfile = 'UserProfile';
+    static Settings = 'Settings';
 
     static AppPages = {
         [this.Notifications]:{iconG:IconNotifGray, iconC:IconNotifColor},
@@ -54,6 +58,17 @@ export default class {
         [this.Travel]:{icon:IconTravel, title:'Travel'},
         [this.Shopping]:{icon:IconShopping, title:'Shopping'},
         [this.Dining]:{icon:IconDining, title:'Dining'},
-        [this.HealthBeauty]:{icon:IconHealthBeauty, title:'Health & Beauty'},
+        [this.HealthBeauty]:{icon:IconHealthBeauty, title:'Health'},// & Beauty
+    };
+
+    static Drawer = {
+        [this.HotPicks]:{title:'Home'},
+        [this.UserProfile]:{title:'My Profile'},
+        [this.Notifications]:{title:'Notifications'},
+        [this.Calendar]:{title:'Plans'},
+        [this.VirtualReality]:{title:'AR'},
+        [this.Bookmarks]:{title:'Bookmarks'},
+        [this.DataPages]:{title:'Categories'},
+        [this.Settings]:{icon:IconSettings, title:'Settings'},
     };
 }

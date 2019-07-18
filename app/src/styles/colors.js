@@ -7,7 +7,9 @@ const colors = {
     secondaryText: '#939393',
     highlight: '#9B68FF',
     border: '#ffa83b',
+    titleMenu: '#FF9B59',
     background: '#212121',
+    shadowColor: '#000000',
 };
 
 export default colors;

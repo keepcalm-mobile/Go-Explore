@@ -9,16 +9,6 @@ import s from './style';
 import {screens} from '../../../../constants';
 
 
-
-// const MenuBottom = () => (
-//     <View style={{width:'100%', height:scale(45), backgroundColor:'#FFFF00'}}>
-//         {/*<Text style={[s.welcome, {color:'#000000'}]}>CategoriesMng coming soon</Text>*/}
-//         {button(IconMainColor)}
-//         {/*<TouchableOpacity activeOpacity={0.5}>*/}
-//         {/*    <IconMainColor/>*/}
-//         {/*</TouchableOpacity>*/}
-//     </View>
-// );
 const button = (Icon, onPress, iId) => {
     return (
         <TouchableOpacity onPress = {() => onPress(iId)} activeOpacity={0.5} style={{width: scale(35), height: scale(35), alignItems:'center', justifyContent:'center'}}>
@@ -63,7 +53,7 @@ class MenuBottom extends React.Component<Props> {
         const { onButtonPress } = this.props;
         return (
             <View style={{width:'100%', height:scale(45)+bottomIndent, backgroundColor:'#1D1D1D'}}>
-                <LinearGradient colors={['#00000000', '#00000050']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} pointerEvents='none' style={{width:'100%', height:indent*.5, marginTop: -indent*.5}} />
+                <LinearGradient colors={['#00000000', '#00000050']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} pointerEvents="none" style={{width:'100%', height:indent*.5, marginTop: -indent*.5}} />
                 <View  style={{flex:1, justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>
                     {button(this.state[screens.Notifications], onButtonPress, screens.Notifications)}
                     {button(this.state[screens.Calendar], onButtonPress, screens.Calendar)}
@@ -77,23 +67,3 @@ class MenuBottom extends React.Component<Props> {
 }
 
 export default MenuBottom;
-
-// class MenuBottom extends React.Component<Props> {
-//     state = {
-//
-//     };
-//
-//     constructor(props) {
-//         super(props);
-//     }
-// //
-//     render() {
-//         return (
-//             <View style={[{width:'100%', height:scale(45), backgroundColor:'#FFFFFF'}]}>
-//                 <Text style={[s.welcome, {color:'#000000'}]}>CategoriesMng coming soon</Text>
-//             </View>
-//         );
-//     }
-// }
-//
-// export default MenuBottom;

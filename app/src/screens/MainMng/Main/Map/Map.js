@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Animated, PanResponder, AsyncStorage} from 'react-native';
+import {View, Animated, PanResponder} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {scale} from '../../../../utils/resize';
 import {indent, windowH, windowW} from '../../../../styles';
 
@@ -99,20 +100,20 @@ class Map extends React.Component<Props> {
             onStartShouldSetPanResponder: (e, gesture) => true,
             onMoveShouldSetPanResponderCapture: () => true,
             onPanResponderGrant: (e, gestureState) => {
-                this.state.pan.flattenOffset();
                 this.state.pan.setOffset({x: this.state.pan.x._value, y: this.state.pan.y._value});
                 this.state.pan.setValue({x: 0, y: 0});
             },
             onPanResponderMove: Animated.event([ null, { dy: this.state.pan.y } ]),
             onPanResponderRelease: (e, gesture) => {
+                this.state.pan.flattenOffset();
 
-                let toY = 0;
-                if (Math.abs(gesture.dy) > 100){
+                let toY = this.isOpen ? -windowH * 0.8 : 0;
+                if ( Math.abs( gesture.dy) > 100 ){
                     if (gesture.dy < 0){
                         toY = -windowH * 0.8;
                         this.isOpen = true;
                     } else {
-                        toY = windowH * 0.8;
+                        toY = 0;
                         this.isOpen = false;
                     }
                 }
@@ -120,6 +121,7 @@ class Map extends React.Component<Props> {
                 Animated.spring(this.state.pan, {
                     toValue: { x: 0, y: toY },
                     friction: 5,
+                    useNativeDriver: true,
                 }).start();
             },
         });
@@ -131,12 +133,11 @@ class Map extends React.Component<Props> {
         this.isOpen = false;
 
         this.state.pan.flattenOffset();
-        this.state.pan.setOffset({x: this.state.pan.x._value, y: this.state.pan.y._value});
-        this.state.pan.setValue({x: 0, y: 0});
 
         Animated.spring(this.state.pan, {
-            toValue: { x: 0, y: windowH * 0.8 },
+            toValue: { x: 0, y: 0 },
             friction: 8,
+            useNativeDriver: true,
         }).start();
     };
     setPosition(position) {

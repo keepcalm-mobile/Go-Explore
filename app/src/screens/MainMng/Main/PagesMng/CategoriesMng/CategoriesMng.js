@@ -3,7 +3,6 @@ import {Text, View} from 'react-native';
 import s from './style';
 import ButtonOrange from '../../../../../components/ButtonOrange';
 import {Auth, logOut} from '../../../../../api/Auth';
-import MapView from "react-native-maps";
 
 class CategoriesMng extends React.Component<Props> {
     state = {
