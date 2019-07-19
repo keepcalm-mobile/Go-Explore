@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Animated, PanResponder} from 'react-native';
+import {View, Animated, PanResponder, Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {scale} from '../../../../utils/resize';
 import {indent, windowH, windowW} from '../../../../styles';
@@ -25,38 +25,38 @@ const GPS_TIMEOUT = 60000;
 const GPS_MAXIMUM_AGE = 60000; // current location caching duration in milliseconds
 
 async function requestPermission() {
-    try {
-        const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-                title: 'Location Permission',
-                message:
-                    'We need access to your geolocation, ' +
-                    'so you can find things nearby.',
-                buttonNeutral: 'Ask Me Later',
-                buttonNegative: 'Cancel',
-                buttonPositive: 'OK',
-            },
-        );
-
-        if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
-
-            ToastAndroid.showWithGravity(
-                'GPS granted After request',
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
+    if(Platform.OS === 'android') {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                {
+                    title: 'Location Permission',
+                    message:
+                        'We need access to your geolocation, ' +
+                        'so you can find things nearby.',
+                    buttonNeutral: 'Ask Me Later',
+                    buttonNegative: 'Cancel',
+                    buttonPositive: 'OK',
+                },
             );
 
-            this.getCurrentPosition();
+            if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
 
-            this.setState({
-                gpsGranted: 'true',
-            });
+                ToastAndroid.showWithGravity(
+                    'GPS granted After request',
+                    ToastAndroid.SHORT,
+                    ToastAndroid.CENTER,
+                );
+
+                this.getCurrentPosition();
+
+                this.setState({
+                    gpsGranted: 'true',
+                });
+            }
+        } catch (ex) {
+            //console.log(ex);
         }
-    }
-    catch(ex)
-    {
-        //console.log(ex);
     }
 }
 
@@ -155,7 +155,7 @@ class Map extends React.Component<Props> {
 
     getCurrentPosition() {
 
-        if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
+        if (Platform.OS === 'android' && PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
 
             this.setState({
                 gpsGranted: 'true',
@@ -246,7 +246,7 @@ class Map extends React.Component<Props> {
                                 this.state.map.animateToCoordinate(position.coords, 300); // deprecated, but works
                         }
 
-                        if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))
+                        if (Platform.OS !== 'android' || PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))
                         {
                             this.getCurrentPosition();
                         }

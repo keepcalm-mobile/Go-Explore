@@ -1,11 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import type {Props} from 'react-native/Libraries/Components/View/View';
 import PropTypes from 'prop-types';
 import LinearGradient from 'react-native-linear-gradient';
-import {colors, doubleIndent, indent, bottomIndent} from '../../../../styles';
+import {indent, bottomIndent} from '../../../../styles';
 import {scale} from '../../../../utils/resize';
-import s from './style';
 import {screens} from '../../../../constants';
 
 
@@ -21,9 +20,6 @@ const button = (Icon, onPress, iId) => {
 class MenuBottom extends React.Component<Props> {
     static propTypes = {
         onButtonPress: PropTypes.func.isRequired,
-        // onPress: PropTypes.func.isRequired,
-        // onLayout: PropTypes.func,
-        // icon: PropTypes.object,
     };
 
     state = {
@@ -38,21 +34,23 @@ class MenuBottom extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-        console.log('>>>>>>>BUTTON ' + JSON.stringify(props));
     }
 
 
     changeIcon = (iId) => {
-        console.log('>>>>>>>CHANGE ICON');
         if (this.state.prevPage !== iId){
-            this.setState({[this.state.prevPage]:screens.AppPages[this.state.prevPage].iconG, [iId]:screens.AppPages[iId].iconC, prevPage:iId});
+            if (screens.Sections[iId]){ iId = screens.DataPages; }
+            let state = {prevPage:iId};
+            if( screens.AppPages[this.state.prevPage] ){ state[this.state.prevPage] = screens.AppPages[this.state.prevPage].iconG; }
+            if( screens.AppPages[iId] ){ state[iId] = screens.AppPages[iId].iconC; }
+            this.setState(state);
         }
     };
 
     render = () => {
         const { onButtonPress } = this.props;
         return (
-            <View style={{width:'100%', height:scale(45)+bottomIndent, backgroundColor:'#1D1D1D'}}>
+            <View style={{width:'100%', height:scale(45) + bottomIndent, backgroundColor:'#1D1D1D'}}>
                 <LinearGradient colors={['#00000000', '#00000050']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} pointerEvents="none" style={{width:'100%', height:indent*.5, marginTop: -indent*.5}} />
                 <View  style={{flex:1, justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>
                     {button(this.state[screens.Notifications], onButtonPress, screens.Notifications)}

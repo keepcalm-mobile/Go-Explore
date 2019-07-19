@@ -8,6 +8,7 @@ import PagesMng from './Main/PagesMng';
 import {scale} from '../../utils/resize';
 import IconMenu from '../../../assets/topIcons/menuIcon.svg';
 import IconSearch from '../../../assets/topIcons/searchIcon.svg';
+import {getCurrentRoute} from '../../utils/navHelper';
 
 const iconSize = scale(22);
 
@@ -22,32 +23,50 @@ class MainMng extends React.Component{
         };
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        this._drawer.setCurPage(getCurrentRoute(this.props.navigation.state));
+    }
+
     openDrawer = () => {
         this._main.minimize();
         this._drawer.show();
-        Animated.spring(this.state.animVal, { toValue: 0, useNativeDriver: true }).start();
+        Animated.spring(this.state.animVal, { toValue: 0 }).start();//, useNativeDriver: true
     };
 
     closeDrawer = () => {
+        console.log("CLICK CLOSE!!!");
         this._main.maximize();
         this._drawer.hide();
-        Animated.spring(this.state.animVal, { toValue: 1, useNativeDriver: true }).start();
+        Animated.spring(this.state.animVal, { toValue: 1 }).start();//, useNativeDriver: true
     };
 
-    choiceCategory = () => {
-
+    choiceCategory = (iId) => {
+        this.closeDrawer();
+        this._main._openTab(iId, true);
     };
+
+    choiceSection = (iId) => {
+        this.closeDrawer();
+        this._main._openSection(iId);
+    };
+
 
     render() {
         const { navigation } = this.props;
         const { animVal } = this.state;
+        const rotate = '0deg';
+        const scale = 1;
+        const translateX = 0;
+        const translateY = animVal.interpolate({ inputRange: [0, 1], outputRange: [-(iconSize + doubleIndent), 0] });
+
         const animStyle = {opacity: animVal,
-            translateY : animVal.interpolate({ inputRange: [0, 1], outputRange: [-(iconSize + doubleIndent), 0] }),
+            transform: [{translateX}, {translateY}, {rotate}, {scale}],
+            // translateY : animVal.interpolate({ inputRange: [0, 1], outputRange: [-(iconSize + doubleIndent), 0] }),
         };
 
         return (
             <View style={{flex:1, backgroundColor:colors.background}}>
-                <Drawer ref={c => this._drawer = c} close={this.closeDrawer} onButtonPress={this.choiceCategory}/>
+                <Drawer ref={c => this._drawer = c} close={this.closeDrawer} onChoiceCategory={this.choiceCategory} onChoiceSection={this.choiceSection}/>
                 <Main navigation={navigation} ref={c => this._main = c}/>
                 <Search/>
 

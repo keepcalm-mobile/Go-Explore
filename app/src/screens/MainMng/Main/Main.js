@@ -9,9 +9,6 @@ import SectionsMenu from './SectionsMenu';
 import s from './style';
 import {windowH, windowW} from '../../../styles';
 
-// const ThisWillWork = forwardRef((props, ref) => {
-//     return <button ref={ref}>Text</button>
-// });
 
 class Main extends React.Component {
     constructor(props) {
@@ -89,9 +86,9 @@ class Main extends React.Component {
         this.setState({pointerEvents: 'auto'});
     };
 
-    _openTab = (iTabId) => {
+    _openTab = (iTabId, iJump = false) => {
         console.log('OPEN TAB!! : ' + iTabId);
-        if (iTabId === screens.DataPages){
+        if (iTabId === screens.DataPages && !iJump){
             this._panel.show();
         } else {
             this.props.navigation.navigate(iTabId);
@@ -104,7 +101,7 @@ class Main extends React.Component {
     _openSection = (iSectionId) => {
         console.log('OPEN SECTION!! : ' + iSectionId);
         this._panel.hide();
-        this.props.navigation.navigate(screens.DataPages);
+        this.props.navigation.navigate(iSectionId);
         this._bottom.changeIcon(screens.DataPages);
     };
 

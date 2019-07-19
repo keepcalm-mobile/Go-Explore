@@ -4,6 +4,7 @@ import s, {colors} from '../../../styles';
 const styles = StyleSheet.create({
     container:{
         flex:1,
+        backgroundColor: colors.background,
         overflow: 'hidden',
         borderColor: colors.shadowColor,
         shadowColor: colors.shadowColor,

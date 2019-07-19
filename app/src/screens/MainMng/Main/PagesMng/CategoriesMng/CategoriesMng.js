@@ -1,34 +1,51 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import s from './style';
-import ButtonOrange from '../../../../../components/ButtonOrange';
-import {Auth, logOut} from '../../../../../api/Auth';
+import {createSwitchNavigator} from 'react-navigation';
+import {screens} from '../../../../../constants';
+import HotPicks from './categories/HotPicks';
+import Cinema from './categories/Cinema/Cinema';
+import Attraction from './categories/Attraction/Attraction';
+import Travel from './categories/Travel/Travel';
+import Shopping from './categories/Shopping/Shopping';
+import Dining from './categories/Dining/Dining';
+import HealthBeauty from './categories/HealthBeauty/HealthBeauty';
+
+
+const CategoriesNavi = createSwitchNavigator({
+        [screens.HotPicks]  : { screen: HotPicks},
+        [screens.Cinema]  : { screen: Cinema},
+        [screens.Attraction]  : { screen: Attraction},
+        [screens.Travel]  : { screen: Travel},
+        [screens.Shopping]  : { screen: Shopping},
+        [screens.Dining]  : { screen: Dining},
+        [screens.HealthBeauty]  : { screen: HealthBeauty},
+    },{
+        initialRouteName: screens.HotPicks,
+        initialRouteKey: screens.HotPicks + 'Key',
+        defaultNavigationOptions: {
+            gesturesEnabled: true,
+        },
+        cardShadowEnabled: false,
+    }
+);
 
 class CategoriesMng extends React.Component<Props> {
-    state = {
-
-    };
+    static router = CategoriesNavi.router;
 
     constructor(props) {
         super(props);
+        console.log('________ PAGES MNG : ' + JSON.stringify(props));
     }
 
     render() {
+        const { navigation } = this.props;
+
         return (
-            <View style={s.container}>
-                <Text style={s.welcome}>CategoriesMng coming soon</Text>
-                <ButtonOrange onPress={this._logOut} title={'LOGOUT'}/>
+            <View style={{flex:1}}>
+                <CategoriesNavi navigation={navigation}/>
             </View>
         );
     }
-
-    _logOut = async () => {
-        const resp = await logOut();
-        if (Auth.AUTH_LOGOUT === resp) {
-            this.props.navigation.navigate('Auth');
-        }
-        // await AsyncStorage.clear();
-    };
 }
 
 export default CategoriesMng;

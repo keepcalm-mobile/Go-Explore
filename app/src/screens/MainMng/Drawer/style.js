@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
-import s, {colors, doubleIndent, fontNames, fontSizes, windowH, windowW} from '../../../styles';
+import s, {colors, doubleIndent, fontNames, fontSizes, windowH, windowW, startY} from '../../../styles';
 
 const styles = StyleSheet.create({
     container:{
+        paddingTop: startY,
         position:'absolute',
         height:windowH,
         width:windowW * 0.4,
     },
     subMenu:{
-        // flex:1,
+        paddingTop: startY,
         height: '100%',
         position:'absolute',
         overflow: 'hidden',
