@@ -30,14 +30,14 @@ class MainMng extends React.Component{
     openDrawer = () => {
         this._main.minimize();
         this._drawer.show();
-        Animated.spring(this.state.animVal, { toValue: 0 }).start();//, useNativeDriver: true
+        Animated.spring(this.state.animVal, { toValue: 0, useNativeDriver: true }).start();
     };
 
     closeDrawer = () => {
         console.log("CLICK CLOSE!!!");
         this._main.maximize();
         this._drawer.hide();
-        Animated.spring(this.state.animVal, { toValue: 1 }).start();//, useNativeDriver: true
+        Animated.spring(this.state.animVal, { toValue: 1, useNativeDriver: true }).start();
     };
 
     choiceCategory = (iId) => {

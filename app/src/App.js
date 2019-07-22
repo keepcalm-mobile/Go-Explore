@@ -2,10 +2,10 @@ import React from 'react';
 import {createSwitchNavigator, createAppContainer} from 'react-navigation';
 import {AuthLoader, AuthMng, MainMng} from './screens';
 import {connect, Provider} from 'react-redux';
-import {Platform, NativeModules, LayoutAnimation, StyleSheet} from 'react-native';
+import {Platform, NativeModules, StatusBar} from 'react-native';
 import store from './store';
-import {screens} from "./constants";
-import s from "./screens/AuthMng/styles";
+import {screens} from './constants';
+
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
 //   android:
@@ -21,6 +21,9 @@ if (Platform.OS === 'android'){
     UIManager.setLayoutAnimationEnabledExperimental &&
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
+StatusBar.setBarStyle('light-content');
+// StatusBar.setTranslucent(true);
+// StatusBar.setBackgroundColor('#00000000');
 
 const RootNavigationView = createAppContainer(
     createSwitchNavigator(
@@ -34,8 +37,6 @@ const RootNavigationView = createAppContainer(
     )
 );
 
-// const RootNavigator = connect(state => ({ count: state.count }))(RootNavigationView);//connect(mapStateToProps)(NavigatorView);
-// const RootNavigator = connect(mapStateToProps)(NavigatorView);
 const RootNavigation = connect(state => (state))(RootNavigationView);
 
 const App = () => (

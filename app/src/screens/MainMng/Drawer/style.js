@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import s, {colors, doubleIndent, fontNames, fontSizes, windowH, windowW, startY} from '../../../styles';
+import s, {colors, bottomIndent, fontNames, fontSizes, windowH, windowW, startY} from '../../../styles';
 
 const styles = StyleSheet.create({
     container:{
@@ -10,15 +10,15 @@ const styles = StyleSheet.create({
     },
     subMenu:{
         paddingTop: startY,
-        height: '100%',
+        height: windowH + bottomIndent,
         position:'absolute',
-        overflow: 'hidden',
+        // overflow: 'hidden',
         backgroundColor: colors.background,
         borderColor: colors.shadowColor,
         shadowColor: colors.shadowColor,
         shadowOffset: {
             width: 0,
-            height: 6,
+            height: 0,
         },
         shadowOpacity: 0.37,
         shadowRadius: 7.49,

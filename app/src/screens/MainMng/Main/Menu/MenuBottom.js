@@ -10,7 +10,7 @@ import {screens} from '../../../../constants';
 
 const button = (Icon, onPress, iId) => {
     return (
-        <TouchableOpacity onPress = {() => onPress(iId)} activeOpacity={0.5} style={{width: scale(35), height: scale(35), alignItems:'center', justifyContent:'center'}}>
+        <TouchableOpacity onPress = {() => onPress(iId)} activeOpacity={0.5} style={{width: scale(35), height: scale(35), alignItems:'center', justifyContent:'center', marginBottom:bottomIndent}}>
             <Icon height={scale(26)}/>
         </TouchableOpacity>
     );
