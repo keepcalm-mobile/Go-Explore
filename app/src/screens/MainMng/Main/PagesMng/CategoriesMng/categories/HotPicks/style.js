@@ -5,9 +5,9 @@ import {scale} from '../../../../../../../utils/resize';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.background,
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        backgroundColor: colors.bgCategory,
     },
     welcome: {
         fontFamily: 'Poppins-Bold',

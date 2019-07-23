@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
         height: windowH + bottomIndent,
         position:'absolute',
         // overflow: 'hidden',
-        backgroundColor: colors.background,
+        backgroundColor: colors.bgApp,
         borderColor: colors.shadowColor,
         shadowColor: colors.shadowColor,
         shadowOffset: {

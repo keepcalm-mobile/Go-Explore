@@ -65,7 +65,7 @@ class MainMng extends React.Component{
         };
 
         return (
-            <View style={{flex:1, backgroundColor:colors.background}}>
+            <View style={{flex:1, backgroundColor:colors.bgApp}}>
                 <Drawer ref={c => this._drawer = c} close={this.closeDrawer} onChoiceCategory={this.choiceCategory} onChoiceSection={this.choiceSection}/>
                 <Main navigation={navigation} ref={c => this._main = c}/>
                 <Search/>

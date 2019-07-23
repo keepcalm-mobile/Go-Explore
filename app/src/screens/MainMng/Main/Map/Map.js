@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Animated, PanResponder, Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {scale} from '../../../../utils/resize';
-import {indent, windowH, windowW} from '../../../../styles';
+import {doubleIndent, indent, windowH, windowW} from '../../../../styles';
 
 import {PermissionsAndroid} from 'react-native';
 import MapView from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
@@ -212,7 +212,7 @@ class Map extends React.Component<Props> {
     render() {
         const panStyle = { transform: this.state.pan.getTranslateTransform() };
         return (
-            <Animated.View style={[panStyle, {position:'absolute', backgroundColor:'#D0D0D0', width:windowW, height:windowH, borderRadius:10, marginLeft:indent, marginTop:windowH - 75, overflow: 'hidden'}]}>
+            <Animated.View style={[panStyle, {position:'absolute', backgroundColor:'#D0D0D0', width:windowW-doubleIndent, height:windowH, borderRadius:10, marginLeft:indent, marginTop:windowH - 75, overflow: 'hidden'}]}>
 
                 <MapView
                     // style={{width:'100%', height:'100%', borderRadius:25}}

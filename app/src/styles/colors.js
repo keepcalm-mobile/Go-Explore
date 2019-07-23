@@ -8,8 +8,10 @@ const colors = {
     highlight: '#9B68FF',
     border: '#ffa83b',
     titleMenu: '#FF9B59',
-    background: '#212121',
+    bgApp: '#212121',
+    bgCategory: '#000000',
     shadowColor: '#000000',
+    ratingStars: '#F2C94C',
 };
 
 export default colors;
