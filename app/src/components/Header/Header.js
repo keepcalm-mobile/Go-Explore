@@ -56,6 +56,7 @@ class Header extends React.Component<Props> {
                     inactiveSlideScale={1}
                     autoplay={true}
                     onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+                    shouldOptimizeUpdates={false}
                     // containerCustomStyle={{marginTop:-20, alignContent:'flex-start', alignSelf:'flex-start'}}
                     // contentContainerCustomStyle={{justifyContent:'flex-start', alignContent:'flex-start'}}
                 />

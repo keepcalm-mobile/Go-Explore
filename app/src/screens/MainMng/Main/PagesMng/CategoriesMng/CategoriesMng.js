@@ -3,12 +3,12 @@ import {Text, View} from 'react-native';
 import {createSwitchNavigator} from 'react-navigation';
 import {screens} from '../../../../../constants';
 import HotPicks from './categories/HotPicks';
-import Cinema from './categories/Cinema/Cinema';
-import Attraction from './categories/Attraction/Attraction';
-import Travel from './categories/Travel/Travel';
-import Shopping from './categories/Shopping/Shopping';
-import Dining from './categories/Dining/Dining';
-import HealthBeauty from './categories/HealthBeauty/HealthBeauty';
+import Cinema from './categories/Cinema';
+import Attraction from './categories/Attraction';
+import Travel from './categories/Travel';
+import Shopping from './categories/Shopping';
+import Dining from './categories/Dining';
+import HealthBeauty from './categories/HealthBeauty';
 
 
 const CategoriesNavi = createSwitchNavigator({

@@ -1,0 +1,74 @@
+import React from 'react';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import s from './style';
+import {ButtonOrange} from '../../../../../../../components';
+import {Auth, logOut} from '../../../../../../../api/Auth';
+import Header from '../../../../../../../components/Header';
+import CarouselBig from '../../../../../../../components/CarouselBig';
+import CarouselSmall from '../../../../../../../components/CarouselSmall';
+import {screens} from '../../../../../../../constants';
+import {scale} from '../../../../../../../utils/resize';
+import IconFilter from '../../../../../../../../assets/topIcons/filterIcon.svg';
+
+class Template extends React.Component<Props> {
+    state = {
+
+    };
+
+    constructor(props) {
+        super(props);
+    }
+
+    onHeaderItemClick = () => {
+      console.log('HEADER CLICK');
+    };
+
+    onFilterBtnClick = () => {
+
+    };
+
+    filterBtn = (iId) => {
+        return iId !== screens.HotPicks ? (
+            <TouchableOpacity onPress = {this.onFilterBtnClick} activeOpacity={0.5} style={{width: scale(38), height: scale(38), alignItems:'center', justifyContent:'center'}}>
+                <IconFilter width={scale(38)} height={scale(38)}/>
+            </TouchableOpacity>
+        ) : null;
+    };
+
+    curTitle = (iId) => {
+        const Icon = screens.Sections[iId].icon;
+
+        return (
+            <View style={s.titleCnt}>
+                <View style={{flexDirection:'row'}}>
+                    <Icon width={scale(30)} height={scale(30)}/>
+                    <Text style={s.welcome}>{screens.Sections[iId].title}</Text>
+                </View>
+                {this.filterBtn(iId)}
+            </View>
+        );
+    };
+
+    generateContent = (iData) => {
+        let list = [];
+        for (let i = 0; i < iData.length; i++){
+            list.push(iData[i].type === 'big'
+                ? <CarouselBig onItemClick={this.onHeaderItemClick} items={iData[i].data} title={iData[i].title}/>
+                : <CarouselSmall onItemClick={this.onHeaderItemClick} items={iData[i].data} title={iData[i].title}/>);
+        }
+        return list;
+    };
+
+    render() {
+        const {header, data} = this.props.content;
+        return (
+            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false}>
+                <Header onItemClick={this.onHeaderItemClick} items={header} />
+                {this.curTitle(screens.HotPicks)}
+                {this.generateContent(data)}
+            </ScrollView>
+        );
+    }
+}
+
+export default Template;

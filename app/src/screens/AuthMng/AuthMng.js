@@ -283,7 +283,8 @@ class AuthMng extends React.Component<Props> {
                     <ScrollView contentContainerStyle={{height:this.state.animScrollH, justifyContent:'space-between', flexDirection:'column'}}
                                 scrollEnabled={this.state.scrollEnabled}
                                 keyboardShouldPersistTaps={'handled'}
-                                removeClippedSubviews={false}>
+                                removeClippedSubviews={false}
+                                pinchGestureEnabled={false}>
                         <View style={{marginTop: this.state.animLogoTop}} onLayout={this._calcLayouts}>
                             <Logo width={scale(330)} style={s.logo}/>
                             <Animated.View style={{opacity: this.state.titleOpacity}}>

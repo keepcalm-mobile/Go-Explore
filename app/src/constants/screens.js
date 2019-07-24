@@ -60,7 +60,7 @@ export default class {
         [this.Travel]:{icon:IconTravel, title:'Travel'},
         [this.Shopping]:{icon:IconShopping, title:'Shopping'},
         [this.Dining]:{icon:IconDining, title:'Dining'},
-        [this.HealthBeauty]:{icon:IconHealthBeauty, title:'Health'},// & Beauty
+        [this.HealthBeauty]:{icon:IconHealthBeauty, title:'Health & Beauty'},// & Beauty
     };
 
     static Drawer = {
