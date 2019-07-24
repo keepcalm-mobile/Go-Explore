@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* goExploreAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* goExploreAppTests.m */; };
 		0DEBA392D7518FED12FACCD2 /* libPods-goExploreApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCED4C6A74FA2B49ADA8E6F5 /* libPods-goExploreApp.a */; };
@@ -22,6 +21,7 @@
 		ACC31959268E49C7BCC08A3C /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 17D086923AAC4077B6F5DF89 /* Poppins-Regular.ttf */; };
 		DDC29A011D076057D88ED96A /* libPods-goExploreApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D7918FD80D8010C272233D6 /* libPods-goExploreApp-tvOS.a */; };
 		DF6560ACEF0C8397E8243405 /* libPods-goExploreAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB50906617C52386F63A34D5 /* libPods-goExploreAppTests.a */; };
+		25A0F94D25844C4AA6183EAB /* libRangeSlider.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14D1262FA6314FCA9D74813C /* libRangeSlider.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +71,8 @@
 		F9FAF327CF2D6E249631034A /* Pods-goExploreApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-goExploreApp.debug.xcconfig"; path = "Target Support Files/Pods-goExploreApp/Pods-goExploreApp.debug.xcconfig"; sourceTree = "<group>"; };
 		FCED4C6A74FA2B49ADA8E6F5 /* libPods-goExploreApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-goExploreApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD707DA14F2020731B994DE7 /* Pods-goExploreAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-goExploreAppTests.release.xcconfig"; path = "Target Support Files/Pods-goExploreAppTests/Pods-goExploreAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		57634B60401B4AC4A4FACCE7 /* RangeSlider.xcodeproj */ = {isa = PBXFileReference; name = "RangeSlider.xcodeproj"; path = "../node_modules/react-native-range-slider/ios/RangeSlider.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		14D1262FA6314FCA9D74813C /* libRangeSlider.a */ = {isa = PBXFileReference; name = "libRangeSlider.a"; path = "libRangeSlider.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0DEBA392D7518FED12FACCD2 /* libPods-goExploreApp.a in Frameworks */,
+				25A0F94D25844C4AA6183EAB /* libRangeSlider.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,6 +159,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				57634B60401B4AC4A4FACCE7 /* RangeSlider.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -615,6 +619,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp.app/goExploreApp";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -635,6 +647,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp.app/goExploreApp";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Release;
 		};
@@ -655,6 +675,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = goExploreApp;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -674,6 +698,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = goExploreApp;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Release;
 		};
@@ -702,6 +730,14 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -730,6 +766,14 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Release;
 		};
@@ -757,6 +801,14 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp-tvOS.app/goExploreApp-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -784,6 +836,14 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp-tvOS.app/goExploreApp-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-range-slider/ios/**",
+				);
 			};
 			name = Release;
 		};

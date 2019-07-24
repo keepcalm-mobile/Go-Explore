@@ -1,18 +1,8 @@
 import {StyleSheet} from 'react-native';
-import s, {colors} from '../../../../../../../styles';
+import s, {colors, indent} from '../../../../../../../styles';
 import {scale} from '../../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
-    line: {
-      height: 1,
-        width: '100%',
-      backgroundColor: '#000000',
-        marginTop: 15,
-        marginBottom: 15,
-        //margin: 15,
-        alignSelf: 'flex-start',
-        flexDirection: 'row'
-    },
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -48,12 +38,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#3A3A3A',
         borderRadius: 10,
         flexDirection: 'column',
-        marginLeft: 15,
-        marginRight: 15,
+        marginLeft: indent,
+        marginRight: indent,
         marginTop: -250,
-        height: 400,
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingBottom: 200
     },
     filtersHeader: {
         color: '#ff9e18',
@@ -73,14 +63,23 @@ const styles = StyleSheet.create({
     keywordsContainer: {
         flexDirection: 'row',
         marginTop: 16,
-        marginLeft: 15,
+        marginLeft: indent,
         alignSelf: 'flex-start'
     },
     keywordsInput: {
         color: '#ffffff',
         fontSize: 12,
         padding: 0,
-        margin: 0
+        margin: 0,
+        marginBottom: 15
+    },
+    baseKeywordsView: {
+        flexDirection: 'row',
+        width: '100%',
+        marginTop: 15,
+        paddingLeft: 6,
+        paddingRight: 6,
+        flexWrap: 'wrap'
     },
     locationPicker: {
         alignSelf: 'center',
@@ -98,6 +97,34 @@ const styles = StyleSheet.create({
         height: 58,
         justifyContent: 'center',
         marginTop: 10
+    },
+    languagesContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        marginTop: 15,
+        paddingLeft: 6,
+        paddingRight: 6,
+        flexWrap: 'wrap',
+        borderRadius: 10,
+        borderColor: colors.border,
+        borderWidth: 1,
+        alignItems: 'center'
+    },
+    dropdownTouchArea: {
+        position: 'absolute',
+        width: 50,
+        height: '100%',
+        right: 0,
+        top: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    applyButton: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        flexDirection: 'row'
     }
 });
 export default styles;
