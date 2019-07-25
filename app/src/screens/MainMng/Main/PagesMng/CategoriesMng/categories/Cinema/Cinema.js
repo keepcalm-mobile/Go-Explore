@@ -4,7 +4,7 @@ import s from './style';
 import ButtonOrange from '../../../../../../../components/ButtonOrange';
 import {Auth, logOut} from '../../../../../../../api/Auth';
 import LinearGradient from 'react-native-linear-gradient';
-import RangeSlider from 'rn-range-slider';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 //TODO: load image from server?
 import MoviePlaceholder from '../../../../../../../../assets/cinema/avengers.png';
@@ -20,6 +20,7 @@ import defaultStyle, { colors, fontNames, fontSizes, indent} from '../../../../.
 
 class Cinema extends React.Component<Props> {
     state = {
+        scrollEnabled: true,
         keywordText: '',
 
         //TODO: user entered keywords:
@@ -27,7 +28,6 @@ class Cinema extends React.Component<Props> {
             'Superhero',
             'Thor'
         ],
-        //userKeywords: null,
         location: 'Mall of Qatar - Doha',
         genres: [
             { text: 'Action', active: false },
@@ -71,12 +71,11 @@ class Cinema extends React.Component<Props> {
         ]
     };
 
+    enableScroll = () => this.setState({ scrollEnabled: true });
+    disableScroll = () => this.setState({ scrollEnabled: false });
+
     constructor(props) {
         super(props);
-
-        // this.state.userKeywords = this.state.keywordsList.map(info => (
-        //     <Keyword key={info.id} title={info.text} />
-        // ));
     }
 
     render() {
@@ -84,30 +83,30 @@ class Cinema extends React.Component<Props> {
         let keywords = []
         for (let i = 0; i < this.state.keywordsList.length; i++)
         {
-            keywords.push(<Keyword title={this.state.keywordsList[i]} editable={true} />);
+            keywords.push(<Keyword key={i} title={this.state.keywordsList[i]} editable={true} />);
         }
 
         let genres = []
         for (let i = 0; i < this.state.genres.length; i++)
         {
-            genres.push(<Keyword title={this.state.genres[i].text} editable={false} fontSize={fontSizes.big} active={this.state.genres[i].active} />);
+            genres.push(<Keyword key={i} title={this.state.genres[i].text} editable={false} fontSize={fontSizes.big} active={this.state.genres[i].active} />);
         }
 
         let experience = []
         for (let i = 0; i < this.state.experience.length; i++)
         {
-            experience.push(<Keyword title={this.state.experience[i].text} editable={false} fontSize={fontSizes.big} active={this.state.experience[i].active} />);
+            experience.push(<Keyword key={i} title={this.state.experience[i].text} editable={false} fontSize={fontSizes.big} active={this.state.experience[i].active} />);
         }
 
         let languages = []
         for (let i = 0; i < this.state.languages.length; i++)
         {
-            languages.push(<Keyword title={this.state.languages[i]} editable={true} />);
+            languages.push(<Keyword key={i} title={this.state.languages[i]} editable={true} />);
         }
 
         return (
             <View style={s.container}>
-                <ScrollView style={s.mainScroll} contentContainerStyle={s.mainScrollContainer}>
+                <ScrollView style={s.mainScroll} contentContainerStyle={s.mainScrollContainer} scrollEnabled={this.state.scrollEnabled}>
                     <Image source={MoviePlaceholder} style={s.poster} />
                     <LinearGradient style={s.filtersContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={95} angleCenter={{ x: 0.3, y: 0.8}}>
                         <Text style={s.filtersHeader}>Filters</Text>
@@ -151,7 +150,7 @@ class Cinema extends React.Component<Props> {
 
                         <HorizontalLine />
                         <Text style={s.filtersCategoryHeader}>Rating</Text>
-                        <View style={{alignSelf: 'flex-start', marginLeft: indent}}>
+                        <View style={{alignSelf: 'flex-start'}}>
                             <RatingStars rating={3} ratingStyle={'circle'} style={{alignSelf: 'flex-start'}} />
                         </View>
 
@@ -161,15 +160,19 @@ class Cinema extends React.Component<Props> {
                             {genres}
                         </View>
 
-                        <HorizontalLine />
+                        <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
+                            <HorizontalLine />
+                        </View>
                         <Text style={s.filtersCategoryHeader}>Experience</Text>
                         <View style={s.baseKeywordsView}>
                             {experience}
                         </View>
 
-                        <HorizontalLine />
+                        <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
+                            <HorizontalLine />
+                        </View>
                         <Text style={s.filtersCategoryHeader}>Languages</Text>
-                        <View style={{paddingLeft: indent, paddingRight: indent, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                             <View style={s.languagesContainer}>
                                 {languages}
                                 <View style={s.dropdownTouchArea}>
@@ -184,27 +187,22 @@ class Cinema extends React.Component<Props> {
 
                         <HorizontalLine />
                         <Text style={s.filtersCategoryHeader}>Price</Text>
-                        <View style={{flexDirection: 'row', paddingLeft: indent, paddingRight: 15, width: '100%'}}>
-                            <RangeSlider
-                                style={{width: '100%', height: 80}}
-                                gravity={'center'}
-                                min={200}
-                                max={1000}
-                                step={20}
-                                selectionColor="#3df"
-                                blankColor="#f618"
-                                onValueChanged={(low, high, fromUser) => {
-                                    //this.setState({rangeLow: low, rangeHigh: high})
-                                }}
+                        <View style={{flexDirection: 'row', paddingLeft: indent, paddingRight: indent, width: '100%'}}>
+                            <MultiSlider
+                                values={[0,1000]}
+                                onValuesChangeStart={this.disableScroll}
+                                onValuesChangeFinish={this.enableScroll}
                             />
                         </View>
 
-                        <View style={{flexDirection: 'row', width: '100%', height: 56, paddingLeft: indent, paddingRight: indent, marginTop: 65}}>
-                            <TouchableOpacity style={s.applyButton}>
-                                <LinearGradient style={{width: '100%', height: '100%', borderRadius: 10, justifyContent: 'center', alignItems: 'center'}} colors={['#ff9e18', '#f8df8d']}>
-                                    <Text style={{color: '#ffffff', fontSize: 16, fontWeight: 'bold'}}>APPLY FILTERS</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
+                        <View style={{flexDirection: 'row', width: '100%'}}>
+                            <ButtonOrange
+                                title={'APPLY FILTERS'}
+                                style={{flex: 1, marginLeft: -indent, marginRight: -indent}}
+                                onPress={() => {
+
+                                }}
+                            />
                         </View>
                     </LinearGradient>
                 </ScrollView>

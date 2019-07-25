@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
         backgroundColor: '#000000',
         borderRadius: 5,
-        marginLeft: 9,
-        marginRight: 9,
+        marginRight: 15,
         flexDirection: 'row',
         marginBottom: 15
     },

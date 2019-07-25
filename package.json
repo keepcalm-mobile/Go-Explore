@@ -8,6 +8,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@ptomasroos/react-native-multi-slider": "^1.0.0",
     "@react-native-community/async-storage": "^1.5.1",
     "core-js": "^3.1.4",
     "jetifier": "^1.6.3",
@@ -29,8 +30,7 @@
     "redux": "^4.0.4",
     "redux-actions": "^2.6.5",
     "redux-persist": "^5.10.0",
-    "redux-thunk": "^2.3.0",
-    "rn-range-slider": "^1.2.6"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
