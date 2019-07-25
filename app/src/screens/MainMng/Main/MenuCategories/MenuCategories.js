@@ -20,7 +20,7 @@ const button = (Icon, onPress, iId, iTitle) => {
     );
 };
 
-class SectionsMenu extends React.Component<Props> {
+class MenuCategories extends React.Component<Props> {
     static propTypes = {
         onButtonPress: PropTypes.func.isRequired,
     };
@@ -55,17 +55,17 @@ class SectionsMenu extends React.Component<Props> {
                 <View style={{height:'80%'}}>
 
                     <View style={{flex:1, justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>
-                        {button(screens.Sections[screens.Attraction].icon, onButtonPress, screens.Attraction, screens.Sections[screens.Attraction].title)}
-                        {button(screens.Sections[screens.Cinema].icon, onButtonPress, screens.Cinema, screens.Sections[screens.Cinema].title)}
-                        {button(screens.Sections[screens.Dining].icon, onButtonPress, screens.Dining, screens.Sections[screens.Dining].title)}
+                        {button(screens.Categories[screens.Attraction].icon, onButtonPress, screens.Attraction, screens.Categories[screens.Attraction].title)}
+                        {button(screens.Categories[screens.Cinema].icon, onButtonPress, screens.Cinema, screens.Categories[screens.Cinema].title)}
+                        {button(screens.Categories[screens.Dining].icon, onButtonPress, screens.Dining, screens.Categories[screens.Dining].title)}
                     </View>
                     <View style={{flex:1, justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>
-                        {button(screens.Sections[screens.HealthBeauty].icon, onButtonPress, screens.HealthBeauty, screens.Sections[screens.HealthBeauty].title)}
-                        {button(screens.Sections[screens.Shopping].icon, onButtonPress, screens.Shopping, screens.Sections[screens.Shopping].title)}
-                        {button(screens.Sections[screens.Travel].icon, onButtonPress, screens.Travel, screens.Sections[screens.Travel].title)}
+                        {button(screens.Categories[screens.HealthBeauty].icon, onButtonPress, screens.HealthBeauty, screens.Categories[screens.HealthBeauty].title)}
+                        {button(screens.Categories[screens.Shopping].icon, onButtonPress, screens.Shopping, screens.Categories[screens.Shopping].title)}
+                        {button(screens.Categories[screens.Travel].icon, onButtonPress, screens.Travel, screens.Categories[screens.Travel].title)}
                     </View>
                     <View style={{flex:1, justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>
-                        {button(screens.Sections[screens.HotPicks].icon, onButtonPress, screens.HotPicks, screens.Sections[screens.HotPicks].title)}
+                        {button(screens.Categories[screens.HotPicks].icon, onButtonPress, screens.HotPicks, screens.Categories[screens.HotPicks].title)}
                     </View>
                     {/*<View style={{flex:1, justifyContent:'space-around', flexDirection:'row', alignItems:'center'}}>*/}
                         <TouchableOpacity onPress = {this.hide} activeOpacity={0.5} style={{width: '100%', height: scale(40), alignItems:'center', justifyContent:'center'}}>
@@ -77,4 +77,4 @@ class SectionsMenu extends React.Component<Props> {
     }
 }
 
-export default SectionsMenu;
+export default MenuCategories;

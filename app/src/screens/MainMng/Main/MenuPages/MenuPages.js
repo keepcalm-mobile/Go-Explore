@@ -17,7 +17,7 @@ const button = (Icon, onPress, iId) => {
 };
 
 
-class MenuBottom extends React.Component<Props> {
+class MenuPages extends React.Component<Props> {
     static propTypes = {
         onButtonPress: PropTypes.func.isRequired,
     };
@@ -39,7 +39,7 @@ class MenuBottom extends React.Component<Props> {
 
     changeIcon = (iId) => {
         if (this.state.prevPage !== iId){
-            if (screens.Sections[iId]){ iId = screens.DataPages; }
+            if (screens.Categories[iId]){ iId = screens.DataPages; }
             let state = {prevPage:iId};
             if( screens.AppPages[this.state.prevPage] ){ state[this.state.prevPage] = screens.AppPages[this.state.prevPage].iconG; }
             if( screens.AppPages[iId] ){ state[iId] = screens.AppPages[iId].iconC; }
@@ -64,4 +64,4 @@ class MenuBottom extends React.Component<Props> {
     }
 }
 
-export default MenuBottom;
+export default MenuPages;

@@ -32,8 +32,8 @@ const button = (iTitle, iPress, iId, iCur, Icon = null) => {
 
 class Drawer extends React.Component<Props> {
     static propTypes = {
+        onChoicePage: PropTypes.func.isRequired,
         onChoiceCategory: PropTypes.func.isRequired,
-        onChoiceSection: PropTypes.func.isRequired,
         close: PropTypes.func.isRequired,
     };
 
@@ -60,7 +60,7 @@ class Drawer extends React.Component<Props> {
     };
 
     setCurPage = (iId) => {
-        if (screens.Sections[iId]){
+        if (screens.Categories[iId]){
             this.setState({parentPage:screens.DataPages, curPage:iId});
         } else {
             this.setState({parentPage:iId, curPage:''});
@@ -78,7 +78,7 @@ class Drawer extends React.Component<Props> {
         }
     };
 
-    _onCategoryClick = (iId) => {
+    _onPageClick = (iId) => {
         if (iId === screens.SubMenu){
             Animated.spring(this.state.pan, {
                 toValue: this.state.subMenuWidth,
@@ -87,12 +87,12 @@ class Drawer extends React.Component<Props> {
             }).start();
             this.setState({showSubMenu:true, pointerEvents:'none'});
         } else {
-            this.props.onChoiceCategory(iId);
+            this.props.onChoicePage(iId);
         }
     };
 
-    _onSectionClick = (iId) => {
-        this.props.onChoiceSection(iId);
+    _onCategoryClick = (iId) => {
+        this.props.onChoiceCategory(iId);
     };
 
 
@@ -120,13 +120,13 @@ class Drawer extends React.Component<Props> {
 
                     <Text style={[s.textBtn, {color: colors.titleMenu, marginRight: indent, marginLeft: indent}]}>{screens.Drawer[screens.SubMenu].title}</Text>
 
-                    {button(screens.Sections[screens.HotPicks].title, this._onSectionClick, screens.HotPicks, this.state.curPage)}
-                    {button(screens.Sections[screens.Cinema].title, this._onSectionClick, screens.Cinema, this.state.curPage)}
-                    {button(screens.Sections[screens.Attraction].title, this._onSectionClick, screens.Attraction, this.state.curPage)}
-                    {button(screens.Sections[screens.Travel].title, this._onSectionClick, screens.Travel, this.state.curPage)}
-                    {button(screens.Sections[screens.Shopping].title, this._onSectionClick, screens.Shopping, this.state.curPage)}
-                    {button(screens.Sections[screens.Dining].title, this._onSectionClick, screens.Dining, this.state.curPage)}
-                    {button(screens.Sections[screens.HealthBeauty].title, this._onSectionClick, screens.HealthBeauty, this.state.curPage)}
+                    {button(screens.Categories[screens.HotPicks].title, this._onCategoryClick, screens.HotPicks, this.state.curPage)}
+                    {button(screens.Categories[screens.Cinema].title, this._onCategoryClick, screens.Cinema, this.state.curPage)}
+                    {button(screens.Categories[screens.Attraction].title, this._onCategoryClick, screens.Attraction, this.state.curPage)}
+                    {button(screens.Categories[screens.Travel].title, this._onCategoryClick, screens.Travel, this.state.curPage)}
+                    {button(screens.Categories[screens.Shopping].title, this._onCategoryClick, screens.Shopping, this.state.curPage)}
+                    {button(screens.Categories[screens.Dining].title, this._onCategoryClick, screens.Dining, this.state.curPage)}
+                    {button(screens.Categories[screens.HealthBeauty].title, this._onCategoryClick, screens.HealthBeauty, this.state.curPage)}
                 </Animated.View>);
         } else {
             return null;
@@ -145,14 +145,14 @@ class Drawer extends React.Component<Props> {
                         <IconClose width={iconSize}/>
                     </TouchableOpacity>
 
-                    {button(screens.Drawer[screens.DataPages].title, this._onCategoryClick, screens.DataPages, this.state.parentPage)}
-                    {button(screens.Drawer[screens.UserProfile].title, this._onCategoryClick, screens.UserProfile, this.state.parentPage)}
-                    {button(screens.Drawer[screens.Notifications].title, this._onCategoryClick, screens.Notifications, this.state.parentPage)}
-                    {button(screens.Drawer[screens.Calendar].title, this._onCategoryClick, screens.Calendar, this.state.parentPage)}
-                    {button(screens.Drawer[screens.VirtualReality].title, this._onCategoryClick, screens.VirtualReality, this.state.parentPage)}
-                    {button(screens.Drawer[screens.Bookmarks].title, this._onCategoryClick, screens.Bookmarks, this.state.parentPage)}
-                    {button(screens.Drawer[screens.SubMenu].title, this._onCategoryClick, screens.SubMenu, '')}
-                    {button(screens.Drawer[screens.Settings].title, this._onCategoryClick, screens.Settings, this.state.parentPage, screens.Drawer[screens.Settings].icon)}
+                    {button(screens.Drawer[screens.DataPages].title, this._onPageClick, screens.DataPages, this.state.parentPage)}
+                    {button(screens.Drawer[screens.UserProfile].title, this._onPageClick, screens.UserProfile, this.state.parentPage)}
+                    {button(screens.Drawer[screens.Notifications].title, this._onPageClick, screens.Notifications, this.state.parentPage)}
+                    {button(screens.Drawer[screens.Calendar].title, this._onPageClick, screens.Calendar, this.state.parentPage)}
+                    {button(screens.Drawer[screens.VirtualReality].title, this._onPageClick, screens.VirtualReality, this.state.parentPage)}
+                    {button(screens.Drawer[screens.Bookmarks].title, this._onPageClick, screens.Bookmarks, this.state.parentPage)}
+                    {button(screens.Drawer[screens.SubMenu].title, this._onPageClick, screens.SubMenu, '')}
+                    {button(screens.Drawer[screens.Settings].title, this._onPageClick, screens.Settings, this.state.parentPage, screens.Drawer[screens.Settings].icon)}
                 </View>
                 {this._subMenuArea()}
             </View>

@@ -27,7 +27,7 @@ class Header extends React.Component<Props> {
 
     _renderItem = ({item, index}) => {
         return (
-            <View style={s.slide}>
+            <View key={item.id} style={s.slide}>
                 <Image resizeMode={'cover'} style={s.image} source={{uri: item.image}} />
                 <LinearGradient colors={['#00000000', '#000000CC', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={s.linearGradient} />
                 <Text style={s.title}>{item.title}</Text>

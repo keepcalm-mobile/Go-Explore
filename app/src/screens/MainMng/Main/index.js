@@ -1,11 +1,38 @@
 import {connect} from 'react-redux';
 import React, {forwardRef} from 'react';
 import ModMap from '../../../modules/map';
-import {login} from '../../../modules/reg';
+import {setCurCategory} from '../../../modules/categories';
 import Main from './Main';
+import PropTypes from 'prop-types';
 
-const MainConnected = connect( state => (state[ ModMap.Reg ]), { login }, null, { forwardRef: true } )(Main);
+Main.propTypes = {
+    setCurCategory: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    curCategory: PropTypes.string.isRequired,
+};
+
+const stateToProps = (state) => {
+    return {
+        isLoading: state[ ModMap.Categories ].isLoading,
+        curCategory: state[ ModMap.Categories ].curCategory,
+    };
+};
+
+const dispatchToProps = (dispatch) => {
+    return {
+        setCurCategory: (iValue) => dispatch(setCurCategory(iValue)),
+    };
+};
+
+const Connected = connect(stateToProps, dispatchToProps, null, { forwardRef: true })(Main);
 
 export default forwardRef((props, ref) =>
-    <MainConnected {...props} ref={ref} />
+    <Connected {...props} ref={ref} />
 );
+
+//
+// const MainConnected = connect( state => (state[ ModMap.Categories ]), { setCurCategory }, null, { forwardRef: true } )(Main);
+//
+// export default forwardRef((props, ref) =>
+//     <MainConnected {...props} ref={ref} />
+// );

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import {createSwitchNavigator} from 'react-navigation';
+import {createStackNavigator, createSwitchNavigator} from 'react-navigation';
 import {screens} from '../../../../../constants';
 import HotPicks from './categories/HotPicks';
 import Cinema from './categories/Cinema';
@@ -22,6 +22,7 @@ const CategoriesNavi = createSwitchNavigator({
     },{
         initialRouteName: screens.HotPicks,
         initialRouteKey: screens.HotPicks + 'Key',
+        backBehavior:'history',
         defaultNavigationOptions: {
             gesturesEnabled: true,
         },

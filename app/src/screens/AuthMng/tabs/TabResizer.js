@@ -50,12 +50,12 @@ class TabResizer extends React.Component<Props> {
     // }
 
 
-    _keyboardWillShow = (e) => this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, true);
+    _keyboardWillShow = (e) => this.updateStateLayoutProps(true, true);
 
-    _keyboardWillHide = (e) => this.updateStateLayoutProps(this.props[ModMap.RegAnim], true, false);
+    _keyboardWillHide = (e) => this.updateStateLayoutProps(true, false);
 
 
-    updateStateLayoutProps(iLayout, iAnim = false, iKeyboard = false) {
+    updateStateLayoutProps(iAnim = false, iKeyboard = false) {
         let toValue = iKeyboard ? 1.0 : 0.0;
 
         if (iAnim){

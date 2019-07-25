@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
 import ModMap from '../../../../modules/map';
-import {login} from '../../../../modules/reg';
+import {setCurCategory} from '../../../../modules/categories';
 import PagesMng from './PagesMng';
-export default connect( state => (state[ ModMap.Reg ]), { login } )(PagesMng);
+export default connect( state => (state[ ModMap.Categories ]), { setCurCategory } )(PagesMng);

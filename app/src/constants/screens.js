@@ -53,7 +53,7 @@ export default class {
         [this.VirtualReality]:{iconG:IconArGray, iconC:IconArColor},
     };
 
-    static Sections = {
+    static Categories = {
         [this.HotPicks]:{icon:IconHotPicks, title:'Hot Picks'},
         [this.Cinema]:{icon:IconCinema, title:'Cinema'},
         [this.Attraction]:{icon:IconAttractions, title:'Attractions'},

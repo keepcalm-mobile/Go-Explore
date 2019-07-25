@@ -17,6 +17,7 @@ class Template extends React.Component<Props> {
 
     constructor(props) {
         super(props);
+        console.log(">>>>> TEMPLATE : " + JSON.stringify(props));
     }
 
     onHeaderItemClick = () => {
@@ -36,13 +37,13 @@ class Template extends React.Component<Props> {
     };
 
     curTitle = (iId) => {
-        const Icon = screens.Sections[iId].icon;
+        const Icon = screens.Categories[iId].icon;
 
         return (
             <View style={s.titleCnt}>
                 <View style={{flexDirection:'row'}}>
                     <Icon width={scale(30)} height={scale(30)}/>
-                    <Text style={s.welcome}>{screens.Sections[iId].title}</Text>
+                    <Text style={s.welcome}>{screens.Categories[iId].title}</Text>
                 </View>
                 {this.filterBtn(iId)}
             </View>
@@ -60,11 +61,12 @@ class Template extends React.Component<Props> {
     };
 
     render() {
-        const {header, data} = this.props.content;
+        if (this.props.curCategory === '' || this.props.data[this.props.curCategory] === null) return (<View/>);
+        const {header, data} = this.props.data[this.props.curCategory];
         return (
             <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false}>
                 <Header onItemClick={this.onHeaderItemClick} items={header} />
-                {this.curTitle(screens.HotPicks)}
+                {this.curTitle(this.props.curCategory)}
                 {this.generateContent(data)}
             </ScrollView>
         );

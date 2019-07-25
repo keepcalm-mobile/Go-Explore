@@ -34,20 +34,20 @@ class MainMng extends React.Component{
     };
 
     closeDrawer = () => {
-        console.log("CLICK CLOSE!!!");
+        console.log('CLICK CLOSE!!!');
         this._main.maximize();
         this._drawer.hide();
         Animated.spring(this.state.animVal, { toValue: 1, useNativeDriver: true }).start();
     };
 
-    choiceCategory = (iId) => {
+    choicePage = (iId) => {
         this.closeDrawer();
-        this._main._openTab(iId, true);
+        this._main._openPage(iId, true);
     };
 
-    choiceSection = (iId) => {
+    choiceCategory = (iId) => {
         this.closeDrawer();
-        this._main._openSection(iId);
+        this._main._openCategory(iId);
     };
 
 
@@ -66,7 +66,7 @@ class MainMng extends React.Component{
 
         return (
             <View style={{flex:1, backgroundColor:colors.bgApp}}>
-                <Drawer ref={c => this._drawer = c} close={this.closeDrawer} onChoiceCategory={this.choiceCategory} onChoiceSection={this.choiceSection}/>
+                <Drawer ref={c => this._drawer = c} close={this.closeDrawer} onChoicePage={this.choicePage} onChoiceCategory={this.choiceCategory}/>
                 <Main navigation={navigation} ref={c => this._main = c}/>
                 <Search/>
 

@@ -116,10 +116,4 @@ const termsDispatchToProps = (dispatch) => {
 const TermsScreen = connect( termsStateToProps, termsDispatchToProps)(TermsTab);
 
 
-// const LoginScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { login } )(LoginTab);//enhance(LoginTab);
-// const SignupScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { setCntHeight } )(SignupTab);//enhance(SignupTab);
-// const ForgotScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { setCntHeight } )(ForgotTab);//enhance(ForgotTab);
-// const OptScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { setCntHeight } )(OtpTab);//enhance(OtpTab);
-// const TermsScreen = connect( state => ({ [ ModMap.Reg ] : state[ ModMap.Reg ], [ModMap.RegAnim] : state[ ModMap.RegAnim ] }), { setCntHeight } )(TermsTab);//enhance(TermsTab);
-
 export { LoginScreen, SignupScreen, ForgotScreen, OtpScreen, TermsScreen };

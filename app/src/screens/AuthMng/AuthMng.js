@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-    Keyboard,
-    Text,
-    View,
-    Animated,
-    Easing,
-    LayoutAnimation,
-    StyleSheet,
-    Dimensions,
-    Platform,
-    ScrollView,
-    PermissionsAndroid, ToastAndroid
-} from 'react-native';
+import { Keyboard, Text, View, Animated, Easing, LayoutAnimation, StyleSheet, Dimensions, Platform, ScrollView, PermissionsAndroid, ToastAndroid } from 'react-native';
 import {createStackNavigator} from 'react-navigation';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import {AppBg, Waves, OverlayLoader} from '../../components';

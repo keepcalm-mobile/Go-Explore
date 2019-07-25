@@ -18,6 +18,7 @@ const TabsNavi = createBottomTabNavigator({
     },{
         initialRouteName: screens.DataPages,
         initialRouteKey: screens.DataPages + 'Key',
+        backBehavior:'history',
     // transparentCard: true,
     defaultNavigationOptions: {
         gesturesEnabled: true,

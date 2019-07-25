@@ -1,18 +1,22 @@
 import React, {forwardRef} from 'react';
 import {Animated, PanResponder, View} from 'react-native';
-import MenuBottom from './Menu';
+import MenuPages from './MenuPages';
 import Map from './Map';
 import PagesMng from './PagesMng';
 import {getCurrentRoute} from '../../../utils/navHelper';
 import {screens} from '../../../constants';
-import SectionsMenu from './SectionsMenu';
+import MenuCategories from './MenuCategories';
 import s from './style';
 import {windowH, windowW} from '../../../styles';
+import {setCurCategory} from "../../../modules/categories";
 
 
 class Main extends React.Component {
     constructor(props) {
         super(props);
+
+        console.log(">>>>>>> MAIN cur Props : " + JSON.stringify(props.setCurCategory));
+        props.setCurCategory(screens.HotPicks);
 
         this.state = {
             pan: new Animated.ValueXY(),
@@ -86,8 +90,8 @@ class Main extends React.Component {
         this.setState({pointerEvents: 'auto'});
     };
 
-    _openTab = (iTabId, iJump = false) => {
-        console.log('OPEN TAB!! : ' + iTabId);
+    _openPage = (iTabId, iJump = false) => {
+        console.log('OPEN PAGE!! : ' + iTabId);
         if (iTabId === screens.DataPages && !iJump){
             this._panel.show();
         } else {
@@ -98,10 +102,11 @@ class Main extends React.Component {
         this._map.hide();
     };
 
-    _openSection = (iSectionId) => {
-        console.log('OPEN SECTION!! : ' + iSectionId);
+    _openCategory = (iCategoryId) => {
+        console.log('OPEN CATEGORY!! : ' + iCategoryId);
         this._panel.hide();
-        this.props.navigation.navigate(iSectionId);
+        this.props.setCurCategory(iCategoryId);
+        this.props.navigation.navigate(screens.HotPicks);//iCategoryId);
         this._bottom.changeIcon(screens.DataPages);
     };
 
@@ -119,8 +124,8 @@ class Main extends React.Component {
                 <Animated.View style={[{width:'100%', height:'100%', overflow: 'hidden'}, animStyle]}>
                     <PagesMng navigation={navigation}/>
                     <Map ref={c => this._map = c}/>
-                    <MenuBottom ref={c => this._bottom = c} onButtonPress={this._openTab}/>
-                    <SectionsMenu ref={c => this._panel = c} onButtonPress={this._openSection}/>
+                    <MenuPages ref={c => this._bottom = c} onButtonPress={this._openPage}/>
+                    <MenuCategories ref={c => this._panel = c} onButtonPress={this._openCategory}/>
                 </Animated.View>
             </Animated.View>
         );
