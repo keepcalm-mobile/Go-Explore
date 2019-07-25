@@ -43,28 +43,31 @@ const styles = StyleSheet.create({
         marginTop: -250,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingBottom: 200
+        paddingBottom: 100,
+        paddingLeft: indent,
+        paddingRight: indent
     },
     filtersHeader: {
         color: '#ff9e18',
         fontSize: 18,
         fontWeight: 'bold',
-        marginTop: 12
+        marginTop: 12,
+        marginBottom: 10
     },
     filtersCategoryHeader: {
         color: '#ffffff',
         fontSize: 12,
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        marginTop: 10,
-        alignSelf: 'flex-start',
-        marginLeft: 16
+        alignSelf: 'flex-start'
     },
     keywordsContainer: {
         flexDirection: 'row',
         marginTop: 16,
-        marginLeft: indent,
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
+        width: '100%',
+        marginLeft: -9,
+        marginRight: -9
     },
     keywordsInput: {
         color: '#ffffff',
@@ -77,9 +80,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         marginTop: 15,
-        paddingLeft: 6,
-        paddingRight: 6,
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
     },
     locationPicker: {
         alignSelf: 'center',
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
         borderColor: '#ff9e18',
         borderWidth: 1,
         borderRadius: 10,
-        width: '90%',
+        width: '100%',
         height: 58,
         justifyContent: 'center',
         marginTop: 10
@@ -118,13 +121,6 @@ const styles = StyleSheet.create({
         top: 0,
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    applyButton: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        flexDirection: 'row'
     }
 });
 export default styles;

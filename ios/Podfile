@@ -38,7 +38,6 @@ target 'goExploreApp' do
 
 
 
-  pod 'RNRangeSlider', :path => '../node_modules/rn-range-slider'
 
   target 'goExploreAppTests' do
     inherit! :search_paths

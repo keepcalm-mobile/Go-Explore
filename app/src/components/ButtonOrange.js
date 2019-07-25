@@ -15,9 +15,9 @@ class ButtonOrange extends React.Component<Props> {
     };
 
     render = () => {
-        const { title, onPress, onLayout } = this.props;
+        const { title, onPress, onLayout, style } = this.props;
         return (
-            <TouchableOpacity activeOpacity={0.5} onPress={onPress} onLayout={onLayout}>
+            <TouchableOpacity style={style} activeOpacity={0.5} onPress={onPress} onLayout={onLayout}>
                 <LinearGradient colors={[colors.darkMain, colors.lightMain]} start={{ x: 0, y: 0, }} end={{ x: 1, y: 0 }} style={styles.linearGradient} >
                     <Text style={styles.buttonText}> {title} </Text>
                 </LinearGradient>
