@@ -5,7 +5,7 @@ import StarEmpty from '../../../assets/rating/starEmpty.svg';
 import circleGlow from '../../../assets/rating/circleGlow.png';
 import s from './style';
 
-class Rating extends Component {
+class RatingComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -104,4 +104,4 @@ class Rating extends Component {
     }
 }
 
-export default Rating;
+export default RatingComponent;

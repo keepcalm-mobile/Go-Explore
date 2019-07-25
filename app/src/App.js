@@ -14,6 +14,8 @@ import {screens} from './constants';
 // });
 //var logoW = Dimensions.get('window').width * .85;//Dimensions.get('window').width * .85 > 330 ? 330 : Dimensions.get('window').width * .85;
 
+//Disable warnings box
+console.disableYellowBox = true;
 
 if (Platform.OS === 'android'){
     const { UIManager } = NativeModules;

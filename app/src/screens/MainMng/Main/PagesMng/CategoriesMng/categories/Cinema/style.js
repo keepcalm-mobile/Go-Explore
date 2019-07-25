@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     },
     keywordsContainer: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         marginTop: 16,
         alignSelf: 'flex-start',
         width: '100%',
@@ -74,7 +75,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         padding: 0,
         margin: 0,
-        marginBottom: 15
+        marginBottom: 15,
+        marginLeft: indent - 5
     },
     baseKeywordsView: {
         flexDirection: 'row',
