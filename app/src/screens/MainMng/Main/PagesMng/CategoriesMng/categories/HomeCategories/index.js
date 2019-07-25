@@ -1,11 +1,11 @@
-import {connect} from 'react-redux';
-import React, {forwardRef} from 'react';
+import HomeCategories from './HomeCategories';
+import PropTypes from 'prop-types';
 import ModMap from '../../../../../../../modules/map';
 import {setCurCategory} from '../../../../../../../modules/categories';
-import HotPicks from './HotPicks';
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import React, {forwardRef} from 'react';
 
-HotPicks.propTypes = {
+HomeCategories.propTypes = {
     setCurCategory: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
     curCategory: PropTypes.string.isRequired,
@@ -16,8 +16,7 @@ const stateToProps = (state) => {
     return {
         isLoading: state[ ModMap.Categories ].isLoading,
         curCategory: state[ ModMap.Categories ].curCategory,
-        data: state[ ModMap.Categories ].categoriesData,
-        // content : tempData,
+        data: state[ ModMap.Categories ].data,
     };
 };
 
@@ -27,9 +26,8 @@ const dispatchToProps = (dispatch) => {
     };
 };
 
-const Connected = connect(stateToProps, dispatchToProps, null, { forwardRef: true })(HotPicks);
+const Connected = connect(stateToProps, dispatchToProps, null, { forwardRef: true })(HomeCategories);
 
 export default forwardRef((props, ref) =>
     <Connected {...props} ref={ref} />
 );
-

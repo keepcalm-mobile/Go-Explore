@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         borderRadius: 20,
-        backgroundColor: colors.bgApp,
+        backgroundColor: colors.bgCategory,
         // overflow: 'hidden',
         // borderColor: colors.shadowColor,
         shadowColor: colors.shadowColor,

@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, View} from 'react-native';
 import s from './style';
 import {Auth, logOut} from '../../../../../../../api/Auth';
-import Template from '../Template';
+import ButtonOrange from '../../../../../../../components/ButtonOrange';
 
 
-class HotPicks extends Template {
+class HotPicks extends React.Component<Props> {
     state = {
 
     };
@@ -14,9 +14,14 @@ class HotPicks extends Template {
         super(props);
     }
 
-    // render() {
-    //     super.render();
-    // }
+    render() {
+        return (
+            <View style={s.container}>
+                <Text style={s.welcome}>Shopping coming soon</Text>
+                <ButtonOrange onPress={this._logOut} title={'LOGOUT'}/>
+            </View>
+        );
+    }
 
     _logOut = async () => {
         const resp = await logOut();

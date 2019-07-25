@@ -7,6 +7,7 @@ import BookmarksScreen from './Bookmarks';
 import ArgRealScreen from './ArgReal';
 import {createBottomTabNavigator} from 'react-navigation';
 import {screens} from '../../../../constants';
+import {colors} from "../../../../styles";
 
 
 const TabsNavi = createBottomTabNavigator({
@@ -42,10 +43,10 @@ class PagesMng extends React.Component<Props> {
         const { navigation } = this.props;
 
         return (
-            <View style={{flex:1}}>
-                <TabsNavi navigation={navigation}/>
-            </View>
-        );
+
+                <TabsNavi navigation={navigation} style={{backgroundColor: colors.bgCategory}}/>
+            // </View>
+        );//<View style={{flex:1}}>
     }
 }
 

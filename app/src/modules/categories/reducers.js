@@ -30,7 +30,7 @@ function curCategory(state = '', action) {
     }
 }
 
-function categoriesData(state = dataState, action) {
+function data(state = dataState, action) {
     console.log('???? DATA REDUCER : ' + action.type);
     switch (action.type) {
         case t.UPDATE_DATA:
@@ -46,7 +46,7 @@ function categoriesData(state = dataState, action) {
 const reducer = combineReducers({
     isLoading,
     curCategory,
-    categoriesData,
+    data,
 });
 
 export default reducer;

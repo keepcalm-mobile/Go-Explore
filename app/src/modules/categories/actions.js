@@ -186,7 +186,7 @@ function curCategory(iValue) {
     };
 }
 
-function categoriesData(iData) {
+function updateData(iData) {
     return {
         type: t.UPDATE_DATA,
         data: iData,
@@ -207,7 +207,7 @@ export function setCurCategory(iValue) {
             .then((response) => response.json())
             .then((data) => {
                 data = tempData;
-                dispatch(categoriesData({[iValue]:data} ));
+                dispatch(updateData({[iValue]:data} ));
             })
             .catch(() => dispatch(hasErrored(true)));
     };

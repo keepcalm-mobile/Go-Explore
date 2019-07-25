@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import s from './style';
-import {ButtonOrange} from '../../../../../../../components';
+import {ButtonOrange, OverlayLoader} from '../../../../../../../components';
 import {Auth, logOut} from '../../../../../../../api/Auth';
 import Header from '../../../../../../../components/Header';
 import CarouselBig from '../../../../../../../components/CarouselBig';
@@ -9,15 +9,16 @@ import CarouselSmall from '../../../../../../../components/CarouselSmall';
 import {screens} from '../../../../../../../constants';
 import {scale} from '../../../../../../../utils/resize';
 import IconFilter from '../../../../../../../../assets/topIcons/filterIcon.svg';
+import {colors} from '../../../../../../../styles';
 
-class Template extends React.Component<Props> {
+class HomeCategories extends React.Component<Props> {
     state = {
 
     };
 
     constructor(props) {
         super(props);
-        console.log(">>>>> TEMPLATE : " + JSON.stringify(props));
+        console.log('>>>>> TEMPLATE : ' + JSON.stringify(props));
     }
 
     onHeaderItemClick = () => {
@@ -61,16 +62,20 @@ class Template extends React.Component<Props> {
     };
 
     render() {
-        if (this.props.curCategory === '' || this.props.data[this.props.curCategory] === null) return (<View/>);
-        const {header, data} = this.props.data[this.props.curCategory];
+        if (this.props.curCategory === '' || this.props.data[this.props.curCategory] === null) {
+            return ( <View style={{flex:1, backgroundColor: colors.bgCategory}} /> );
+        }
+
+        const curCategory = this.props.curCategory;
+        const {header, data} = this.props.data[curCategory];
         return (
             <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false}>
                 <Header onItemClick={this.onHeaderItemClick} items={header} />
-                {this.curTitle(this.props.curCategory)}
+                {this.curTitle(curCategory)}
                 {this.generateContent(data)}
             </ScrollView>
         );
     }
 }
 
-export default Template;
+export default HomeCategories;
