@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {View, Image, Text, ScrollView} from 'react-native';
+import {View, Image, Text, ScrollView, TouchableOpacity} from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import s, {itemH, itemW} from './style';
 import type {Props} from 'react-native/Libraries/Components/View/View';
+import {scale} from '../../utils/resize';
 
 
 class CarouselBig extends React.Component<Props> {
@@ -20,16 +21,19 @@ class CarouselBig extends React.Component<Props> {
     }
 
     _renderItem = (item, index) => {
+        const {id, type, image, title} = item;
         return (
-            <View key={item.id} style={s.slide}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: item.image}} />
-                <Text style={s.itemTitle}>{item.title}</Text>
-            </View>
+            //{/*<View key={item.id} style={s.slide}>*/}
+            <TouchableOpacity key={id} onPress = { () => { this.props.onItemClick(id, type); }} activeOpacity={0.75} style={s.slide}>
+                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />
+                <Text style={s.itemTitle}>{title}</Text>
+            </TouchableOpacity>
+            // </View>
         );
     };
 
     render = () => {
-        const { items, onPress, title } = this.props;
+        const { items, title } = this.props;
         return (
             <View style={s.container}>
                 <Text style={s.title}>{title}</Text>

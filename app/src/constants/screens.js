@@ -35,13 +35,13 @@ export default class {
         static UserProfile = 'UserProfile';
         static Settings = 'Settings';
         static DataPages = 'DataPages';
-            static HotPicks = 'HotPicks';
-            static Cinema = 'Cinema';
-            static Attraction = 'Attraction';
-            static Travel = 'Travel';
-            static Shopping = 'Shopping';
-            static Dining = 'Dining';
-            static HealthBeauty = 'HealthBeauty';
+            static HotPicks = 'hotPicks';
+            static Cinema = 'cinema';
+            static Attraction = 'attractions';
+            static Travel = 'travel';
+            static Shopping = 'shopping';
+            static Dining = 'dining';
+            static HealthBeauty = 'health';
 
     static SubMenu = 'SubMenu';
 

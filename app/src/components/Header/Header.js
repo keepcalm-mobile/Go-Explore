@@ -26,15 +26,16 @@ class Header extends React.Component<Props> {
     }
 
     _renderItem = ({item, index}) => {
+        const {id, type, image, title, subTitle, rating} = item;
         return (
-            <View key={item.id} style={s.slide}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: item.image}} />
+            <View key={id} style={s.slide}>
+                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />
                 <LinearGradient colors={['#00000000', '#000000CC', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={s.linearGradient} />
-                <Text style={s.title}>{item.title}</Text>
-                <Text style={s.subTitle}>{item.subTitle}</Text>
+                <Text style={s.title}>{title}</Text>
+                <Text style={s.subTitle}>{subTitle}</Text>
                 <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:scale(7)}}>
-                    <Rating editable={false} max={5} rating={item.rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
-                    <ButtonBlack onPress={this.props.onItemClick} title={'View detail'}/>
+                    <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
+                    <ButtonBlack onPress = { () => { this.props.onItemClick(id, type); }} title={'View detail'}/>
                 </View>
             </View>
         );

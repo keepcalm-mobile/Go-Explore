@@ -3,6 +3,7 @@ import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import s from './style';
 import {ButtonOrange, OverlayLoader} from '../../../../../../../components';
 import {Auth, logOut} from '../../../../../../../api/Auth';
+import CinemaFilter from '../Cinema/filter';
 import Header from '../../../../../../../components/Header';
 import CarouselBig from '../../../../../../../components/CarouselBig';
 import CarouselSmall from '../../../../../../../components/CarouselSmall';
@@ -13,7 +14,7 @@ import {colors} from '../../../../../../../styles';
 
 class HomeCategories extends React.Component<Props> {
     state = {
-
+        filterIsShow:false,
     };
 
     constructor(props) {
@@ -21,12 +22,17 @@ class HomeCategories extends React.Component<Props> {
         console.log('>>>>> TEMPLATE : ' + JSON.stringify(props));
     }
 
-    onHeaderItemClick = () => {
-      console.log('HEADER CLICK');
+
+    /***    HEADER   ***/
+    onHeaderItemClick = (iId, iType) => {
+        console.log('HEADER CLICK : ' + iType + ' _ id : ' + iId);
+        this.props.navigation.navigate({ routeName: iType, params:{id:iId}, key:screens.ForgotTab + 'Key'});
     };
 
-    onFilterBtnClick = () => {
 
+    /***    FILTER   ***/
+    onFilterBtnClick = () => {
+        this.setState({filterIsShow: !this.state.filterIsShow});
     };
 
     filterBtn = (iId) => {
@@ -37,11 +43,19 @@ class HomeCategories extends React.Component<Props> {
         ) : null;
     };
 
+    filterPanel = () => {
+        return this.state.filterIsShow ? (
+            <CinemaFilter onApplyClick={this.onFilterBtnClick}/>
+        ) : null;
+    };
+
+
+    /***    TITLE   ***/
     curTitle = (iId) => {
         const Icon = screens.Categories[iId].icon;
 
         return (
-            <View style={s.titleCnt}>
+            <View key={iId + 'TitleKey'} style={s.titleCnt}>
                 <View style={{flexDirection:'row'}}>
                     <Icon width={scale(30)} height={scale(30)}/>
                     <Text style={s.welcome}>{screens.Categories[iId].title}</Text>
@@ -51,12 +65,19 @@ class HomeCategories extends React.Component<Props> {
         );
     };
 
-    generateContent = (iData) => {
+
+    /***    ITEMS   ***/
+    onItemClick = (iId, iType) => {
+        console.log('ITEM CLICK : ' + iType + ' _ id : ' + JSON.stringify(iId));
+        this.props.navigation.navigate({ routeName: iType, params:{id:iId}, key:screens.ForgotTab + 'Key'});
+    };
+
+    generateContent = (iData, iId) => {
         let list = [];
         for (let i = 0; i < iData.length; i++){
             list.push(iData[i].type === 'big'
-                ? <CarouselBig onItemClick={this.onHeaderItemClick} items={iData[i].data} title={iData[i].title}/>
-                : <CarouselSmall onItemClick={this.onHeaderItemClick} items={iData[i].data} title={iData[i].title}/>);
+                ? <CarouselBig key={iId + i.toString() + 'BigKey'} onItemClick={this.onItemClick} items={iData[i].data} title={iData[i].title}/>
+                : <CarouselSmall key={iId + i.toString() + 'SmallKey'} onItemClick={this.onItemClick} items={iData[i].data} title={iData[i].title}/>);
         }
         return list;
     };
@@ -70,9 +91,10 @@ class HomeCategories extends React.Component<Props> {
         const {header, data} = this.props.data[curCategory];
         return (
             <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false}>
-                <Header onItemClick={this.onHeaderItemClick} items={header} />
+                <Header key={curCategory + 'HeaderKey'} onItemClick={this.onHeaderItemClick} items={header} />
                 {this.curTitle(curCategory)}
-                {this.generateContent(data)}
+                {this.generateContent(data, curCategory)}
+                {this.filterPanel()}
             </ScrollView>
         );
     }
