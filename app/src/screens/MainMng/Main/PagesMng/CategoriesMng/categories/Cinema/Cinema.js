@@ -6,6 +6,8 @@ import {Auth, logOut} from '../../../../../../../api/Auth';
 import LinearGradient from 'react-native-linear-gradient';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
+import {Dimensions } from "react-native";
+
 //TODO: load image from server?
 import MoviePlaceholder from '../../../../../../../../assets/cinema/avengers.png';
 import IconClose from '../../../../../../../../assets/topIcons/closeIcon.svg';
@@ -17,6 +19,9 @@ import HorizontalLine from '../../../../../../../components/HorizontalLine/Horiz
 import Keyword from '../../../../../../../components/Keyword/Keyword';
 import RatingStars from '../../../../../../../components/Rating/RatingStars';
 import defaultStyle, { colors, fontNames, fontSizes, indent} from '../../../../../../../styles';
+
+const screenWidth = Math.round(Dimensions.get('window').width);
+const screenHeight = Math.round(Dimensions.get('window').height);
 
 class Cinema extends React.Component<Props> {
 
@@ -210,7 +215,7 @@ class Cinema extends React.Component<Props> {
 
                         <HorizontalLine />
                         <Text style={s.filtersCategoryHeader}>Location</Text>
-                        <LinearGradient style={s.locationPickerContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={90} angleCenter={{ x: 0.5, y: 0.3}}>
+                        <LinearGradient style={s.locationPickerContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={90} angleCenter={{ x: 0.5, y: 0.6}}>
                             <Picker
                                 selectedValue={this.state.location}
                                 style={s.locationPicker}
@@ -258,7 +263,9 @@ class Cinema extends React.Component<Props> {
 
                         <HorizontalLine />
                         <Text style={s.filtersCategoryHeader}>Age</Text>
-                        <CircleValues values={this.state.ages} />
+                        <CircleValues values={this.state.ages} onValuesChanged={(values) => {
+                            this.setState({ages: values});
+                        }} />
 
                         <HorizontalLine />
                         <Text style={s.filtersCategoryHeader}>Price</Text>
@@ -271,9 +278,10 @@ class Cinema extends React.Component<Props> {
                                 onValuesChangeStart={this.disableScroll}
                                 onValuesChangeFinish={this.enableScroll}
                                 isMarkersSeparated={true}
-                                trackStyle={{backgroundColor: '#ffffff'}}
+                                trackStyle={{backgroundColor: '#ffffff', width: '100%'}}
                                 selectedStyle={{backgroundColor: colors.border}}
-                                containerStyle={{width: '100%'}}
+                                containerStyle={{width: (screenWidth - (indent*4)), marginLeft: -indent, marginRight: -indent, padding: 0}}
+                                sliderLength={(screenWidth - (indent*4))} //TODO: find out how to make it like 100% for any screen width
 
                                 onValuesChange={(values) => {
                                     this.setState({
@@ -300,8 +308,16 @@ class Cinema extends React.Component<Props> {
                             />
                         </View>
                         <View style={{width: '100%', flexDirection: 'row', height: 20, marginBottom: 44, marginTop: 25}}>
-                            <Text style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute', left: 0}}>${this.state.priceMinCurrent}</Text>
-                            <Text style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute', right: 0}}>${this.state.priceMaxCurrent}</Text>
+                            <Text
+                                style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute',
+                                    left: (((this.state.priceMinCurrent/this.state.priceMax) * (screenWidth - (indent*4))) - 10)
+                                }}>
+                                ${this.state.priceMinCurrent}
+                            </Text>
+                            <Text
+                                style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute',
+                                    right: ((screenWidth - (indent*4)) - ((this.state.priceMaxCurrent/this.state.priceMax) * (screenWidth - (indent*4))) - 10)
+                                }}>${this.state.priceMaxCurrent}</Text>
                         </View>
 
                         <View style={{flexDirection: 'row', width: '100%'}}>
