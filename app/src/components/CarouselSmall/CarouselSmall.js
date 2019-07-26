@@ -37,7 +37,6 @@ class CarouselSmall extends React.Component<Props> {
         const { items, title } = this.props;
         return (
             <View style={s.container}>
-                <Separator width={windowW} style={s.separator}/>
                 <Text style={s.title}>{title}</Text>
 
                 <ScrollView horizontal={true}

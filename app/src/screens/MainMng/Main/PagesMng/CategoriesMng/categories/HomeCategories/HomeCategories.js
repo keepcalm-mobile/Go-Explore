@@ -10,7 +10,8 @@ import CarouselSmall from '../../../../../../../components/CarouselSmall';
 import {screens} from '../../../../../../../constants';
 import {scale} from '../../../../../../../utils/resize';
 import IconFilter from '../../../../../../../../assets/topIcons/filterIcon.svg';
-import {colors} from '../../../../../../../styles';
+import {colors, windowW} from '../../../../../../../styles';
+import Separator from '../../../../../../../../assets/topIcons/separator.svg';
 
 class HomeCategories extends React.Component<Props> {
     state = {
@@ -78,6 +79,9 @@ class HomeCategories extends React.Component<Props> {
             list.push(iData[i].type === 'big'
                 ? <CarouselBig key={iId + i.toString() + 'BigKey'} onItemClick={this.onItemClick} items={iData[i].data} title={iData[i].title}/>
                 : <CarouselSmall key={iId + i.toString() + 'SmallKey'} onItemClick={this.onItemClick} items={iData[i].data} title={iData[i].title}/>);
+            if (i !== iData.length - 1){
+                list.push(<Separator width={windowW} style={s.separator} key={iId + i.toString() + 'SeparatorKey'}/>)
+            };
         }
         return list;
     };

@@ -31,5 +31,8 @@ const styles = StyleSheet.create({
         // textAlign: 'center',
         // margin: 10,
     },
+    separator: {
+        marginBottom:indent,
+    },
 });
 export default styles;

@@ -24,9 +24,6 @@ const styles = StyleSheet.create({
         marginLeft: indent,
         marginBottom: indent,
     },
-    separator: {
-        marginBottom:indent,
-    },
     slider: {
         paddingHorizontal: indent*.5,
     },
