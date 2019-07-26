@@ -3,10 +3,10 @@ import React from 'react';
 import {View, Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import LinearGradient from 'react-native-linear-gradient';
-import s, {headerH} from './style';
+import s from './style';
 import type {Props} from 'react-native/Libraries/Components/View/View';
 import  Rating from '../Rating';
-import {windowW, colors} from '../../styles';
+import {windowW, colors, headerH} from '../../styles';
 import {scale} from '../../utils/resize';
 import ButtonBlack from '../ButtonBlack';
 
@@ -57,7 +57,7 @@ class Header extends React.Component<Props> {
                     inactiveSlideScale={1}
                     autoplay={true}
                     onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
-                    shouldOptimizeUpdates={false}
+                    // shouldOptimizeUpdates={false}
                     // containerCustomStyle={{marginTop:-20, alignContent:'flex-start', alignSelf:'flex-start'}}
                     // contentContainerCustomStyle={{justifyContent:'flex-start', alignContent:'flex-start'}}
                 />

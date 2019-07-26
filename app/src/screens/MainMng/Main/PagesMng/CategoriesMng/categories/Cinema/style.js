@@ -1,14 +1,40 @@
 import {StyleSheet} from 'react-native';
-import s, {colors, indent} from '../../../../../../../styles';
+import s, {colors, doubleIndent, fontNames, fontSizes, indent, windowW, headerH} from '../../../../../../../styles';
 import {scale} from '../../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.bgApp,
+        backgroundColor: colors.bgCategory,
+        paddingBottom: doubleIndent,
     },
+    header: {
+        height:headerH,
+        width:'100%',
+        justifyContent: 'flex-end',
+        // alignItems:'flex-end',
+        backgroundColor: 'transparent',
+        marginBottom:indent,
+    },
+    image:{
+        width: windowW,
+        height: headerH,
+        position: 'absolute',
+    },
+    title: {
+        fontFamily: fontNames.bold,
+        fontSize: fontSizes.heading,
+        textAlign: 'left',
+        marginLeft: indent,
+        color: colors.white,
+    },
+    linearGradient: {
+        width: '100%',
+        height: '50%',
+        position: 'absolute',
+        marginTop: '50%',
+    },
+
     welcome: {
         fontFamily: 'Poppins-Bold',
         fontSize: scale(24),

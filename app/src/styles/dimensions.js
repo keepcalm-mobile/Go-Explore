@@ -11,3 +11,4 @@ export const startY = (!isIphoneX()) ? 0 : getStatusBarHeight() - indent;
 export const barH = (!isIphoneX()) ? getStatusBarHeight() : 0;
 export const windowH = Dimensions.get('window').height - barH - bottomIndent;
 export const windowW = Dimensions.get('window').width;// - doubleIndent;
+export const headerH = scale(390);

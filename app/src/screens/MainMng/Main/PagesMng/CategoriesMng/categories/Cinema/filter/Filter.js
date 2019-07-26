@@ -15,8 +15,8 @@ import CircleValues from '../../../../../../../../components/CircleValues/Circle
 import HorizontalLine from '../../../../../../../../components/HorizontalLine/HorizontalLine';
 import Keyword from '../../../../../../../../components/Keyword/Keyword';
 import RatingStars from '../../../../../../../../components/Rating/RatingStars';
-import defaultStyle, { colors, fontNames, fontSizes, indent} from '../../../../../../../../styles';
-import PropTypes from "prop-types";
+import defaultStyle, {colors, fontNames, fontSizes, indent, windowW} from '../../../../../../../../styles';
+import PropTypes from 'prop-types';
 
 class Filter extends React.Component<Props> {
     static propTypes = {
@@ -188,130 +188,142 @@ class Filter extends React.Component<Props> {
         }
 
         return (
-                <LinearGradient style={s.filtersContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={95} angleCenter={{ x: 0.3, y: 0.8}}>
-                    <Text style={s.filtersHeader}>Filters</Text>
-                    <Text style={s.filtersCategoryHeader}>Keywords</Text>
+            <LinearGradient style={s.filtersContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={95} angleCenter={{ x: 0.3, y: 0.8}}>
+                <Text style={s.filtersHeader}>Filters</Text>
+                <Text style={s.filtersCategoryHeader}>Keywords</Text>
 
-                    <View style={s.keywordsContainer}>
-                        {keywords}
-                        <TextInput
-                           style={s.keywordsInput}
-                           value={this.state.keywordText}
-                           placeholder={'Type a keyword here...'}
-                           placeholderTextColor={'#ffffff'}
-                           onChangeText={(keywordText) => this.setState({keywordText})}
-                           value={this.state.keywordText}
-                           onEndEditing={(e) => {
-                               this.addKeyword(e.nativeEvent.text);
-                               this.setState({keywordText: ''});
-                           }}
-                        />
-                    </View>
+                <View style={s.keywordsContainer}>
+                    {keywords}
+                    <TextInput
+                        style={s.keywordsInput}
+                        placeholder={'Type a keyword here...'}
+                        placeholderTextColor={'#ffffff'}
+                        onChangeText={(keywordText) => this.setState({keywordText})}
+                        value={this.state.keywordText}
+                        onEndEditing={(e) => {
+                            this.addKeyword(e.nativeEvent.text);
+                            this.setState({keywordText: ''});
+                        }}
+                    />
+                </View>
 
+                <HorizontalLine />
+                <Text style={s.filtersCategoryHeader}>Location</Text>
+                <LinearGradient style={s.locationPickerContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={90} angleCenter={{ x: 0.5, y: 0.6}}>
+                    <Picker
+                        selectedValue={this.state.location}
+                        style={s.locationPicker}
+                        onValueChange={(itemValue, itemIndex) =>
+                            this.setState({location: itemValue})
+                        }>
+                        <Picker.Item label="Mall of Qatar - Doha" value="place0" />
+                        <Picker.Item label="Another Place 1" value="place1" />
+                        <Picker.Item label="Another Place 2" value="place2" />
+                    </Picker>
+                </LinearGradient>
+
+                <HorizontalLine />
+                <Text style={s.filtersCategoryHeader}>Rating</Text>
+                <View style={{alignSelf: 'flex-start'}}>
+                    <RatingStars rating={3} ratingStyle={'circle'} style={{alignSelf: 'flex-start'}} />
+                </View>
+
+                <HorizontalLine />
+                <Text style={s.filtersCategoryHeader}>Genre</Text>
+                <View style={s.baseKeywordsView}>
+                    {genres}
+                </View>
+
+                <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
                     <HorizontalLine />
-                    <Text style={s.filtersCategoryHeader}>Location</Text>
-                    <LinearGradient style={s.locationPickerContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={90} angleCenter={{ x: 0.5, y: 0.3}}>
-                        <Picker
-                            selectedValue={this.state.location}
-                            style={s.locationPicker}
-                            onValueChange={(itemValue, itemIndex) =>
-                                this.setState({location: itemValue})
-                            }>
-                            <Picker.Item label="Mall of Qatar - Doha" value="place0" />
-                            <Picker.Item label="Another Place 1" value="place1" />
-                            <Picker.Item label="Another Place 2" value="place2" />
-                        </Picker>
-                    </LinearGradient>
+                </View>
+                <Text style={s.filtersCategoryHeader}>Experience</Text>
+                <View style={s.baseKeywordsView}>
+                    {experience}
+                </View>
 
+                <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
                     <HorizontalLine />
-                    <Text style={s.filtersCategoryHeader}>Rating</Text>
-                    <View style={{alignSelf: 'flex-start'}}>
-                        <RatingStars rating={3} ratingStyle={'circle'} style={{alignSelf: 'flex-start'}} />
-                    </View>
-
-                    <HorizontalLine />
-                    <Text style={s.filtersCategoryHeader}>Genre</Text>
-                    <View style={s.baseKeywordsView}>
-                        {genres}
-                    </View>
-
-                    <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
-                        <HorizontalLine />
-                    </View>
-                    <Text style={s.filtersCategoryHeader}>Experience</Text>
-                    <View style={s.baseKeywordsView}>
-                        {experience}
-                    </View>
-
-                    <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
-                        <HorizontalLine />
-                    </View>
-                    <Text style={s.filtersCategoryHeader}>Languages</Text>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                        <View style={s.languagesContainer}>
-                            {languages}
-                            <View style={s.dropdownTouchArea}>
-                                <DropdownArrow />
-                            </View>
+                </View>
+                <Text style={s.filtersCategoryHeader}>Languages</Text>
+                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+                    <View style={s.languagesContainer}>
+                        {languages}
+                        <View style={s.dropdownTouchArea}>
+                            <DropdownArrow />
                         </View>
                     </View>
+                </View>
 
-                    <HorizontalLine />
-                    <Text style={s.filtersCategoryHeader}>Age</Text>
-                    <CircleValues values={this.state.ages} />
+                <HorizontalLine />
+                <Text style={s.filtersCategoryHeader}>Age</Text>
+                <CircleValues values={this.state.ages} onValuesChanged={(values) => {
+                    this.setState({ages: values});
+                }} />
 
-                    <HorizontalLine />
-                    <Text style={s.filtersCategoryHeader}>Price</Text>
-                    <View style={{flexDirection: 'row', justifyContent: 'center', paddingLeft: indent, paddingRight: indent, width: '100%', height: 20}}>
-                        <MultiSlider
-                            values={[this.state.priceMinCurrent, this.state.priceMaxCurrent]}
-                            min={this.state.priceMin}
-                            max={this.state.priceMax}
-                            step={1}
-                            onValuesChangeStart={this.disableScroll}
-                            onValuesChangeFinish={this.enableScroll}
-                            isMarkersSeparated={true}
-                            trackStyle={{backgroundColor: '#ffffff'}}
-                            selectedStyle={{backgroundColor: colors.border}}
-                            containerStyle={{width: '100%'}}
+                <HorizontalLine />
+                <Text style={s.filtersCategoryHeader}>Price</Text>
+                <View style={{flexDirection: 'row', justifyContent: 'center', paddingLeft: indent, paddingRight: indent, width: '100%', height: 20}}>
+                    <MultiSlider
+                        values={[this.state.priceMinCurrent, this.state.priceMaxCurrent]}
+                        min={this.state.priceMin}
+                        max={this.state.priceMax}
+                        step={1}
+                        onValuesChangeStart={this.disableScroll}
+                        onValuesChangeFinish={this.enableScroll}
+                        isMarkersSeparated={true}
+                        trackStyle={{backgroundColor: '#ffffff', width: '100%'}}
+                        selectedStyle={{backgroundColor: colors.border}}
+                        containerStyle={{width: (windowW - (indent * 4)), marginLeft: -indent, marginRight: -indent, padding: 0}}
+                        sliderLength={(windowW - (indent * 4))} //TODO: find out how to make it like 100% for any screen width
 
-                            onValuesChange={(values) => {
-                                this.setState({
-                                    priceMinCurrent: values[0],
-                                    priceMaxCurrent: values[1],
-                                });
-                            }}
+                        onValuesChange={(values) => {
+                            this.setState({
+                                priceMinCurrent: values[0],
+                                priceMaxCurrent: values[1],
+                            });
+                        }}
 
-                            customMarkerLeft={(e) => {
-                                return (<LinearGradient
-                                    colors={['#ff9e18', '#f8df8d']}
-                                    currentValue={e.currentValue}
-                                    style={{width: 20, height: 20, borderRadius: 20}}
-                                />);
-                            }}
+                        customMarkerLeft={(e) => {
+                            return (<LinearGradient
+                                colors={['#ff9e18', '#f8df8d']}
+                                currentValue={e.currentValue}
+                                style={{width: 20, height: 20, borderRadius: 20}}
+                            />);
+                        }}
 
-                            customMarkerRight={(e) => {
-                                return (<LinearGradient
-                                    colors={['#ff9e18', '#f8df8d']}
-                                    currentValue={e.currentValue}
-                                    style={{width: 20, height: 20, borderRadius: 20}}
-                                />);
-                            }}
-                        />
-                    </View>
-                    <View style={{width: '100%', flexDirection: 'row', height: 20, marginBottom: 44, marginTop: 25}}>
-                        <Text style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute', left: 0}}>${this.state.priceMinCurrent}</Text>
-                        <Text style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute', right: 0}}>${this.state.priceMaxCurrent}</Text>
-                    </View>
+                        customMarkerRight={(e) => {
+                            return (<LinearGradient
+                                colors={['#ff9e18', '#f8df8d']}
+                                currentValue={e.currentValue}
+                                style={{width: 20, height: 20, borderRadius: 20}}
+                            />);
+                        }}
+                    />
+                </View>
+                <View style={{width: '100%', flexDirection: 'row', height: 20, marginBottom: 44, marginTop: 25}}>
+                    <Text
+                        style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute',
+                            left: (((this.state.priceMinCurrent / this.state.priceMax) * (windowW - (indent * 4))) - 10),
+                        }}>
+                        ${this.state.priceMinCurrent}
+                    </Text>
+                    <Text
+                        style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute',
+                            right: ((windowW - (indent * 4)) - ((this.state.priceMaxCurrent / this.state.priceMax) * (windowW - (indent * 4))) - 10),
+                        }}>${this.state.priceMaxCurrent}</Text>
+                </View>
 
-                    <View style={{flexDirection: 'row', width: '100%'}}>
-                        <ButtonOrange
-                            title={'APPLY FILTERS'}
-                            style={{flex: 1, marginLeft: -indent, marginRight: -indent}}
-                            onPress={() => {this.props.onApplyClick(); }}
-                        />
-                    </View>
-                </LinearGradient>
+                <View style={{flexDirection: 'row', width: '100%'}}>
+                    <ButtonOrange
+                        title={'APPLY FILTERS'}
+                        style={{flex: 1, marginLeft: -indent, marginRight: -indent}}
+                        onPress={() => {
+                            this.props.onApplyClick();
+                        }}
+                    />
+                </View>
+            </LinearGradient>
         );
     }
 }

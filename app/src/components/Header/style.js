@@ -1,8 +1,6 @@
 import {StyleSheet} from 'react-native';
-import s, { colors, bottomIndent, fontNames, fontSizes, windowH, windowW, startY, indent, doubleIndent, } from '../../styles';
+import s, { colors, bottomIndent, fontNames, fontSizes, windowH, windowW, startY, indent, doubleIndent, headerH} from '../../styles';
 import {scale, verticalScale} from '../../utils/resize';
-
-export const headerH = scale(390);
 
 const styles = StyleSheet.create({
     container: {
