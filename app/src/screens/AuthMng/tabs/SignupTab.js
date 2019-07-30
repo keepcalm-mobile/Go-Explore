@@ -4,7 +4,7 @@ import s from '../styles';
 import TabResizer from './TabResizer';
 import ButtonOrange from '../../../components/ButtonOrange';
 import {TextInput} from 'react-native-gesture-handler';
-import {screens} from "../../../constants";
+import {screens} from '../../../constants';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 

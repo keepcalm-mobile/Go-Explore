@@ -10,6 +10,7 @@ const fontSizes = {
     small: scale(12),
     smallBtn: scale(11.25),
     smallTitle: scale(10),
+    personName: scale(9),
 };
 
 export default fontSizes;

@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         marginLeft: indent,
         marginRight: indent * 0.5,
         color: colors.ratingStars,
-        marginTop: 6
+        // marginTop: 6,
     },
     ratingCircle: {
         width: 44,
@@ -22,12 +22,12 @@ const styles = StyleSheet.create({
         borderRadius: 44,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     circleRatingText: {
         fontSize: fontSizes.big,
         color: colors.white,
         //marginRight: 5
-    }
+    },
 });
 export default styles;

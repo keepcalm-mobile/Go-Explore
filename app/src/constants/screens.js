@@ -17,7 +17,7 @@ import IconShopping from '../../assets/categoriesIcons/iconShopping.svg';
 import IconDining from '../../assets/categoriesIcons/iconDining.svg';
 import IconHealthBeauty from '../../assets/categoriesIcons/iconHealth.svg';
 
-import IconSettings from '../../assets/topIcons/settingsIcon.svg';
+import IconSettings from '../../assets/serviceIcons/settingsIcon.svg';
 
 export default class {
     static InitialSetup = 'InitialSetup';

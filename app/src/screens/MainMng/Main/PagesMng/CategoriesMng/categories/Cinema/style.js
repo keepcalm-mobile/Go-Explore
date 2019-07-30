@@ -4,7 +4,7 @@ import {scale} from '../../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: colors.bgCategory,
         paddingBottom: doubleIndent,
     },
@@ -21,6 +21,18 @@ const styles = StyleSheet.create({
         height: headerH,
         position: 'absolute',
     },
+    linearGradient: {
+        width: '100%',
+        height: '50%',
+        position: 'absolute',
+        marginTop: '50%',
+    },
+
+    titleCnt: {
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginBottom:indent,
+    },
     title: {
         fontFamily: fontNames.bold,
         fontSize: fontSizes.heading,
@@ -28,11 +40,98 @@ const styles = StyleSheet.create({
         marginLeft: indent,
         color: colors.white,
     },
-    linearGradient: {
-        width: '100%',
-        height: '50%',
-        position: 'absolute',
-        marginTop: '50%',
+    rightBtn: {
+        width: scale(40),
+        height: scale(40),
+        alignItems:'center',
+        justifyContent:'center',
+        marginRight:indent,
+    },
+
+    ratingCnt:{
+        flexDirection:'row',
+        marginBottom:indent,
+    },
+    ratingInfo: {
+        fontFamily: fontNames.regular,
+        fontSize: fontSizes.small,
+        textAlign: 'left',
+        marginLeft: indent,
+        color: colors.white,
+    },
+
+    tagsCnt: {
+        flexDirection:'row',
+        flexWrap:'wrap',
+        marginBottom:indent,
+        marginHorizontal: indent,
+    },
+    tagCnt: {
+        justifyContent:'center',
+        borderWidth:1,
+        borderRadius:20,
+        borderColor:colors.darkMain,
+        marginRight: indent * 0.67,
+        marginBottom: indent * 0.5,
+    },
+    tagTxt: {
+        fontFamily: fontNames.regular,
+        fontSize: fontSizes.small,
+        textAlign: 'center',
+        lineHeight: scale(18),
+        color: colors.white,
+        marginHorizontal: indent * 0.5,
+        marginVertical: indent * 0.25,
+    },
+
+    tabLabel: {
+        fontFamily: fontNames.bold,
+        fontSize: fontSizes.small,
+        textAlign: 'center',
+        lineHeight: scale(18),
+        color: colors.white,
+        margin:0,
+        // marginHorizontal: indent * 0.5,
+        // marginVertical: indent * 0.25,
+    },
+    tabCnt: {
+        // flex:1,
+        backgroundColor: 'transparent',
+        paddingVertical: indent,
+    },
+    overviewDesc: {
+        fontFamily: fontNames.regular,
+        fontSize: fontSizes.description,
+        textAlign: 'left',
+        lineHeight: scale(21),
+        color: colors.white,
+        marginBottom:indent,
+        marginHorizontal:indent,
+    },
+    overviewInfoCnt:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginBottom:indent,
+        marginHorizontal:indent,
+    },
+    overviewInfoItem:{
+        alignItems:'flex-start',
+        justifyContent:'flex-start',
+        marginRight: indent,
+    },
+    overviewInfoTitle:{
+        fontFamily: fontNames.bold,
+        fontSize: fontSizes.small,
+        textAlign: 'left',
+        lineHeight: scale(18),
+        color: colors.white,
+    },
+    overviewInfoSubtitle:{
+        fontFamily: fontNames.regular,
+        fontSize: fontSizes.small,
+        textAlign: 'left',
+        lineHeight: scale(18),
+        color: colors.secondaryText,
     },
 
     welcome: {
@@ -51,7 +150,7 @@ const styles = StyleSheet.create({
     poster: {
         width: '100%',
         top: 0,
-        left: 0
+        left: 0,
     },
     mainScroll: {
         width: '100%',
@@ -71,21 +170,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingBottom: 100,
         paddingLeft: indent,
-        paddingRight: indent
+        paddingRight: indent,
     },
     filtersHeader: {
         color: '#ff9e18',
         fontSize: 18,
         fontWeight: 'bold',
         marginTop: 12,
-        marginBottom: 10
+        marginBottom: 10,
     },
     filtersCategoryHeader: {
         color: '#ffffff',
         fontSize: 12,
         fontWeight: 'bold',
         textTransform: 'uppercase',
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
     },
     keywordsContainer: {
         flexDirection: 'row',
@@ -94,7 +193,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         width: '100%',
         marginLeft: -9,
-        marginRight: -9
+        marginRight: -9,
     },
     keywordsInput: {
         color: '#ffffff',
@@ -102,7 +201,7 @@ const styles = StyleSheet.create({
         padding: 0,
         margin: 0,
         marginBottom: 15,
-        marginLeft: indent - 5
+        marginLeft: indent - 5,
     },
     baseKeywordsView: {
         flexDirection: 'row',
@@ -127,7 +226,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 58,
         justifyContent: 'center',
-        marginTop: 10
+        marginTop: 10,
     },
     languagesContainer: {
         flexDirection: 'row',
@@ -139,7 +238,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: colors.border,
         borderWidth: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     dropdownTouchArea: {
         position: 'absolute',
@@ -148,7 +247,7 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         alignItems: 'center',
-        justifyContent: 'center'
-    }
+        justifyContent: 'center',
+    },
 });
 export default styles;

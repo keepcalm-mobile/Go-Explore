@@ -6,8 +6,8 @@ import Main from './Main';
 import Search from './Search';
 import PagesMng from './Main/PagesMng';
 import {scale} from '../../utils/resize';
-import IconMenu from '../../../assets/topIcons/menuIcon.svg';
-import IconSearch from '../../../assets/topIcons/searchIcon.svg';
+import IconMenu from '../../../assets/serviceIcons/menuIcon.svg';
+import IconSearch from '../../../assets/serviceIcons/searchIcon.svg';
 import {getCurrentRoute} from '../../utils/navHelper';
 
 const iconSize = scale(22);

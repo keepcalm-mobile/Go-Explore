@@ -9,9 +9,9 @@ import CarouselBig from '../../../../../../../components/CarouselBig';
 import CarouselSmall from '../../../../../../../components/CarouselSmall';
 import {screens} from '../../../../../../../constants';
 import {scale} from '../../../../../../../utils/resize';
-import IconFilter from '../../../../../../../../assets/topIcons/filterIcon.svg';
+import IconFilter from '../../../../../../../../assets/serviceIcons/filterIcon.svg';
 import {colors, windowW} from '../../../../../../../styles';
-import Separator from '../../../../../../../../assets/topIcons/separator.svg';
+import Separator from '../../../../../../../../assets/serviceIcons/separator.svg';
 
 class HomeCategories extends React.Component<Props> {
     state = {
@@ -38,8 +38,8 @@ class HomeCategories extends React.Component<Props> {
 
     filterBtn = (iId) => {
         return iId !== screens.HotPicks ? (
-            <TouchableOpacity onPress = {this.onFilterBtnClick} activeOpacity={0.5} style={{width: scale(38), height: scale(38), alignItems:'center', justifyContent:'center'}}>
-                <IconFilter width={scale(38)} height={scale(38)}/>
+            <TouchableOpacity onPress = {this.onFilterBtnClick} activeOpacity={0.5} style={{width: scale(40), height: scale(40), alignItems:'center', justifyContent:'center'}}>
+                <IconFilter width={scale(40)} height={scale(40)}/>
             </TouchableOpacity>
         ) : null;
     };
@@ -80,8 +80,8 @@ class HomeCategories extends React.Component<Props> {
                 ? <CarouselBig key={iId + i.toString() + 'BigKey'} onItemClick={this.onItemClick} items={iData[i].data} title={iData[i].title}/>
                 : <CarouselSmall key={iId + i.toString() + 'SmallKey'} onItemClick={this.onItemClick} items={iData[i].data} title={iData[i].title}/>);
             if (i !== iData.length - 1){
-                list.push(<Separator width={windowW} style={s.separator} key={iId + i.toString() + 'SeparatorKey'}/>)
-            };
+                list.push(<Separator width={windowW} style={s.separator} key={iId + i.toString() + 'SeparatorKey'}/>);
+            }
         }
         return list;
     };

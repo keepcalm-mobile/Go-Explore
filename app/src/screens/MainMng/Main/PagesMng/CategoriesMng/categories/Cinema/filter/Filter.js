@@ -7,7 +7,7 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 //TODO: load image from server?
 import MoviePlaceholder from '../../../../../../../../../assets/cinema/avengers.png';
-import IconClose from '../../../../../../../../../assets/topIcons/closeIcon.svg';
+import IconClose from '../../../../../../../../../assets/serviceIcons/closeIcon.svg';
 import DropdownArrow from '../../../../../../../../../assets/dropdownArrow.svg';
 import {scale} from '../../../../../../../../utils/resize';
 

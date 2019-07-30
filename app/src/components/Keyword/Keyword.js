@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, ToastAndroid} from 'react-native';
 
-import IconClose from '../../../assets/topIcons/closeIcon.svg';
+import IconClose from '../../../assets/serviceIcons/closeIcon.svg';
 import LinearGradient from "react-native-linear-gradient";
 
 class Keyword extends React.Component{

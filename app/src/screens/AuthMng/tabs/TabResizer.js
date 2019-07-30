@@ -1,10 +1,5 @@
 import React from 'react';
-import {Animated, Dimensions, Keyboard, LayoutAnimation, Platform, TextInput} from 'react-native';
-import {verticalScale} from '../../../utils/resize';
-import {ModMap} from '../../../modules';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
-
-const barH = (Platform.OS === 'android') ? getStatusBarHeight() : 0;
+import {Animated, Dimensions, Keyboard, LayoutAnimation} from 'react-native';
 
 class TabResizer extends React.Component<Props> {
     static navigationOptions = {header: null};
@@ -22,7 +17,6 @@ class TabResizer extends React.Component<Props> {
     }
 
     state = {
-        animBtnMargin: verticalScale(73),
         opacityValue: new Animated.Value(0.0),
         animatedValue: new Animated.Value(0.0),
         itemsMinCount:1,
@@ -40,14 +34,6 @@ class TabResizer extends React.Component<Props> {
         this.keyboardDidShowListener.remove();
         this.keyboardDidHideListener.remove();
     }
-
-
-    // componentDidUpdate(prevProps, prevState) {
-    // //     if (this.props[ModMap.RegAnim] !== prevProps[ModMap.RegAnim]) {
-    //         console.log('DID RESIZER : ' + JSON.stringify(this.props));
-    // //         this.updateStateLayoutProps(this.props[ModMap.RegAnim]);
-    // //     }
-    // }
 
 
     _keyboardWillShow = (e) => this.updateStateLayoutProps(true, true);
@@ -76,8 +62,6 @@ class TabResizer extends React.Component<Props> {
             this.state.animatedValue.setValue(toValue);
             this.state.opacityValue.setValue(toValue);
         }
-
-        this.setState({animBtnMargin: iKeyboard ? 0 : verticalScale(73)});
     }
 
     itemsMinCount = (event) => {

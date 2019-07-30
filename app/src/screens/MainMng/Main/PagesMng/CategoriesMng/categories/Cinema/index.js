@@ -29,10 +29,7 @@ const tempData = {
                 {title:'Kevin Fegie', subTitle:'Actor', image:'https://naxlabel.mobi/img/portfolio/cabin.png'},
                 {title:'San Lee', subTitle:'Actor', image:'https://naxlabel.mobi/img/portfolio/cabin.png'},
                 {title:'Scarlett Johansson', subTitle:'Actor', image:'https://naxlabel.mobi/img/portfolio/cabin.png'}],
-            rating : [{title:'Metoscore', value:'Filmrating.com'}, {title:'Reviews', value:'734 user'}, {title:'Popularity', value:'26 | 5'}],
-            tags : ['SPA', 'Health', 'Luxury'],
-            url : 'https://youtu.be/TcMBFSGVi1c',
-            type : 'health',
+            rating : [{value:'Metoscore', title:'Filmrating.com'}, {value:'Reviews', title:'734 user'}, {value:'Popularity', title:'26 | 5'}],
         },
     cinema:
         [

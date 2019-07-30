@@ -4,7 +4,7 @@
 // import {login} from '../../../modules/reg';
 import Header from './Header';
 
-// const HeaderConnected = connect( state => (state[ ModMap.Reg ]), { login }, null, { forwardRef: true } )(CarouselSmall);
+// const HeaderConnected = connect( state => (state[ ModMap.Reg ]), { login }, null, { forwardRef: true } )(CarouselPersons);
 //
 // export default forwardRef((props, ref) =>
 //     <HeaderConnected {...props} ref={ref} />

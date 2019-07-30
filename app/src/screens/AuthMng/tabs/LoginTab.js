@@ -1,16 +1,16 @@
 import React from 'react';
-import { Animated, Dimensions, Keyboard, LayoutAnimation, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import s from '../styles';
 import {TextInput} from 'react-native-gesture-handler';
 import ButtonOrange from '../../../components/ButtonOrange';
 import LogoG from '../../../../assets/logoGoogle.svg';
 import {scale, verticalScale} from '../../../utils/resize';
 import LogoFb from '../../../../assets/logoFacebook.svg';
-import {Auth, signIn} from '../../../api/Auth';
 import {screens} from '../../../constants';
 import TabResizer from './TabResizer';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
+const animValue = verticalScale(100);
 
 class LoginTab extends TabResizer {
     constructor(props){
@@ -20,7 +20,7 @@ class LoginTab extends TabResizer {
 
         this.state = {
             ...this.state,
-            animSocialHeight: verticalScale(100),
+            animSocialHeight: animValue,
             itemsMinCount:3,
             email:'',
             password:'',
@@ -34,17 +34,14 @@ class LoginTab extends TabResizer {
         return null;
     }
 
-    updateStateLayoutProps(iLayout, iAnim = false, iKeyboard = false) {
-        super.updateStateLayoutProps(iLayout, iAnim, iKeyboard);
-        let socHeight = iKeyboard ? 0 : verticalScale(100);
-
-        // if (iAnim) LayoutAnimation.easeInEaseOut();
-        this.setState({animSocialHeight: socHeight});
+    updateStateLayoutProps(iAnim = false, iKeyboard = false) {
+        super.updateStateLayoutProps(iAnim, iKeyboard);
+        this.setState({animSocialHeight: iKeyboard ? 0 : animValue});
     }
 
 
     _socialArea = () => {
-        if (this.state.animSocialHeight > 50) {
+        if (this.state.animSocialHeight > animValue * .5) {
             return (
                 <>
                     <Text style={s.socialTitle}>or login with</Text>
@@ -64,7 +61,7 @@ class LoginTab extends TabResizer {
     };
 
     _forgotArea = () => {
-        if (this.state.animSocialHeight > 50) {
+        if (this.state.animSocialHeight > animValue * .5) {
             return (<Text style={[s.forgot]} onPress={this.onForgotPress}>Forgot Password?</Text>);
         } else {
             return null;
@@ -121,18 +118,10 @@ class LoginTab extends TabResizer {
 
     onSignInPress = () => {
         this.props.login({email:this.state.email, pass:this.state.password});
-
-        // const resp = await subTitle(this.state.email, this.state.password);
-        // if (Auth.AUTH_COMPLETE === resp){
-        // this.props.navigation.navigate(screens.App);
-        // } else {
-        //     alert('Wrong all');
-        // }
     };
 
     onForgotPress = () => {
         this.props.navigation.navigate({ routeName: screens.ForgotTab, key:screens.ForgotTab + 'Key'});
-        // this.props.navigation.push(screens.ForgotTab);
     };
 
     onSignUpPress = () => {

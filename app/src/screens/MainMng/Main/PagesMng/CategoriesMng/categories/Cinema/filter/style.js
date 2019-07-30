@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     poster: {
         width: '100%',
         top: 0,
-        left: 0
+        left: 0,
     },
     mainScroll: {
         width: '100%',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         width: '100%',
         marginLeft: -9,
-        marginRight: -9
+        marginRight: -9,
     },
     keywordsInput: {
         color: '#ffffff',
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         padding: 0,
         margin: 0,
         marginBottom: 15,
-        marginLeft: indent - 5
+        marginLeft: indent - 5,
     },
     baseKeywordsView: {
         flexDirection: 'row',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 58,
         justifyContent: 'center',
-        marginTop: 10
+        marginTop: 10,
     },
     languagesContainer: {
         flexDirection: 'row',
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderColor: colors.border,
         borderWidth: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     dropdownTouchArea: {
         position: 'absolute',
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         alignItems: 'center',
-        justifyContent: 'center'
-    }
+        justifyContent: 'center',
+    },
 });
 export default styles;
