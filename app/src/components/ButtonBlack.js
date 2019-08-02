@@ -12,15 +12,16 @@ class ButtonBlack extends React.Component<Props> {
         title: PropTypes.string.isRequired,
         onPress: PropTypes.func.isRequired,
         onLayout: PropTypes.func,
+        titleStyle: PropTypes.object,
     };
 
     render = () => {
-        const { title, onPress, onLayout } = this.props;
+        const { title, onPress, onLayout, titleStyle} = this.props;
         return (
             <TouchableOpacity activeOpacity={0.5} onPress={onPress} onLayout={onLayout}>
-                <LinearGradient colors={[colors.darkMain, colors.lightMain]} start={{ x: 0, y: 0, }} end={{ x: 1, y: 0 }} style={styles.linearGradient} >
-                    <LinearGradient colors={['#000000', '#3A3A3A']} start={{ x: 0, y: 0, }} end={{ x: 1, y: 0 }} style={styles.linearDark} >
-                        <Text style={styles.buttonText}> {title} </Text>
+                <LinearGradient colors={[colors.darkMain, colors.lightMain]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.linearGradient} >
+                    <LinearGradient colors={['#000000', '#3A3A3A']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} useAngle={true} angle={158} angleCenter={{ x: 0.75, y: 0.5}} style={styles.linearDark} >
+                        <Text style={[styles.buttonText, titleStyle]}> {title} </Text>
                     </LinearGradient>
                 </LinearGradient>
             </TouchableOpacity>

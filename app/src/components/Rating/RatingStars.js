@@ -43,10 +43,12 @@ class Rating extends Component {
                 </TouchableWithoutFeedback>
             );
         }
-        return <View style={[this.props.style,{flexDirection:'row'}]}>
-            <Text style={s.ratingValue}>{this.state.rating.toString()}</Text>
-            {icons}
-        </View>;
+        return (
+            <View style={[this.props.style,{flexDirection:'row'}]}>
+                <Text style={s.ratingValue}>{this.state.rating.toFixed(1).toString()}</Text>
+                {icons}
+            </View>
+        );
     }
 }
 

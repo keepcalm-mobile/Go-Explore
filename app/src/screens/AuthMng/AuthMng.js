@@ -102,15 +102,15 @@ const topMargMax = Math.round(Dimensions.get('window').height * 0.04) + startY;/
 const titles = {
     default:{
         title:{ text:'Welcome to GoExplore City', style:{color:colors.white} },
-        subTitle:{ text:'Sign in to continue', style:{color:colors.white, fontSize: fontSizes.small} },
+        subTitle:{ text:'Sign in to continue', style:{color:colors.white, fontSize: fontSizes.small, lineHeight: scale(24)} },
     },
     [screens.OtpTab]:{
         title:{ text:'Verify your Mobile', style:{color:colors.highlight} },
-        subTitle:{ text:'Enter your OTP code here', style:{color:colors.secondaryText, fontSize: fontSizes.medium} },
+        subTitle:{ text:'Enter your OTP code here', style:{color:colors.secondaryText, fontSize: fontSizes.medium, lineHeight: scale(24)} },
     },
     [screens.TermsTab]:{
         title:{ text:'Terms of service', style:{color:colors.highlight} },
-        subTitle:{ text:'For User Capi Bar', style:{color:colors.secondaryText, fontSize: fontSizes.medium} },
+        subTitle:{ text:'For User Capi Bar', style:{color:colors.secondaryText, fontSize: fontSizes.medium, lineHeight: scale(24)} },
     },
 };
 
@@ -185,6 +185,8 @@ class AuthMng extends React.Component<Props> {
             LayoutAnimation.easeInEaseOut();
         }
         this.setState({animLogoTop: topMargin, animAreaH: viewAreaH, animCntH:cntH, animScrollH:scrollH, scrollEnabled: scrollH > viewAreaH });
+
+        this._scrollCnt.scrollTo({y: 300});
     }
 
 
@@ -272,7 +274,8 @@ class AuthMng extends React.Component<Props> {
                                 scrollEnabled={this.state.scrollEnabled}
                                 keyboardShouldPersistTaps={'handled'}
                                 removeClippedSubviews={false}
-                                pinchGestureEnabled={false}>
+                                pinchGestureEnabled={false}
+                                ref={c => this._scrollCnt = c}>
                         <View style={{marginTop: this.state.animLogoTop}} onLayout={this._calcLayouts}>
                             <Logo width={scale(330)} style={s.logo}/>
                             <Animated.View style={{opacity: this.state.titleOpacity}}>

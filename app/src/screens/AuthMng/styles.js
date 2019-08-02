@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         marginLeft:indent,
         marginRight:indent,
         marginBottom:indent,
-        marginTop:(-scale(56)),
+        marginTop:(-scale(54)),
 
         paddingLeft:scale(15),
         paddingRight:scale(15),

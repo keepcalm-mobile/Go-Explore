@@ -3,8 +3,8 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from '../utils/resize';
-import {colors, fontSizes, fontNames, indent} from "../styles";
-import type {Props} from "react-native/Libraries/Components/View/View";
+import {colors, fontSizes, fontNames, indent} from '../styles';
+import type {Props} from 'react-native/Libraries/Components/View/View';
 
 
 class ButtonOrange extends React.Component<Props> {
@@ -17,8 +17,8 @@ class ButtonOrange extends React.Component<Props> {
     render = () => {
         const { title, onPress, onLayout, style } = this.props;
         return (
-            <TouchableOpacity style={style} activeOpacity={0.5} onPress={onPress} onLayout={onLayout}>
-                <LinearGradient colors={[colors.darkMain, colors.lightMain]} start={{ x: 0, y: 0, }} end={{ x: 1, y: 0 }} style={styles.linearGradient} >
+            <TouchableOpacity style={{marginHorizontal: indent}} activeOpacity={0.5} {...this.props}>
+                <LinearGradient colors={[colors.darkMain, colors.lightMain]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.linearGradient} >
                     <Text style={styles.buttonText}> {title} </Text>
                 </LinearGradient>
             </TouchableOpacity>
@@ -29,8 +29,6 @@ class ButtonOrange extends React.Component<Props> {
 const styles = StyleSheet.create({
     linearGradient: {
         marginBottom: verticalScale(24),
-        marginLeft: indent,
-        marginRight: indent,
         borderRadius: 8,
     },
     buttonText: {

@@ -1,11 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {View, Image, Text, ScrollView, TouchableOpacity} from 'react-native';
-import Carousel from 'react-native-snap-carousel';
 import s, {itemH, itemW} from './style';
 import type {Props} from 'react-native/Libraries/Components/View/View';
-import {windowW, colors, doubleIndent, indent} from '../../styles';
-import Separator from '../../../assets/serviceIcons/separator.svg';
 
 
 class CarouselSmall extends React.Component<Props> {
@@ -26,7 +23,7 @@ class CarouselSmall extends React.Component<Props> {
         return (
             // {/*<View key={item.id} style={s.slide}>*/}
             <TouchableOpacity key={id} onPress = { () => { this.props.onItemClick(id, type); }} activeOpacity={0.75} style={s.slide}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />
+                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} progressiveRenderingEnabled={true}/>
                 <Text style={s.itemTitle}>{title}</Text>
             </TouchableOpacity>
             // {/*</View>*/}
@@ -40,7 +37,6 @@ class CarouselSmall extends React.Component<Props> {
                 <Text style={s.title}>{title}</Text>
 
                 <ScrollView horizontal={true}
-                            removeClippedSubviews={false}
                             pinchGestureEnabled={false}
                             showsHorizontalScrollIndicator={false}
                             showsVerticalScrollIndicator={false}

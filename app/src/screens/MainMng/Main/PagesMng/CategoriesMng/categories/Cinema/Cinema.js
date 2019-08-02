@@ -8,11 +8,12 @@ import {scale} from '../../../../../../../utils/resize';
 import Rating from '../../../../../../../components/Rating';
 import ButtonBlack from '../../../../../../../components/ButtonBlack';
 import IconFilter from '../../../../../../../../assets/serviceIcons/playIcon.svg';
-import TabIndicator from '../../../../../../../../assets/serviceIcons/tabIndicator.svg';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import {indent, windowW} from '../../../../../../../styles';
 import colors from '../../../../../../../styles/colors';
-import CarouselPersons from "../../../../../../../components/CarouselPersons";
+import CarouselPersons from '../../../../../../../components/CarouselPersons';
+import Separator from '../../../../../../../../assets/serviceIcons/separator.svg';
+import {TextInput} from "react-native-gesture-handler";
 
 class Cinema extends React.Component<Props> {
     constructor(props) {
@@ -26,6 +27,9 @@ class Cinema extends React.Component<Props> {
                 { key: 'comments', title: 'COMMENTS'},
                 { key: 'explore', title: 'EXPLORE'},
             ],
+            comment: '',
+            comment2: '',
+            rateValue: 0.0,
         };
     }
 
@@ -38,7 +42,7 @@ class Cinema extends React.Component<Props> {
         const {image, title, rating, tags, url} = iData;
         return (
             <View key={iType + 'HeaderKey'} style={s.header}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />
+                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} progressiveRenderingEnabled={true}/>
                 <LinearGradient colors={['#00000000', '#000000CC', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={s.linearGradient} />
 
                 <View style={s.titleCnt}>
@@ -72,8 +76,7 @@ class Cinema extends React.Component<Props> {
                 </View>
             );})}
         </View>
-    )
-
+    );
 
     overview = (iData) => (
         <View style={s.tabCnt}>
@@ -85,19 +88,126 @@ class Cinema extends React.Component<Props> {
         </View>
     );
 
+
+
+    _cinemaItem = (item, index) => {
+        const {image} = item;
+        return (
+            <View key={index} style={s.cinemaSlide}>
+                <Image resizeMode={'cover'} style={s.cinemaItemImage} source={{uri: image}} progressiveRenderingEnabled={true}/>
+            </View>
+        );
+    };
+
+
     cinema = (iData) => (
         <View style={s.tabCnt}>
+            <Text style={s.cinemaTitle}>Experience</Text>
+
+            <ScrollView horizontal={true}
+                        pinchGestureEnabled={false}
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={s.cinemaSlider}>
+
+                {iData.map( (item, key) => { return this._cinemaItem(item, key); })}
+            </ScrollView>
         </View>
     );
 
+    // _commentItem = (item, index) => {
+    //     const {user, date, rating, text} = item;
+    //     return (
+    //         <View key={index} style={s.commentItem}>
+    //             <View style={s.commentItemTop}>
+    //                 <Image resizeMode={'cover'} style={s.commentImage} source={{uri: user.image}} progressiveRenderingEnabled={true}/>
+    //                 <View>
+    //                     <Text style={s.commentName}>{user.name}</Text>
+    //                     <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
+    //                 </View>
+    //                 <Text style={s.commentDate}>{date}</Text>
+    //             </View>
+    //             <Text style={s.commentText}>{text}</Text>
+    //         </View>
+    //     );
+    // };
+
+    _showAllComments() {
+        console.log(">>>>> SHOW ALL COMMENTS");
+    }
+
+    _commentItem = (iData, iId) => {
+        let list = [];
+        const length = iData.length > 2 ? 2 : iData.length;
+
+        for (let i = 0; i < length; i++){
+            const {user, date, rating, text} = iData[i];
+            list.push(
+                <View key={iId + i.toString()} style={s.commentItem}>
+                    <View style={s.commentItemTop}>
+                        <Image resizeMode={'cover'} style={s.commentImage} source={{uri: user.image}} progressiveRenderingEnabled={true}/>
+                        <View>
+                            <Text style={s.commentName}>{user.name}</Text>
+                            <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
+                        </View>
+                        <Text style={s.commentDate}>{date}</Text>
+                    </View>
+                    <Text style={s.commentText}>{text}</Text>
+                </View>
+            );
+            if (i !== length - 1){
+                list.push(<Separator width={windowW} style={s.separator} key={iId + i.toString() + 'SeparatorKey'}/>);
+            }
+        }
+
+        if (iData.length > 2){
+            list.push(<ButtonBlack key={iId} onPress={this._showAllComments} title={'VIEW ALL REVIEWS'} titleStyle={s.blackButtonTitle}/>);
+        }
+        return list;
+    };
+
+    _showAllComments = () => {
+        console.log(">>>>> SHOW ALL COMMENTS");
+    };
+
+    _inputArea = () => {
+        return (
+           <View style={s.inputArea}>
+               <View style={s.commentItemTop}>
+                   <Image resizeMode={'cover'} style={s.commentImage} source={{uri: 'https://naxlabel.mobi/img/portfolio/cabin.png'}} progressiveRenderingEnabled={true}/>
+                   <View>
+                       <Text style={s.commentName}>{'Richard'}</Text>
+                       <Rating editable={true} max={5} rating={this.state.rateValue} onRate={(rateValue)=>this.setState({rateValue})} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
+                   </View>
+               </View>
+               <View style={s.inputTextCnt} >
+                   <TextInput
+                       ref={(input) => { this.messageField = input; }}
+                       style={s.inputText}
+                       placeholder="Write a comment..."
+                       placeholderTextColor={'#B7B7B7'}
+                       onChangeText={(comment2) => this.setState({comment2})}
+                       multiline={true}
+                       numberOfLines={4}
+                       maxLength={174}
+                       value={this.state.comment2}
+                   />
+               </View>
+               <ButtonOrange onPress={this._showAllComments} title={'SUBMIT'} style={{marginHorizontal:0}}/>
+           </View>
+        );
+    };
+
     comments = (iData) => (
         <View style={s.tabCnt}>
+            {/*{iData.map( (item, key) => { return this._commentItem(item, key); })}*/}
+            {this._commentItem(iData, 'commentItem')}
+            {this._inputArea()}
         </View>
     );
 
     explore = (iData) => (
-        <View style={s.tabCnt}>
-        </View>
+        <View style={s.tabCnt} />
     );
 
 

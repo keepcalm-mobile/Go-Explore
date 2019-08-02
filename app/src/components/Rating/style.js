@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         marginLeft: indent,
         marginRight: indent * 0.5,
         color: colors.ratingStars,
-        // marginTop: 6,
+        minWidth: fontSizes.description * 1.5,
     },
     ratingCircle: {
         width: 44,

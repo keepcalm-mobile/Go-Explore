@@ -39,7 +39,6 @@ class CarouselBig extends React.Component<Props> {
                 <Text style={s.title}>{title}</Text>
 
                 <ScrollView horizontal={true}
-                            removeClippedSubviews={false}
                             pinchGestureEnabled={false}
                             showsHorizontalScrollIndicator={false}
                             showsVerticalScrollIndicator={false}

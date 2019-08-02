@@ -198,7 +198,7 @@ export function setCurCategory(iValue) {
         dispatch(curCategory(iValue));
         dispatch(isLoading(true));
 
-        fetch(api + '/users')//'?user='+iUser.email+'&pass='+md5(iUser.pass)
+        fetch(api + '?users')//'?user='+iUser.email+'&pass='+md5(iUser.pass)
             .then((response) => {
                 if (!response.ok) { throw Error(response.statusText); }
                 dispatch(isLoading(false));

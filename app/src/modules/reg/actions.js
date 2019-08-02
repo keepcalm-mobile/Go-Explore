@@ -67,7 +67,7 @@ export function login(iUser) {
     return (dispatch) => {
         dispatch(loginIsLoading(true));
 
-        fetch(api + '/users')//'?user='+iUser.email+'&pass='+md5(iUser.pass)
+        fetch(api + '?user')//'?user='+iUser.email+'&pass='+md5(iUser.pass)
             .then((response) => {
                 if (!response.ok) {
                     throw Error(response.statusText);
@@ -92,7 +92,7 @@ export function restorePassword(iMail) {
     return (dispatch) => {
         dispatch(loginIsLoading(true));
 
-        fetch(api + '/users')//'?email='+iMail
+        fetch(api + '?users')//'?email='+iMail
             .then((response) => {
                 if (!response.ok) {
                     throw Error(response.statusText);
@@ -125,7 +125,7 @@ export function registration(iData) {
         //     },
         //     body: JSON.stringify(iData),
         // })
-        fetch(api + '/users')
+        fetch(api + '?users')
         .then((response) => {
             if (!response.ok) {
                 throw Error(response.statusText);
@@ -150,7 +150,7 @@ export function confirmPhone(iValue) {
     return (dispatch) => {
         dispatch(loginIsLoading(true));
 
-        fetch(api + '/users')//'?email='+iMail
+        fetch(api + '?users')//'?email='+iMail
             .then((response) => {
                 if (!response.ok) {
                     throw Error(response.statusText);
@@ -175,7 +175,7 @@ export function termsAgree() {
     return (dispatch) => {
         dispatch(loginIsLoading(true));
 
-        fetch(api + '/users')//'?email='+iMail
+        fetch(api + '?users')//'?email='+iMail
             .then((response) => {
                 if (!response.ok) {
                     throw Error(response.statusText);
