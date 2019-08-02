@@ -8,15 +8,15 @@ import {screens} from '../../../constants';
 import MenuCategories from './MenuCategories';
 import s from './style';
 import {windowH, windowW} from '../../../styles';
-import {setCurCategory} from "../../../modules/categories";
+import {setCurCategory} from '../../../modules/categories';
 
 
 class Main extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log(">>>>>>> MAIN cur Props : " + JSON.stringify(props.setCurCategory));
-        props.setCurCategory(screens.HotPicks);
+        console.log('>>>>>>> MAIN cur Props : ' + JSON.stringify(props.setCurCategory));
+        // props.setCurCategory(screens.HotPicks);
 
         this.state = {
             pan: new Animated.ValueXY(),
@@ -64,7 +64,7 @@ class Main extends React.Component {
                 useNativeDriver: true,
             }),
             Animated.spring(this.state.pan, {
-                toValue: { x: windowW*.45, y: windowH*.01 },
+                toValue: { x: windowW * 0.45, y: windowH * 0.01 },
                 friction: 5,
                 useNativeDriver: true,
             }),
@@ -105,8 +105,9 @@ class Main extends React.Component {
     _openCategory = (iCategoryId) => {
         console.log('OPEN CATEGORY!! : ' + iCategoryId);
         this._panel.hide();
-        this.props.setCurCategory(iCategoryId);
-        this.props.navigation.navigate(screens.HotPicks);//iCategoryId);
+        // this.props.setCurCategory(iCategoryId);
+        // this.props.navigation.navigate(screens.HotPicks);//iCategoryId);
+        this.props.navigation.navigate({routeName:screens.HotPicks, key: screens.DataPages + iCategoryId + 'Key', params:{categoryId:iCategoryId}});
         this._bottom.changeIcon(screens.DataPages);
     };
 

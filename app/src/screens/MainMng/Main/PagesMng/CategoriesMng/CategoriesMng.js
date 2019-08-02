@@ -2,15 +2,15 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {createStackNavigator, createSwitchNavigator} from 'react-navigation';
 import {screens} from '../../../../../constants';
-import Home from './categories/HomeCategories';
+import Home from './HomeCategories';
 import Cinema from './categories/Cinema';
 import Attraction from './categories/Attraction';
 import Travel from './categories/Travel';
 import Shopping from './categories/Shopping';
 import Dining from './categories/Dining';
 import HealthBeauty from './categories/HealthBeauty';
-import {colors} from "../../../../../styles";
-import {OverlayLoader} from "../../../../../components";
+import {colors} from '../../../../../styles';
+import {OverlayLoader} from '../../../../../components';
 
 
 const CategoriesNavi = createStackNavigator({
@@ -23,7 +23,8 @@ const CategoriesNavi = createStackNavigator({
         [screens.HealthBeauty]  : { screen: HealthBeauty},
     },{
         initialRouteName: screens.HotPicks,
-        initialRouteKey: screens.HotPicks + 'Key',
+        initialRouteKey: screens.DataPages + screens.HotPicks + 'Key',
+        initialRouteParams:{categoryId:screens.HotPicks},
         headerMode: 'none',
         defaultNavigationOptions: {
             gesturesEnabled: true,

@@ -1,17 +1,17 @@
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import s from './style';
-import {ButtonOrange, OverlayLoader} from '../../../../../../../components';
-import {Auth, logOut} from '../../../../../../../api/Auth';
-import CinemaFilter from '../Cinema/filter';
-import Header from '../../../../../../../components/Header';
-import CarouselBig from '../../../../../../../components/CarouselBig';
-import CarouselSmall from '../../../../../../../components/CarouselSmall';
-import {screens} from '../../../../../../../constants';
-import {scale} from '../../../../../../../utils/resize';
-import IconFilter from '../../../../../../../../assets/serviceIcons/filterIcon.svg';
-import {colors, windowW} from '../../../../../../../styles';
-import Separator from '../../../../../../../../assets/serviceIcons/separator.svg';
+import {ButtonOrange, OverlayLoader} from '../../../../../../components';
+import {Auth, logOut} from '../../../../../../api/Auth';
+import CinemaFilter from '../categories/Cinema/filter';
+import Header from '../../../../../../components/Header';
+import CarouselBig from '../../../../../../components/CarouselBig';
+import CarouselSmall from '../../../../../../components/CarouselSmall';
+import {screens} from '../../../../../../constants';
+import {scale} from '../../../../../../utils/resize';
+import IconFilter from '../../../../../../../assets/serviceIcons/filterIcon.svg';
+import {colors, windowW} from '../../../../../../styles';
+import Separator from '../../../../../../../assets/serviceIcons/separator.svg';
 
 class HomeCategories extends React.Component<Props> {
     state = {
@@ -21,6 +21,12 @@ class HomeCategories extends React.Component<Props> {
     constructor(props) {
         super(props);
         console.log('>>>>> TEMPLATE : ' + JSON.stringify(props));
+
+        const catId = props.navigation.state.params.categoryId;
+
+        //if(this.props.data[catId] === null) {
+            props.setCurCategory(catId);
+        //}
     }
 
 
@@ -87,11 +93,13 @@ class HomeCategories extends React.Component<Props> {
     };
 
     render() {
-        if (this.props.curCategory === '' || this.props.data[this.props.curCategory] === null) {
+        const curCategory = this.props.navigation.state.params.categoryId;
+
+        if (this.props.data[curCategory] === null) {
             return ( <View style={{flex:1, backgroundColor: colors.bgCategory}} /> );
         }
 
-        const curCategory = this.props.curCategory;
+        // const curCategory = this.props.curCategory;
         const {header, data} = this.props.data[curCategory];
         return (
             <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false}>

@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import s, {colors, doubleIndent, fontSizes, indent} from '../../../../../../../styles';
-import {scale} from '../../../../../../../utils/resize';
+import s, {colors, doubleIndent, fontSizes, indent} from '../../../../../../styles';
+import {scale} from '../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
     container: {

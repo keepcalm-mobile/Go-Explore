@@ -8,7 +8,8 @@ import PagesMng from './Main/PagesMng';
 import {scale} from '../../utils/resize';
 import IconMenu from '../../../assets/serviceIcons/menuIcon.svg';
 import IconSearch from '../../../assets/serviceIcons/searchIcon.svg';
-import {getCurrentRoute} from '../../utils/navHelper';
+import {getCurrentRoute, getCurrentRouteParams} from '../../utils/navHelper';
+import {screens} from "../../constants";
 
 const iconSize = scale(22);
 
@@ -24,7 +25,8 @@ class MainMng extends React.Component{
     }
 
     componentDidUpdate(prevProps, prevState) {
-        this._drawer.setCurPage(getCurrentRoute(this.props.navigation.state));
+        const curPage = getCurrentRoute(this.props.navigation.state);
+        this._drawer.setCurPage(curPage === screens.HotPicks ? getCurrentRouteParams(this.props.navigation.state).categoryId : curPage);
     }
 
     openDrawer = () => {
@@ -34,7 +36,6 @@ class MainMng extends React.Component{
     };
 
     closeDrawer = () => {
-        console.log('CLICK CLOSE!!!');
         this._main.maximize();
         this._drawer.hide();
         Animated.spring(this.state.animVal, { toValue: 1, useNativeDriver: true }).start();

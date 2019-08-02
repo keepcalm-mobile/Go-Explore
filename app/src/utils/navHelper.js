@@ -26,6 +26,16 @@ export const getCurrentRoute = (state) => {
   return findCurrentRoute(state);
 };
 
+export const getCurrentRouteParams = (state) => {
+  const findCurrentRoute = (navState) => {
+    if (navState.index !== undefined) {
+      return findCurrentRoute(navState.routes[navState.index]);
+    }
+    return navState.params;
+  };
+  return findCurrentRoute(state);
+};
+
 export const navigate = (nav, screen, params) => () => nav.navigate(screen, params);
 
 // export const getParam = param => R.path(['state', 'params', param]);

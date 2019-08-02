@@ -1,7 +1,7 @@
 import HomeCategories from './HomeCategories';
 import PropTypes from 'prop-types';
-import ModMap from '../../../../../../../modules/map';
-import {setCurCategory} from '../../../../../../../modules/categories';
+import ModMap from '../../../../../../modules/map';
+import {setCurCategory} from '../../../../../../modules/categories';
 import {connect} from 'react-redux';
 import React, {forwardRef} from 'react';
 

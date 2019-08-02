@@ -53,7 +53,7 @@ class Header extends React.Component<Props> {
                     sliderHeight={headerH}
                     itemWidth={windowW}
                     itemHeight={headerH}
-                    loop={true}
+                    // loop={true}
                     inactiveSlideScale={1}
                     autoplay={true}
                     onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }

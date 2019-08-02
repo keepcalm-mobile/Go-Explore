@@ -32,7 +32,7 @@ class CarouselBig extends React.Component<Props> {
         );
     };
 
-    render = () => {
+    render() {
         const { items, title } = this.props;
         return (
             <View style={s.container}>
