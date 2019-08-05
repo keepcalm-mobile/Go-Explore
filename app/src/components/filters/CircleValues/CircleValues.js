@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity, ToastAndroid} from 'react-native';
 
-import s, { colors, fontNames, fontSizes, indent} from '../../styles';
-import circleGlow from '../../../assets/rating/circleGlow.png';
+import s, { colors, fontNames, fontSizes, indent} from '../../../styles';
+import circleGlow from '../../../../assets/rating/circleGlow.png';
 
 class CircleValues extends  React.Component{
 

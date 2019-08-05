@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, ToastAndroid} from 'react-native';
 
-import IconClose from '../../../assets/serviceIcons/closeIcon.svg';
+import IconClose from '../../../../assets/serviceIcons/closeIcon.svg';
 import LinearGradient from "react-native-linear-gradient";
 
 class Keyword extends React.Component{
@@ -20,7 +20,7 @@ class Keyword extends React.Component{
             textStyle: styles.text,
             title: props.title ? props.title : '',
             startColor: '#000000',
-            endColor: '#3a3a3a'
+            endColor: '#3a3a3a',
         };
     }
 
@@ -29,7 +29,7 @@ class Keyword extends React.Component{
             this.setState({
                 textStyle: styles.textActive,
                 startColor: '#ff9e18',
-                endColor: '#ffda66'
+                endColor: '#ffda66',
             });
         }
 

@@ -6,17 +6,17 @@ import LinearGradient from 'react-native-linear-gradient';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 //TODO: load image from server?
-import MoviePlaceholder from '../../../../../../../../../assets/cinema/avengers.png';
-import IconClose from '../../../../../../../../../assets/serviceIcons/closeIcon.svg';
-import DropdownArrow from '../../../../../../../../../assets/dropdownArrow.svg';
+import DropdownArrow from '../../../../../../../../../assets/serviceIcons/dropdownArrow.svg';
 import {scale} from '../../../../../../../../utils/resize';
 
-import CircleValues from '../../../../../../../../components/CircleValues/CircleValues';
-import HorizontalLine from '../../../../../../../../components/HorizontalLine/HorizontalLine';
-import Keyword from '../../../../../../../../components/Keyword/Keyword';
-import RatingStars from '../../../../../../../../components/Rating/RatingStars';
 import defaultStyle, {colors, fontNames, fontSizes, indent, windowW} from '../../../../../../../../styles';
 import PropTypes from 'prop-types';
+import CircleValues from '../../../../../../../../components/filters/CircleValues/CircleValues';
+import HorizontalLine from '../../../../../../../../components/filters/HorizontalLine/HorizontalLine';
+import Keyword from '../../../../../../../../components/filters/Keyword/Keyword';
+import RatingStars from '../../../../../../../../components/Rating/RatingStars';
+import Keywords from '../../../../../../../../components/filters/Keywords';
+import Location from '../../../../../../../../components/filters/Location';
 
 class Filter extends React.Component<Props> {
     static propTypes = {
@@ -28,14 +28,8 @@ class Filter extends React.Component<Props> {
 
         this.state = {
             scrollEnabled: true,
-            keywordText: '',
 
-            //TODO: user entered keywords:
-            keywordsList: [
-                'Superhero',
-                'Thor',
-            ],
-            location: 'Mall of Qatar - Doha',
+            // location: 'Mall of Qatar - Doha',
             genres: [
                 { text: 'Action', active: false },
                 { text: 'Adult', active: false },
@@ -86,39 +80,6 @@ class Filter extends React.Component<Props> {
     enableScroll = () => this.setState({ scrollEnabled: true });
     disableScroll = () => this.setState({ scrollEnabled: false });
 
-    addKeyword(word) {
-
-        if (word === '')
-            {return;}
-
-        let list = [...this.state.keywordsList];
-        list = list.concat(word);
-
-        this.setState({
-            keywordsList: list,
-        });
-    }
-
-    removeKeyword(title) {
-
-        // ToastAndroid.showWithGravity(
-        //     'title: ' + title + '  keywordsList = ' + this.state.keywordsList,
-        //     ToastAndroid.LONG,
-        //     ToastAndroid.CENTER,
-        // );
-
-        let list = [...this.state.keywordsList];
-
-        for (let i = 0; i < list.length; i++){
-            if ( list[i] === title) {
-                list.splice(i, 1);
-            }
-        }
-
-        this.setState({
-            keywordsList: list,
-        });
-    }
 
     toggleGenreItem(title) {
 
@@ -162,13 +123,6 @@ class Filter extends React.Component<Props> {
 
     render() {
 
-        let keywords = [];
-        for (let i = 0; i < this.state.keywordsList.length; i++)
-        {
-            let index = i;
-            keywords.push(<Keyword key={this.state.keywordsList[i]} title={this.state.keywordsList[i]} editable={true} onDelete={(title) => {this.removeKeyword(title);}} />);
-        }
-
         let genres = [];
         for (let i = 0; i < this.state.genres.length; i++)
         {
@@ -188,39 +142,16 @@ class Filter extends React.Component<Props> {
         }
 
         return (
-            <LinearGradient style={s.filtersContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={95} angleCenter={{ x: 0.3, y: 0.8}}>
+            <LinearGradient style={s.filtersContainer} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={92} angleCenter={{ x: 0.5, y: 0.5}}>
                 <Text style={s.filtersHeader}>Filters</Text>
-                <Text style={s.filtersCategoryHeader}>Keywords</Text>
 
-                <View style={s.keywordsContainer}>
-                    {keywords}
-                    <TextInput
-                        style={s.keywordsInput}
-                        placeholder={'Type a keyword here...'}
-                        placeholderTextColor={'#ffffff'}
-                        onChangeText={(keywordText) => this.setState({keywordText})}
-                        value={this.state.keywordText}
-                        onEndEditing={(e) => {
-                            this.addKeyword(e.nativeEvent.text);
-                            this.setState({keywordText: ''});
-                        }}
-                    />
-                </View>
+                <Text style={s.filtersCategoryHeader}>Keywords</Text>
+                <Keywords data={['Superhero','Thor']} ref={c => this._keywords = c}/>
 
                 <HorizontalLine />
+
                 <Text style={s.filtersCategoryHeader}>Location</Text>
-                <LinearGradient style={s.locationPickerContainer} colors={['#000000', '#3a3a3a']} useAngle={true} angle={90} angleCenter={{ x: 0.5, y: 0.6}}>
-                    <Picker
-                        selectedValue={this.state.location}
-                        style={s.locationPicker}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({location: itemValue})
-                        }>
-                        <Picker.Item label="Mall of Qatar - Doha" value="place0" />
-                        <Picker.Item label="Another Place 1" value="place1" />
-                        <Picker.Item label="Another Place 2" value="place2" />
-                    </Picker>
-                </LinearGradient>
+                <Location data={[{title:'Mall of Qatar - Doha', id:'place0'}, {title:'Another Place 1', id:'place1'}, {title:'Another Place 2', id:'place2'}]} ref={c => this._location = c}/>
 
                 <HorizontalLine />
                 <Text style={s.filtersCategoryHeader}>Rating</Text>
@@ -329,3 +260,16 @@ class Filter extends React.Component<Props> {
 }
 
 export default Filter;
+
+// {/*<LinearGradient style={s.locationPickerContainer} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={90} angleCenter={{ x: 0.5, y: 0.6}}>*/}
+// {/*    <Picker*/}
+// {/*        selectedValue={this.state.location}*/}
+// {/*        style={s.locationPicker}*/}
+// {/*        onValueChange={(itemValue, itemIndex) =>*/}
+// {/*            this.setState({location: itemValue})*/}
+// {/*        }>*/}
+// {/*        <Picker.Item label="Mall of Qatar - Doha" value="place0" />*/}
+// {/*        <Picker.Item label="Another Place 1" value="place1" />*/}
+// {/*        <Picker.Item label="Another Place 2" value="place2" />*/}
+// {/*    </Picker>*/}
+// {/*</LinearGradient>*/}
