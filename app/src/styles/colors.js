@@ -1,5 +1,6 @@
 const colors = {
     white: '#FFFFFF',
+    blackText: '#000000',
     darkMain: '#FF9E18',
     lightMain: '#F8DF8D',
     darkSecondary: '#000000',
@@ -11,6 +12,7 @@ const colors = {
     bgApp: '#212121',
     bgCategory: '#000000',
     shadowColor: '#000000',
+    glow: '#FBC25A',
     ratingStars: '#F2C94C',
 };
 

@@ -18,15 +18,6 @@ class Keywords extends React.Component<Props> {
         };
     }
 
-    addKeyword(word) {
-        if (word === '') {return;}
-
-        let list = [...this.state.keywordsList];
-        list = list.concat(word);
-
-        this.setState({keywordsList: list});
-    }
-
     removeKeyword = (iId) => {
         let list = [...this.state.keywordsList];
         list.splice(iId, 1);
@@ -44,8 +35,21 @@ class Keywords extends React.Component<Props> {
     };
 
 
+    onEndEditing = (e) => {
+        if (e.nativeEvent.text === '') {
+            this.setState({keywordText: ''});
+        } else {
+            this.setState({keywordText: '', keywordsList: this.state.keywordsList.concat(e.nativeEvent.text)});
+        }
+    };
+
+
+    onChangeText = (keywordText) => {
+        this.setState({keywordText});
+    };
+
     render() {
-        // const {image, text} = this.props.data;
+
         return (
             <View style={s.keywordsContainer}>
                 {this.keywords()}
@@ -53,12 +57,9 @@ class Keywords extends React.Component<Props> {
                     style={s.keywordsInput}
                     placeholder={'Type a keyword here...'}
                     placeholderTextColor={'#ffffff'}
-                    onChangeText={(keywordText) => this.setState({keywordText})}
                     value={this.state.keywordText}
-                    onEndEditing={(e) => {
-                        this.addKeyword(e.nativeEvent.text);
-                        this.setState({keywordText: ''});
-                    }}
+                    onChangeText={this.onChangeText}
+                    onEndEditing={this.onEndEditing}
                 />
             </View>
         );

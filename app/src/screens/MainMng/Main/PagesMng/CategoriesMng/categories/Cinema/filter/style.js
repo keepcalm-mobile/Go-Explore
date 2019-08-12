@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         fontFamily: fontNames.bold,
         textTransform: 'uppercase',
         alignSelf: 'flex-start',
+        marginBottom: indent,
     },
     baseKeywordsView: {
         flexDirection: 'row',

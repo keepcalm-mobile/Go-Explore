@@ -11,12 +11,45 @@ import {scale} from '../../../../../../../../utils/resize';
 
 import defaultStyle, {colors, fontNames, fontSizes, indent, windowW} from '../../../../../../../../styles';
 import PropTypes from 'prop-types';
-import CircleValues from '../../../../../../../../components/filters/CircleValues/CircleValues';
+import CircleValues from '../../../../../../../../components/filters/CircleValues';
+import CircleItem from '../../../../../../../../components/filters/CircleValues/Item';
 import HorizontalLine from '../../../../../../../../components/filters/HorizontalLine/HorizontalLine';
 import Keyword from '../../../../../../../../components/filters/Keyword/Keyword';
-import RatingStars from '../../../../../../../../components/Rating/RatingStars';
+import SelectableItems from '../../../../../../../../components/filters/SelectableItems';
 import Keywords from '../../../../../../../../components/filters/Keywords';
 import Location from '../../../../../../../../components/filters/Location';
+
+const locations = [{label:'Mall of Qatar - Doha', value:'place0'}, {label:'Another Place 1', value:'place1'}, {label:'Another Place 2', value:'place2'}, {label:'Another Place 3', value:'place3'}];
+
+const genres = [
+        { label: 'Action', active: false },
+        { label: 'Adult', active: false },
+        { label: 'Adventure', active: true },
+        { label: 'Avant-garde/Experimental', active: false },
+        { label: 'Comedy', active: true },
+        { label: 'Children\'s/Family', active: false },
+        { label: 'Comedy Drama', active: false },
+        { label: 'Crime', active: false },
+        { label: 'Drama', active: false },
+        { label: 'Epic', active: true },
+        { label: 'Fantasy', active: false },
+        { label: 'Historical Film', active: false },
+        { label: 'Horror', active: false },
+        { label: 'Musical', active: false },
+        { label: 'Mystery', active: true },
+        { label: 'Romance', active: false },
+        { label: 'Science Fiction', active: false },
+        { label: 'Spy Film', active: false },
+        { label: 'War', active: false },
+        { label: 'Western', active: false },
+    ];
+
+const experience = [
+        { label: '2D', active: false },
+        { label: '2D IMAX', active: true },
+        { label: '3D', active: false },
+        { label: '3D IMAX', active: true },
+    ];
 
 class Filter extends React.Component<Props> {
     static propTypes = {
@@ -29,46 +62,9 @@ class Filter extends React.Component<Props> {
         this.state = {
             scrollEnabled: true,
 
-            // location: 'Mall of Qatar - Doha',
-            genres: [
-                { text: 'Action', active: false },
-                { text: 'Adult', active: false },
-                { text: 'Adventure', active: false },
-                { text: 'Avant-garde/Experimental', active: false },
-                { text: 'Comedy', active: true },
-                { text: 'Children\'s/Family', active: false },
-                { text: 'Comedy Drama', active: false },
-                { text: 'Crime', active: false },
-                { text: 'Drama', active: false },
-                { text: 'Epic', active: true },
-                { text: 'Fantasy', active: false },
-                { text: 'Historical Film', active: false },
-                { text: 'Horror', active: false },
-                { text: 'Musical', active: false },
-                { text: 'Mystery', active: false },
-                { text: 'Romance', active: false },
-                { text: 'Science Fiction', active: false },
-                { text: 'Spy Film', active: false },
-                { text: 'War', active: false },
-                { text: 'Western', active: false },
-            ],
-            experience: [
-                { text: 'All Experience', active: true },
-                { text: '2D', active: false },
-                { text: '2D IMAX', active: false },
-                { text: '3D', active: false },
-                { text: '3D IMAX', active: false },
-            ],
             languages: [
                 'English',
                 'Arabian',
-            ],
-            ages: [
-                { text: '+0', active: false },
-                { text: '+6', active: true },
-                { text: '+12', active: false },
-                { text: '+16', active: false },
-                { text: '+18', active: false },
             ],
             priceMin: 0,
             priceMax: 100,
@@ -80,60 +76,7 @@ class Filter extends React.Component<Props> {
     enableScroll = () => this.setState({ scrollEnabled: true });
     disableScroll = () => this.setState({ scrollEnabled: false });
 
-
-    toggleGenreItem(title) {
-
-        let list = [...this.state.genres];
-        let item = null;
-
-        for (let i = 0; i < list.length; i++){
-            if ( list[i].text === title) {
-                list[i].active = !list[i].active;
-                item = list[i];
-            }
-        }
-
-        this.setState({
-            genres: list,
-        });
-
-        // ToastAndroid.showWithGravity(
-        //     'genre text: ' + item.text + '  active = ' + item.active,
-        //     ToastAndroid.LONG,
-        //     ToastAndroid.CENTER,
-        // );
-    }
-
-    toggleExperienceItem(title) {
-
-        let list = [...this.state.experience];
-        let item = null;
-
-        for (let i = 0; i < list.length; i++){
-            if ( list[i].text === title) {
-                list[i].active = !list[i].active;
-                item = list[i];
-            }
-        }
-
-        this.setState({
-            experience: list,
-        });
-    }
-
     render() {
-
-        let genres = [];
-        for (let i = 0; i < this.state.genres.length; i++)
-        {
-            genres.push(<Keyword key={i} title={this.state.genres[i].text} editable={false} toggle={true} onPress={() => {this.toggleGenreItem(this.state.genres[i].text);}} fontSize={fontSizes.big} active={this.state.genres[i].active} />);
-        }
-
-        let experience = [];
-        for (let i = 0; i < this.state.experience.length; i++)
-        {
-            experience.push(<Keyword key={i} title={this.state.experience[i].text} editable={false} toggle={true} onPress={() => {this.toggleExperienceItem(this.state.genres[i].text);}} fontSize={fontSizes.big} active={this.state.experience[i].active} />);
-        }
 
         let languages = [];
         for (let i = 0; i < this.state.languages.length; i++)
@@ -151,31 +94,25 @@ class Filter extends React.Component<Props> {
                 <HorizontalLine />
 
                 <Text style={s.filtersCategoryHeader}>Location</Text>
-                <Location data={[{title:'Mall of Qatar - Doha', id:'place0'}, {title:'Another Place 1', id:'place1'}, {title:'Another Place 2', id:'place2'}]} ref={c => this._location = c}/>
+                <Location data={locations} ref={c => this._location = c}/>
 
                 <HorizontalLine />
+
                 <Text style={s.filtersCategoryHeader}>Rating</Text>
-                <View style={{alignSelf: 'flex-start'}}>
-                    <RatingStars rating={3} ratingStyle={'circle'} style={{alignSelf: 'flex-start'}} />
-                </View>
+                <CircleValues key={CircleItem.TYPE_RATING} type={CircleItem.TYPE_RATING} active={'3'} ref={c => this._rating = c} />
 
                 <HorizontalLine />
+
                 <Text style={s.filtersCategoryHeader}>Genre</Text>
-                <View style={s.baseKeywordsView}>
-                    {genres}
-                </View>
+                <SelectableItems key={'SelectableGenre'} data={genres} ref={c => this._genres = c}/>
 
-                <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
-                    <HorizontalLine />
-                </View>
+                <HorizontalLine />
+
                 <Text style={s.filtersCategoryHeader}>Experience</Text>
-                <View style={s.baseKeywordsView}>
-                    {experience}
-                </View>
+                <SelectableItems key={'SelectableExperience'} data={experience} ref={c => this._experience = c}/>
 
-                <View style={{width: '100%', flexDirection: 'row', marginTop: -15}}>
-                    <HorizontalLine />
-                </View>
+                <HorizontalLine />
+
                 <Text style={s.filtersCategoryHeader}>Languages</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                     <View style={s.languagesContainer}>
@@ -187,12 +124,12 @@ class Filter extends React.Component<Props> {
                 </View>
 
                 <HorizontalLine />
+
                 <Text style={s.filtersCategoryHeader}>Age</Text>
-                <CircleValues values={this.state.ages} onValuesChanged={(values) => {
-                    this.setState({ages: values});
-                }} />
+                <CircleValues key={CircleItem.TYPE_AGE} type={CircleItem.TYPE_AGE} ref={c => this._ages = c}/>
 
                 <HorizontalLine />
+
                 <Text style={s.filtersCategoryHeader}>Price</Text>
                 <View style={{flexDirection: 'row', justifyContent: 'center', paddingLeft: indent, paddingRight: indent, width: '100%', height: 20}}>
                     <MultiSlider
@@ -245,31 +182,10 @@ class Filter extends React.Component<Props> {
                         }}>${this.state.priceMaxCurrent}</Text>
                 </View>
 
-                <View style={{flexDirection: 'row', width: '100%'}}>
-                    <ButtonOrange
-                        title={'APPLY FILTERS'}
-                        style={{flex: 1, marginLeft: -indent, marginRight: -indent}}
-                        onPress={() => {
-                            this.props.onApplyClick();
-                        }}
-                    />
-                </View>
+                <ButtonOrange title={'APPLY FILTERS'} style={{width:'100%'}} onPress={this.props.onApplyClick} />
             </LinearGradient>
         );
     }
 }
 
 export default Filter;
-
-// {/*<LinearGradient style={s.locationPickerContainer} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={90} angleCenter={{ x: 0.5, y: 0.6}}>*/}
-// {/*    <Picker*/}
-// {/*        selectedValue={this.state.location}*/}
-// {/*        style={s.locationPicker}*/}
-// {/*        onValueChange={(itemValue, itemIndex) =>*/}
-// {/*            this.setState({location: itemValue})*/}
-// {/*        }>*/}
-// {/*        <Picker.Item label="Mall of Qatar - Doha" value="place0" />*/}
-// {/*        <Picker.Item label="Another Place 1" value="place1" />*/}
-// {/*        <Picker.Item label="Another Place 2" value="place2" />*/}
-// {/*    </Picker>*/}
-// {/*</LinearGradient>*/}
