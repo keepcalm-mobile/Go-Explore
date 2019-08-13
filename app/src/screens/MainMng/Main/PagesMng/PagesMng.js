@@ -1,5 +1,4 @@
 import React from 'react';
-import {Animated, Easing, View} from 'react-native';
 import NotificationsScreen from './Notifications';
 import CalendarScreen from './Calendar';
 import CategoriesMng from './CategoriesMng';
@@ -7,7 +6,7 @@ import BookmarksScreen from './Bookmarks';
 import ArgRealScreen from './ArgReal';
 import {createBottomTabNavigator} from 'react-navigation';
 import {screens} from '../../../../constants';
-import {colors} from "../../../../styles";
+import s from './style';
 
 
 const TabsNavi = createBottomTabNavigator({
@@ -30,7 +29,6 @@ const TabsNavi = createBottomTabNavigator({
 );
 
 
-
 class PagesMng extends React.Component<Props> {
     static router = TabsNavi.router;
 
@@ -43,10 +41,8 @@ class PagesMng extends React.Component<Props> {
         const { navigation } = this.props;
 
         return (
-
-                <TabsNavi navigation={navigation} style={{backgroundColor: colors.bgCategory}}/>
-            // </View>
-        );//<View style={{flex:1}}>
+            <TabsNavi navigation={navigation} style={s.container}/>
+        );
     }
 }
 

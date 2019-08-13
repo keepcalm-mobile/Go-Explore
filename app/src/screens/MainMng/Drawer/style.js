@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import s, {colors, bottomIndent, fontNames, fontSizes, windowH, windowW, startY} from '../../../styles';
+import s, {colors, bottomIndent, fontNames, fontSizes, windowH, windowW, startY, indent} from '../../../styles';
 
 const styles = StyleSheet.create({
     container:{
@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
         paddingTop: startY,
         height: windowH + bottomIndent,
         position:'absolute',
-        // overflow: 'hidden',
         backgroundColor: colors.bgApp,
         borderColor: colors.shadowColor,
         shadowColor: colors.shadowColor,
@@ -35,6 +34,11 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: colors.white,
         marginTop: 5,
+    },
+    subMenuTitle:{
+        color: colors.titleMenu,
+        marginRight: indent,
+        marginLeft: indent,
     },
 });
 export default styles;

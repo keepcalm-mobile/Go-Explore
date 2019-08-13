@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {scale} from '../../../utils/resize';
 import IconClose from '../../../../assets/serviceIcons/closeIcon.svg';
 import IconBack from '../../../../assets/serviceIcons/backIcon.svg';
-import {colors, doubleIndent, indent, startY, windowH, windowW} from '../../../styles';
+import {colors, doubleIndent, indent} from '../../../styles';
 import s from './style';
 import {screens} from '../../../constants';
 
@@ -118,7 +118,7 @@ class Drawer extends React.Component<Props> {
                         <IconBack width={iconSize}/>
                     </TouchableOpacity>
 
-                    <Text style={[s.textBtn, {color: colors.titleMenu, marginRight: indent, marginLeft: indent}]}>{screens.Drawer[screens.SubMenu].title}</Text>
+                    <Text style={[s.textBtn, s.subMenuTitle]}>{screens.Drawer[screens.SubMenu].title}</Text>
 
                     {button(screens.Categories[screens.HotPicks].title, this._onCategoryClick, screens.HotPicks, this.state.curPage)}
                     {button(screens.Categories[screens.Cinema].title, this._onCategoryClick, screens.Cinema, this.state.curPage)}

@@ -6,8 +6,6 @@ const styles = StyleSheet.create({
         flex:1,
         borderRadius: 20,
         backgroundColor: colors.bgCategory,
-        // overflow: 'hidden',
-        // borderColor: colors.shadowColor,
         shadowColor: colors.shadowColor,
         shadowOffset: {
             width: 0,
@@ -15,8 +13,12 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.37,
         shadowRadius: 7.49,
-
         elevation: 12,
+    },
+    containerOverflow:{
+        width:'100%',
+        height:'100%',
+        overflow: 'hidden',
     },
 });
 export default styles;

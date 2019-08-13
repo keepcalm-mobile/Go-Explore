@@ -92,17 +92,21 @@ class HomeCategories extends React.Component<Props> {
         return list;
     };
 
+    onScroll = (e) => {
+        console.log(e.nativeEvent.contentOffset.y);
+    };
+
     render() {
         const curCategory = this.props.navigation.state.params.categoryId;
 
         if (this.props.data[curCategory] === null) {
-            return ( <View style={{flex:1, backgroundColor: colors.bgCategory}} /> );
+            return ( <View style={s.containerEmpty} /> );
         }
 
         // const curCategory = this.props.curCategory;
         const {header, data} = this.props.data[curCategory];
         return (
-            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false}>
+            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false} onScroll={this.onScroll}>
                 <Header key={curCategory + 'HeaderKey'} onItemClick={this.onHeaderItemClick} items={header} />
                 {this.curTitle(curCategory)}
                 {this.generateContent(data, curCategory)}

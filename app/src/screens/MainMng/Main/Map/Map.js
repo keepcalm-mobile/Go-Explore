@@ -1,13 +1,10 @@
 import React from 'react';
-import {View, Animated, PanResponder, Platform} from 'react-native';
+import {View, Animated, PanResponder, Platform, ToastAndroid, PermissionsAndroid} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {scale} from '../../../../utils/resize';
 import {doubleIndent, indent, windowH, windowW} from '../../../../styles';
-
-import {PermissionsAndroid} from 'react-native';
-import MapView from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
-import { Marker } from 'react-native-maps';
-import {ToastAndroid} from 'react-native';
+import s from './style';
+import MapView, { Marker } from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import MapViewDirections from 'react-native-maps-directions';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -212,11 +209,10 @@ class Map extends React.Component<Props> {
     render() {
         const panStyle = { transform: this.state.pan.getTranslateTransform() };
         return (
-            <Animated.View style={[panStyle, {position:'absolute', backgroundColor:'#D0D0D0', width:windowW-doubleIndent, height:windowH, borderRadius:10, marginLeft:indent, marginTop:windowH - 75, overflow: 'hidden'}]}>
+            <Animated.View style={[panStyle, s.container]}>
 
                 <MapView
-                    // style={{width:'100%', height:'100%', borderRadius:25}}
-                    style={{flex: 1}}
+                    style={s.mapView}
                     initialRegion={this.state.region}
                     customMapStyle={mapStyles}
                     loadingEnabled={true}
@@ -290,8 +286,8 @@ class Map extends React.Component<Props> {
                         }}
                     />
                 </MapView>
-                <View {...this.panResponder.panHandlers} style={{zIndex:1, position:'absolute', width:'100%', height:scale(35)}}>
-                    <View style={{width:50, height:7, backgroundColor:'#000000', borderRadius:5, alignSelf:'center', marginTop:12}}/>
+                <View {...this.panResponder.panHandlers} style={s.dragArea}>
+                    <View style={s.dragIcon}/>
                 </View>
             </Animated.View>
         );

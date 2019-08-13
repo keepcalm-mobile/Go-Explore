@@ -4,11 +4,12 @@ import {scale} from '../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
         backgroundColor: colors.bgCategory,
         paddingBottom: doubleIndent,
+    },
+    containerEmpty:{
+        flex:1,
+        backgroundColor: colors.bgCategory,
     },
     titleCnt:{
         margin: indent,
@@ -22,14 +23,7 @@ const styles = StyleSheet.create({
         fontSize: fontSizes.heading,
         lineHeight: scale(33),
         color: colors.white,
-        marginHorizontal: indent*.5,
-        // position: 'absolute',
-        // left: '5.6%',
-        // paddingTop:20,
-        // height: 36,
-        // top:'18%',
-        // textAlign: 'center',
-        // margin: 10,
+        marginHorizontal: indent * 0.5,
     },
     separator: {
         marginBottom:indent,

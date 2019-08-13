@@ -1,17 +1,17 @@
 import React from 'react';
 import {TouchableOpacity, View, Animated} from 'react-native';
 import {colors, indent, windowW, startY, doubleIndent} from '../../styles';
+import s, {iconSize} from './style';
 import Drawer from './Drawer';
 import Main from './Main';
 import Search from './Search';
 import PagesMng from './Main/PagesMng';
-import {scale} from '../../utils/resize';
 import IconMenu from '../../../assets/serviceIcons/menuIcon.svg';
 import IconSearch from '../../../assets/serviceIcons/searchIcon.svg';
 import {getCurrentRoute, getCurrentRouteParams} from '../../utils/navHelper';
-import {screens} from "../../constants";
+import {screens} from '../../constants';
 
-const iconSize = scale(22);
+
 
 class MainMng extends React.Component{
     static router = PagesMng.router;
@@ -66,17 +66,17 @@ class MainMng extends React.Component{
         };
 
         return (
-            <View style={{flex:1, backgroundColor:colors.bgApp}}>
+            <View style={s.container}>
                 <Drawer ref={c => this._drawer = c} close={this.closeDrawer} onChoicePage={this.choicePage} onChoiceCategory={this.choiceCategory}/>
                 <Main navigation={navigation} ref={c => this._main = c}/>
                 <Search/>
 
-                <Animated.View style={[animStyle, { elevation: 13, position:'absolute', width:'100%', justifyContent:'space-between', flexDirection:'row', marginTop:startY }]}>
-                    <TouchableOpacity onPress = {this.openDrawer} activeOpacity={0.5} style={{width: iconSize + doubleIndent, height: iconSize + doubleIndent, alignItems:'center', justifyContent:'center'}}>
+                <Animated.View style={[animStyle, s.topArea]}>
+                    <TouchableOpacity onPress = {this.openDrawer} activeOpacity={0.5} style={s.touchArea}>
                         <IconMenu width={iconSize}/>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress = {this.hide} activeOpacity={0.5} style={{ width: iconSize + doubleIndent, height: iconSize + doubleIndent, alignItems:'center', justifyContent:'center' }}>
+                    <TouchableOpacity onPress = {this.hide} activeOpacity={0.5} style={s.touchArea}>
                         <IconSearch width={iconSize}/>
                     </TouchableOpacity>
                 </Animated.View>

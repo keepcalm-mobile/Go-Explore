@@ -122,7 +122,7 @@ class Main extends React.Component {
 
         return (//{...this._panResponder.panHandlers}
             <Animated.View style={[s.container, transformStyle]} pointerEvents={this.state.pointerEvents} removeClippedSubviews={true} >
-                <Animated.View style={[{width:'100%', height:'100%', overflow: 'hidden'}, animStyle]}>
+                <Animated.View style={[s.containerOverflow, animStyle]}>
                     <PagesMng navigation={navigation}/>
                     <Map ref={c => this._map = c}/>
                     <MenuPages ref={c => this._bottom = c} onButtonPress={this._openPage}/>

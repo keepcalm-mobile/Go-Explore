@@ -3,7 +3,6 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 import s, {markerSize} from './style';
-import {scale} from '../../../utils/resize';
 import {colors, indent, windowW, fontSizes, fontNames, doubleIndent} from '../../../styles';
 import MultiSlider from 'react-native-range';
 import LinearGradient from 'react-native-linear-gradient';
@@ -54,7 +53,6 @@ class RangeSlider extends React.Component<Props> {
     );
 
     render() {
-        // const {data} = this.props;
         const {setMin, setMax, valueMin, valueMax} = this.state;
         const left = ( ((setMin - valueMin) / (valueMax - valueMin) * 100).toString() + '%');
         const right = ( ((1 - (setMax - valueMin) / (valueMax - valueMin)) * 100).toString() + '%');

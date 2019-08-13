@@ -14,6 +14,9 @@ const colors = {
     shadowColor: '#000000',
     glow: '#FBC25A',
     ratingStars: '#F2C94C',
+    menuBg:'#1D1D1D',
+    mapAreBg:'#D0D0D0',
+    inputBg:'#F1F1F6',
 };
 
 export default colors;

@@ -263,14 +263,14 @@ class AuthMng extends React.Component<Props> {
         const { push, replace, popToTop, pop, dismiss } = navigation;
         // const activeRoute = routes[index];
 
-        return (//{height:this.state.animAreaH},
-            <View style={[s.fillAll, {backgroundColor: '#000000'}]}>
+        return (
+            <View style={s.container}>
                 <Animated.View style={[StyleSheet.absoluteFill, {opacity: this.state.bgOpacity}]}>
                     <AppBg/>
                     <Waves/>
                 </Animated.View>
                 <View style={{height:this.state.animAreaH}}>
-                    <ScrollView contentContainerStyle={{height:this.state.animScrollH, justifyContent:'space-between', flexDirection:'column'}}
+                    <ScrollView contentContainerStyle={[{height:this.state.animScrollH}, s.scrollCnt]}
                                 scrollEnabled={this.state.scrollEnabled}
                                 keyboardShouldPersistTaps={'handled'}
                                 removeClippedSubviews={false}
@@ -283,7 +283,7 @@ class AuthMng extends React.Component<Props> {
                                 <Text style={[s.subTitle, titles[this.state.titleID].subTitle.style]}>{titles[this.state.titleID].subTitle.text}</Text>
                             </Animated.View>
                         </View>
-                        <View style={[{height:this.state.animCntH}]}>
+                        <View style={{height:this.state.animCntH}}>
                             <AuthTabs navigation={navigation}/>
                         </View>
                     </ScrollView>

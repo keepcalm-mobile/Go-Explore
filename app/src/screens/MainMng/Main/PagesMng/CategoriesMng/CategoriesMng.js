@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import {createStackNavigator, createSwitchNavigator} from 'react-navigation';
+import s from './style';
 import {screens} from '../../../../../constants';
 import Home from './HomeCategories';
 import Cinema from './categories/Cinema';
@@ -46,7 +47,7 @@ class CategoriesMng extends React.Component<Props> {
         const isLoading = (this.props.curCategory === '' || this.props.data[this.props.curCategory] === null);
 
         return (
-            <View style={{flex:1, backgroundColor: colors.bgCategory}}>
+            <View style={s.container}>
                 <CategoriesNavi navigation={navigation}/>
                 <OverlayLoader visible={isLoading} message="Loading..." />
             </View>

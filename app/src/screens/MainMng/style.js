@@ -1,26 +1,27 @@
 import {StyleSheet} from 'react-native';
 import {scale} from '../../utils/resize';
-import {colors} from '../../styles';
+import {colors, doubleIndent, startY} from '../../styles';
+
+export const iconSize = scale(22);
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.bgApp,
+        flex:1,
+        backgroundColor:colors.bgApp,
     },
-    welcome: {
-        fontFamily: 'Poppins-Bold',
-        fontSize: scale(24),
-        lineHeight: 36,
-        color: colors.white,
-        // position: 'absolute',
-        // left: '5.6%',
-        // paddingTop:20,
-        // height: 36,
-        // top:'18%',
-        // textAlign: 'center',
-        // margin: 10,
+    topArea: {
+        elevation: 13,
+        position:'absolute',
+        width:'100%',
+        justifyContent:'space-between',
+        flexDirection:'row',
+        marginTop:startY,
+    },
+    touchArea: {
+        width: iconSize + doubleIndent,
+        height: iconSize + doubleIndent,
+        alignItems:'center',
+        justifyContent:'center',
     },
 });
 
