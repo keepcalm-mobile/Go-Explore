@@ -2,7 +2,7 @@ import type {Props} from 'react-native/Libraries/Components/View/View';
 import {Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
-import PickerBox from '../../PickerBox';
+import PickerBox from './PickerBox';
 import s from './style';
 import {colors} from '../../../styles';
 import LinearGradient from 'react-native-linear-gradient';

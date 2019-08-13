@@ -1,6 +1,8 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import {colors, fontNames, fontSizes, indent} from '../../styles';
-export const {width, height} = Dimensions.get('window');
+import {StyleSheet} from 'react-native';
+import {colors, fontNames, fontSizes, indent} from '../../../../styles';
+import {scale} from "../../../../utils/resize";
+
+const height = scale(44);
 
 const styles = StyleSheet.create({
     bgArea:{
@@ -8,26 +10,6 @@ const styles = StyleSheet.create({
         height:'100%',
         position:'absolute',
         backgroundColor: 'transparent',
-    },
-
-    container : {
-        width,
-        bottom: -height,
-        zIndex: 999,
-    },
-    containerVisible : {
-        height: height,
-        backgroundColor: 'rgba(0,0,0,0.3)',
-        position: 'absolute',
-        bottom: 0,
-    },
-    picker: {
-        width,
-        backgroundColor: '#FFFFFF',
-        alignItems: 'center',
-        paddingHorizontal: (width * 1.2077) / 100,
-        paddingBottom: (height * 0.6793) / 100,
-        position: 'absolute',
     },
     flat : {
         position: 'absolute',
@@ -50,15 +32,10 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         // justifyContent: 'flex-end',
     },
-    // boxItem : {
-        // width: '100%',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        // marginVertical: (height * 2.038) / 100,
-    // },
     textItem : {
         fontSize: fontSizes.description,
         fontFamily: fontNames.regular,
+        lineHeight: height,
         marginLeft: indent,
     },
     separator : {

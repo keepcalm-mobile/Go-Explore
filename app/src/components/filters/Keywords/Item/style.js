@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         padding: border,
         borderRadius: 5,
         marginRight: indent,
-        marginBottom: indent,
+        marginVertical: indent * 0.5,
         justifyContent: 'center',
         alignItems: 'center',
     },

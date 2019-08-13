@@ -3,29 +3,23 @@ import React from 'react';
 import {Modal, View, Text, TouchableOpacity, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import s, {width, height} from './style';
-import {colors} from '../../styles';
+import {colors} from '../../../../styles';
 
 class PickerBox extends React.Component<Props> {
 
     static propTypes = {
         data: PropTypes.arrayOf(PropTypes.shape({
             label: PropTypes.string.isRequired,
-            value: PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.number,
-            ]).isRequired,
+            active: PropTypes.bool.isRequired,
         })).isRequired,
-        onValueChange: PropTypes.func.isRequired,
+        onItemPress: PropTypes.func.isRequired,
         onStatusChange: PropTypes.func,
-        selectedId: PropTypes.number,
         itemTextColor: PropTypes.string,
         itemChosenTextColor: PropTypes.string,
         separatorColor: PropTypes.string,
     };
 
     static defaultProps = {
-        data: [], // ex: {label:'JavaScript', value:'js'}
-        selectedId: undefined,
         itemTextColor: colors.white,
         itemChosenTextColor: colors.secondaryText,
         separatorColor: colors.lightSecondary,
@@ -36,30 +30,29 @@ class PickerBox extends React.Component<Props> {
 
         this.state = {
             visible: false,
-            data: props.data,
+            data: props.data.slice(),
             x:0,
             y:0,
             width:0,
             height:0,
-            selectedId: props.selectedId,
         };
     }
 
-    componentDidMount() {
-        this._onValueChange(this.state.selectedId);
-    }
+    // componentDidMount() {
+    //     this._onItemPress(this.state.selectedId);
+    // }
 
     // componentDidUpdate(prevProps, nextState) {
     //     nextState.visible !== this.state.visible && this._animatePicker();
     // }
 
-    _onValueChange = iId => {
-        let newId = iId === this.state.selectedId ? PickerBox.defaultProps.selectedId : iId;
-
-        this.setState({selectedId: newId});
-        this.props.onValueChange(newId);
-
+    _onItemPress = iId => {
+        this.props.onItemPress(iId);
         this._closePicker();
+    };
+
+    setItems = (iData) => {
+        this.setState({data: iData});
     };
 
     openPicker = (iX, iY, iWidth, iHeight) => {
@@ -72,21 +65,9 @@ class PickerBox extends React.Component<Props> {
         this.props.onStatusChange(false);
     };
 
-    // _animatePicker = () => {
-    //     const initialValue    = this.state.visible ? -this.height : 0,
-    //         finalValue      = this.state.visible ? 0 : -this.height;
-    //
-    //     this.state.verticalPos.setValue(initialValue);
-    //
-    //     Animated.spring(this.state.verticalPos, {
-    //         toValue: finalValue,
-    //         friction: Platform.OS === 'ios' ? 9 : 8,
-    //     }).start();
-    // };
-
     _renderItem = ({item, index}) => (
         <>
-            <Text onPress={_ => { this._onValueChange(index); }} style={[s.textItem, {lineHeight:this.state.height, color: this.state.selectedId === index ? this.props.itemChosenTextColor : this.props.itemTextColor}]}>{item.label}</Text>
+            <Text onPress={_ => { this._onItemPress(index); }} style={[s.textItem, {color: this.state.data[index].active ? this.props.itemChosenTextColor : this.props.itemTextColor}]}>{item.label}</Text>
             {index !== this.state.data.length - 1 && <View style={[s.separator, {backgroundColor: this.props.separatorColor}]} />}
         </>
     );

@@ -22,9 +22,9 @@ class Item extends React.Component<Props> {
     }
 
     render() {
-        const {title, id, onPress} = this.props;
+        const {title, id, onPress, style} = this.props;
         return (
-            <LinearGradient style={s.cntBorder} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={158} angleCenter={{ x: 0.5, y: 0.5}}>
+            <LinearGradient style={[s.cntBorder, style]} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={158} angleCenter={{ x: 0.5, y: 0.5}}>
                 <LinearGradient style={s.container} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={8} angleCenter={{ x: 0.7, y: 0.5}}>
                     <Text style={s.title}>{title}</Text>
                     <TouchableOpacity style={s.touchableArea} onPress={ () => {onPress(id);} }>

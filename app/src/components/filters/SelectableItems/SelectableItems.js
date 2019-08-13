@@ -28,7 +28,7 @@ class SelectableItems extends React.Component<Props> {
 
         this.items = [];
         return (
-            <View style={s.keywordsContainer}>
+            <View style={s.itemsContainer}>
                 {data.map( (item, key) => (
                     <Item key={key + 'Key'} id={key} data={item} onPress={ this.onItemClick } ref={ c => this.items.push(c) } />
                 ))}

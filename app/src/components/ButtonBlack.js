@@ -3,8 +3,8 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale, verticalScale} from '../utils/resize';
-import {colors, fontSizes, fontNames, indent} from "../styles";
-import type {Props} from "react-native/Libraries/Components/View/View";
+import {colors, fontSizes, fontNames, indent} from '../styles';
+import type {Props} from 'react-native/Libraries/Components/View/View';
 
 
 class ButtonBlack extends React.Component<Props> {

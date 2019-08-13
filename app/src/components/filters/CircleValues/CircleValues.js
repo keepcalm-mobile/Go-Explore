@@ -1,6 +1,6 @@
 import React from 'react';
 import type {Props} from 'react-native/Libraries/Components/View/View';
-import {Text, View, Image, TouchableOpacity, ToastAndroid} from 'react-native';
+import {View} from 'react-native';
 import s from './style';
 // import circleGlow from '../../../../assets/rating/circleGlow.png';
 import PropTypes from 'prop-types';
@@ -44,7 +44,6 @@ class CircleValues extends React.Component<Props> {
         const {values} = this.state;
         this.items = [];
 
-        console.log('>>>>>>> CIRCLE VALUES LENGTH : ' + this.items.length);
         return (
             <View style={s.container}>
                 {values.map( (item, key) => (

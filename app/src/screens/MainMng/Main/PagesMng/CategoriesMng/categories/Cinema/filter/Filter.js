@@ -1,55 +1,65 @@
 import React from 'react';
 import {Text, View, TextInput, Picker} from 'react-native';
 import s from './style';
-import ButtonOrange from '../../../../../../../../components/ButtonOrange';
-import LinearGradient from 'react-native-linear-gradient';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-
-//TODO: load image from server?
-import DropdownArrow from '../../../../../../../../../assets/serviceIcons/dropdownArrow.svg';
-import {scale} from '../../../../../../../../utils/resize';
-
-import defaultStyle, {colors, fontNames, fontSizes, indent, windowW} from '../../../../../../../../styles';
+import {colors} from '../../../../../../../../styles';
 import PropTypes from 'prop-types';
+
+import LinearGradient from 'react-native-linear-gradient';
 import CircleValues from '../../../../../../../../components/filters/CircleValues';
 import CircleItem from '../../../../../../../../components/filters/CircleValues/Item';
 import HorizontalLine from '../../../../../../../../components/filters/HorizontalLine/HorizontalLine';
-import Keyword from '../../../../../../../../components/filters/Keyword/Keyword';
 import SelectableItems from '../../../../../../../../components/filters/SelectableItems';
 import Keywords from '../../../../../../../../components/filters/Keywords';
 import Location from '../../../../../../../../components/filters/Location';
+import Languages from '../../../../../../../../components/filters/Languages';
+import RangeSlider from '../../../../../../../../components/filters/RangeSlider';
+import ButtonOrange from '../../../../../../../../components/ButtonOrange';
 
 const locations = [{label:'Mall of Qatar - Doha', value:'place0'}, {label:'Another Place 1', value:'place1'}, {label:'Another Place 2', value:'place2'}, {label:'Another Place 3', value:'place3'}];
 
 const genres = [
-        { label: 'Action', active: false },
-        { label: 'Adult', active: false },
-        { label: 'Adventure', active: true },
-        { label: 'Avant-garde/Experimental', active: false },
-        { label: 'Comedy', active: true },
-        { label: 'Children\'s/Family', active: false },
-        { label: 'Comedy Drama', active: false },
-        { label: 'Crime', active: false },
-        { label: 'Drama', active: false },
-        { label: 'Epic', active: true },
-        { label: 'Fantasy', active: false },
-        { label: 'Historical Film', active: false },
-        { label: 'Horror', active: false },
-        { label: 'Musical', active: false },
-        { label: 'Mystery', active: true },
-        { label: 'Romance', active: false },
-        { label: 'Science Fiction', active: false },
-        { label: 'Spy Film', active: false },
-        { label: 'War', active: false },
-        { label: 'Western', active: false },
-    ];
+    { label: 'Action', active: false },
+    { label: 'Adult', active: false },
+    { label: 'Adventure', active: true },
+    { label: 'Avant-garde/Experimental', active: false },
+    { label: 'Comedy', active: true },
+    { label: 'Children\'s/Family', active: false },
+    { label: 'Comedy Drama', active: false },
+    { label: 'Crime', active: false },
+    { label: 'Drama', active: false },
+    { label: 'Epic', active: true },
+    { label: 'Fantasy', active: false },
+    { label: 'Historical Film', active: false },
+    { label: 'Horror', active: false },
+    { label: 'Musical', active: false },
+    { label: 'Mystery', active: true },
+    { label: 'Romance', active: false },
+    { label: 'Science Fiction', active: false },
+    { label: 'Spy Film', active: false },
+    { label: 'War', active: false },
+    { label: 'Western', active: false },
+];
 
 const experience = [
-        { label: '2D', active: false },
-        { label: '2D IMAX', active: true },
-        { label: '3D', active: false },
-        { label: '3D IMAX', active: true },
-    ];
+    { label: '2D', active: false },
+    { label: '2D IMAX', active: true },
+    { label: '3D', active: false },
+    { label: '3D IMAX', active: true },
+];
+
+const languages = [
+    { label: 'English', active: false },
+    { label: 'Arabian', active: true },
+    { label: 'French', active: false },
+    { label: 'Italian', active: false },
+];
+
+const ranges = {
+    valueMin: 40,
+    valueMax: 200,
+    setMin: 20,
+    setMax: 57,
+};
 
 class Filter extends React.Component<Props> {
     static propTypes = {
@@ -62,10 +72,6 @@ class Filter extends React.Component<Props> {
         this.state = {
             scrollEnabled: true,
 
-            languages: [
-                'English',
-                'Arabian',
-            ],
             priceMin: 0,
             priceMax: 100,
             priceMinCurrent: 0,
@@ -73,16 +79,7 @@ class Filter extends React.Component<Props> {
         };
     }
 
-    enableScroll = () => this.setState({ scrollEnabled: true });
-    disableScroll = () => this.setState({ scrollEnabled: false });
-
     render() {
-
-        let languages = [];
-        for (let i = 0; i < this.state.languages.length; i++)
-        {
-            languages.push(<Keyword key={i} title={this.state.languages[i]} editable={true} />);
-        }
 
         return (
             <LinearGradient style={s.filtersContainer} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={92} angleCenter={{ x: 0.5, y: 0.5}}>
@@ -114,14 +111,7 @@ class Filter extends React.Component<Props> {
                 <HorizontalLine />
 
                 <Text style={s.filtersCategoryHeader}>Languages</Text>
-                <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                    <View style={s.languagesContainer}>
-                        {languages}
-                        <View style={s.dropdownTouchArea}>
-                            <DropdownArrow />
-                        </View>
-                    </View>
-                </View>
+                <Languages data={languages} ref={c => this._languages = c}/>
 
                 <HorizontalLine />
 
@@ -131,56 +121,7 @@ class Filter extends React.Component<Props> {
                 <HorizontalLine />
 
                 <Text style={s.filtersCategoryHeader}>Price</Text>
-                <View style={{flexDirection: 'row', justifyContent: 'center', paddingLeft: indent, paddingRight: indent, width: '100%', height: 20}}>
-                    <MultiSlider
-                        values={[this.state.priceMinCurrent, this.state.priceMaxCurrent]}
-                        min={this.state.priceMin}
-                        max={this.state.priceMax}
-                        step={1}
-                        onValuesChangeStart={this.disableScroll}
-                        onValuesChangeFinish={this.enableScroll}
-                        isMarkersSeparated={true}
-                        trackStyle={{backgroundColor: '#ffffff', width: '100%'}}
-                        selectedStyle={{backgroundColor: colors.border}}
-                        containerStyle={{width: (windowW - (indent * 4)), marginLeft: -indent, marginRight: -indent, padding: 0}}
-                        sliderLength={(windowW - (indent * 4))} //TODO: find out how to make it like 100% for any screen width
-
-                        onValuesChange={(values) => {
-                            this.setState({
-                                priceMinCurrent: values[0],
-                                priceMaxCurrent: values[1],
-                            });
-                        }}
-
-                        customMarkerLeft={(e) => {
-                            return (<LinearGradient
-                                colors={['#ff9e18', '#f8df8d']}
-                                currentValue={e.currentValue}
-                                style={{width: 20, height: 20, borderRadius: 20}}
-                            />);
-                        }}
-
-                        customMarkerRight={(e) => {
-                            return (<LinearGradient
-                                colors={['#ff9e18', '#f8df8d']}
-                                currentValue={e.currentValue}
-                                style={{width: 20, height: 20, borderRadius: 20}}
-                            />);
-                        }}
-                    />
-                </View>
-                <View style={{width: '100%', flexDirection: 'row', height: 20, marginBottom: 44, marginTop: 25}}>
-                    <Text
-                        style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute',
-                            left: (((this.state.priceMinCurrent / this.state.priceMax) * (windowW - (indent * 4))) - 10),
-                        }}>
-                        ${this.state.priceMinCurrent}
-                    </Text>
-                    <Text
-                        style={{color: '#ffffff', fontSize: fontSizes.description, position: 'absolute',
-                            right: ((windowW - (indent * 4)) - ((this.state.priceMaxCurrent / this.state.priceMax) * (windowW - (indent * 4))) - 10),
-                        }}>${this.state.priceMaxCurrent}</Text>
-                </View>
+                <RangeSlider valueMin={ranges.valueMin} valueMax={ranges.valueMax} setMin={ranges.setMin} setMax={ranges.setMax} ref={c => this._rangeSlider = c}/>
 
                 <ButtonOrange title={'APPLY FILTERS'} style={{width:'100%'}} onPress={this.props.onApplyClick} />
             </LinearGradient>

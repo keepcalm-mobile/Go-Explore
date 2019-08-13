@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: indent,
-        marginBottom: indent,
+        marginVertical: indent * 0.5,
     },
     cntBorder: {
         flex:1,
