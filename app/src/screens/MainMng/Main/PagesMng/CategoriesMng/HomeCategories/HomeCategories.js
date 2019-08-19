@@ -1,8 +1,6 @@
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import s from './style';
-import {ButtonOrange, OverlayLoader} from '../../../../../../components';
-import {Auth, logOut} from '../../../../../../api/Auth';
 import CinemaFilter from '../categories/Cinema/filter';
 import Header from '../../../../../../components/Header';
 import CarouselBig from '../../../../../../components/CarouselBig';
@@ -24,10 +22,38 @@ class HomeCategories extends React.Component<Props> {
 
         const catId = props.navigation.state.params.categoryId;
 
-        //if(this.props.data[catId] === null) {
-            props.setCurCategory(catId);
-        //}
+        //if(this.props.data[catId] === null)
+        props.setCurCategory(catId);
+        this._scrollOffset = 0;
+        props.setScrollOffset(this._scrollOffset);
     }
+
+    // componentDidUpdate(prevProps): void {
+    //     console.log('!!!!!! COMPONENT DID Update : ' + prevProps.isFocused);
+    //     // if (prevProps.isFocused !== this.props.isFocused) {
+    //     // }
+    // }
+
+    componentDidMount() {
+        const { navigation } = this.props;
+        console.log('!!!!!! COMPONENT DID MOUNT : ' + navigation);
+        this.focusListener = navigation.addListener('didFocus', this.componentDidFocusHandler);
+    }
+
+    componentDidFocusHandler = () => {
+        this.props.setScrollOffset(this._scrollOffset);
+    };
+
+    componentWillUnmount() {
+        this.focusListener.remove();
+    }
+
+    onScroll = (e) => {
+        this._scrollOffset = e.nativeEvent.contentOffset.y;
+        this.props.setScrollOffset(this._scrollOffset);
+        // console.log(e.nativeEvent.contentOffset.y);
+    };
+
 
 
     /***    HEADER   ***/
@@ -92,9 +118,6 @@ class HomeCategories extends React.Component<Props> {
         return list;
     };
 
-    onScroll = (e) => {
-        console.log(e.nativeEvent.contentOffset.y);
-    };
 
     render() {
         const curCategory = this.props.navigation.state.params.categoryId;
@@ -103,10 +126,9 @@ class HomeCategories extends React.Component<Props> {
             return ( <View style={s.containerEmpty} /> );
         }
 
-        // const curCategory = this.props.curCategory;
         const {header, data} = this.props.data[curCategory];
         return (
-            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false} onScroll={this.onScroll}>
+            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false} onScroll={this.onScroll} scrollEventThrottle={500}>
                 <Header key={curCategory + 'HeaderKey'} onItemClick={this.onHeaderItemClick} items={header} />
                 {this.curTitle(curCategory)}
                 {this.generateContent(data, curCategory)}

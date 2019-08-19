@@ -36,9 +36,8 @@ const signUp = async (email, password, firstName, secondName, phone) => {
 };
 
 
-const logOut = async () => {
-    await AsyncStorage.clear();
-    return Auth.AUTH_LOGOUT;
-};
+const logOut = async () => (
+    await AsyncStorage.clear().then( () => Auth.AUTH_LOGOUT )
+);
 
 export {signIn, logOut, auth, Auth};

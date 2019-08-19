@@ -3,13 +3,15 @@ import ModMap from './map';
 
 import auth, {authTypes} from './auth';
 import reg, {regTypes} from './reg';
-import categories, {categoriesTypes} from "./categories";
+import categories, {categoriesTypes} from './categories';
+import scroll, {scrollTypes} from './scrollOffset';
 
 
 const reducers = combineReducers({
-  [ModMap.Auth]:auth,
-  [ModMap.Reg]:reg,
-  [ModMap.Categories]:categories,
+    [ModMap.Auth]:auth,
+    [ModMap.Reg]:reg,
+    [ModMap.Categories]:categories,
+    [ModMap.Scroll]:scroll,
 });
 
 

@@ -11,7 +11,7 @@ import Geolocation from 'react-native-geolocation-service';
 import mapStyles from './mapStyles.json';
 
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyBY5YtcHzrgq0ypfGbej6H8lJE9mJQN8aw'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
+const GOOGLE_MAPS_APIKEY = 'AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;

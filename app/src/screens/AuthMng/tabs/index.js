@@ -12,6 +12,7 @@ import {login, restorePassword, registration, confirmPhone, termsAgree} from '..
 /***    LOGIN   ***/
 LoginTab.propTypes = {
     login: PropTypes.func.isRequired,
+    registration: PropTypes.func.isRequired,
     isSuccess: PropTypes.bool.isRequired,
 };
 
@@ -24,6 +25,7 @@ const loginStateToProps = (state) => {
 const loginDispatchToProps = (dispatch) => {
     return {
         login: (iUser) => dispatch(login(iUser)),
+        registration: (iData) => dispatch(registration(iData)),
     };
 };
 

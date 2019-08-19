@@ -2,7 +2,6 @@ import React from 'react';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import s from './style';
 import ButtonOrange from '../../../../../../../components/ButtonOrange';
-import {Auth, logOut} from '../../../../../../../api/Auth';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale} from '../../../../../../../utils/resize';
 import Rating from '../../../../../../../components/Rating';
@@ -34,7 +33,11 @@ class Cinema extends React.Component<Props> {
         };
     }
 
-    onPlayBtnClick = () => {
+    onPlayBtnPress = () => {
+
+    };
+
+    onBookTicketPress = () => {
 
     };
 
@@ -48,7 +51,7 @@ class Cinema extends React.Component<Props> {
 
                 <View style={s.titleCnt}>
                     <Text style={s.title}>{title}</Text>
-                    <TouchableOpacity onPress = {this.onPlayBtnClick} activeOpacity={0.5} style={s.rightBtn}>
+                    <TouchableOpacity onPress = {this.onPlayBtnPress} activeOpacity={0.5} style={s.rightBtn}>
                         <IconFilter width={scale(40)} height={scale(40)}/>
                     </TouchableOpacity>
                 </View>
@@ -89,7 +92,7 @@ class Cinema extends React.Component<Props> {
         return (
             <ScrollView contentContainerStyle={s.container} >
                 {this.header(type, header)}
-                <ButtonOrange onPress={this._logOut} title={'BOOK TICKET'}/>
+                <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/>
                 <TabView
                     navigationState={this.state}
                     renderScene={this.renderScene}
@@ -111,14 +114,6 @@ class Cinema extends React.Component<Props> {
             </ScrollView>
         );
     }
-
-    _logOut = async () => {
-        const resp = await logOut();
-        if (Auth.AUTH_LOGOUT === resp) {
-            this.props.navigation.navigate('Auth');
-        }
-        // await AsyncStorage.clear();
-    };
 }
 
 export default Cinema;

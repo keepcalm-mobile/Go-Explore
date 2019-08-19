@@ -30,7 +30,7 @@ export default forwardRef((props, ref) =>
     <Connected {...props} ref={ref} />
 );
 
-//
+
 // const MainConnected = connect( state => (state[ ModMap.Categories ]), { setCurCategory }, null, { forwardRef: true } )(Main);
 //
 // export default forwardRef((props, ref) =>

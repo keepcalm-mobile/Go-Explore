@@ -8,7 +8,6 @@ import {screens} from '../../../constants';
 import MenuCategories from './MenuCategories';
 import s from './style';
 import {windowH, windowW} from '../../../styles';
-import {setCurCategory} from '../../../modules/categories';
 
 
 class Main extends React.Component {
@@ -52,7 +51,7 @@ class Main extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         const newRouteName = getCurrentRoute(this.props.navigation.state);
-        console.log('________ NAVI MAIN NEW ROUTE : ' + newRouteName);
+        console.log('________ NAVI MAIN NEW RO UTE : ' + newRouteName);
         this._bottom.changeIcon(newRouteName);
     }
 
@@ -123,7 +122,7 @@ class Main extends React.Component {
         return (//{...this._panResponder.panHandlers}
             <Animated.View style={[s.container, transformStyle]} pointerEvents={this.state.pointerEvents} removeClippedSubviews={true} >
                 <Animated.View style={[s.containerOverflow, animStyle]}>
-                    <PagesMng navigation={navigation}/>
+                    <PagesMng ref={c => this._pagesMng = c} navigation={navigation}/>
                     <Map ref={c => this._map = c}/>
                     <MenuPages ref={c => this._bottom = c} onButtonPress={this._openPage}/>
                     <MenuCategories ref={c => this._panel = c} onButtonPress={this._openCategory}/>

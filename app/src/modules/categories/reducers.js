@@ -31,7 +31,6 @@ function curCategory(state = '', action) {
 }
 
 function data(state = dataState, action) {
-    console.log('???? DATA REDUCER : ' + action.type);
     switch (action.type) {
         case t.UPDATE_DATA:
             return {

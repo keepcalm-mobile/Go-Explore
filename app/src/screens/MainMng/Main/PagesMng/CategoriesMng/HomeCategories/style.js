@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import s, {colors, doubleIndent, fontSizes, indent} from '../../../../../../styles';
+import s, {colors, doubleIndent, fontNames, fontSizes, indent} from '../../../../../../styles';
 import {scale} from '../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     welcome: {
-        fontFamily: 'Poppins-Bold',
+        fontFamily: fontNames.bold,
         fontSize: fontSizes.heading,
         lineHeight: scale(33),
         color: colors.white,

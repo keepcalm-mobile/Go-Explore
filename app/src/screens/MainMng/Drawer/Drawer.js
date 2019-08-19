@@ -3,10 +3,12 @@ import {TouchableOpacity, View, Text, Animated} from 'react-native';
 import PropTypes from 'prop-types';
 import {scale} from '../../../utils/resize';
 import IconClose from '../../../../assets/serviceIcons/closeIcon.svg';
-import IconBack from '../../../../assets/serviceIcons/backIcon.svg';
+import IconBack from '../../../../assets/serviceIcons/backIconDrawer.svg';
 import {colors, doubleIndent, indent} from '../../../styles';
 import s from './style';
 import {screens} from '../../../constants';
+import {LoginManager} from 'react-native-fbsdk';
+import {Auth, logOut} from '../../../api/Auth';
 
 const iconSize = scale(22);
 
@@ -19,9 +21,9 @@ const icon = (Icon) => {
 };
 
 const button = (iTitle, iPress, iId, iCur, Icon = null) => {
-    let _disabled = iCur===iId ? true : false;
+    let _disabled = iCur === iId ? true : false;
     return (
-        <TouchableOpacity onPress = {() => iPress(iId)} activeOpacity={0.5} disabled={_disabled} style={{flexDirection:'row', width: '100%', height: scale(40), marginTop: scale(Icon?50:10), marginLeft: indent, marginRight: indent}}>
+        <TouchableOpacity onPress = {() => iPress(iId)} activeOpacity={0.5} disabled={_disabled} style={{flexDirection:'row', width: '100%', height: scale(40), marginTop: scale(Icon ? 50 : 10), marginLeft: indent, marginRight: indent}}>
             {icon(Icon)}
             <Text style={[s.textBtn, {color: _disabled ? colors.darkMain : colors.white}]}>
                 {iTitle}
@@ -67,19 +69,31 @@ class Drawer extends React.Component<Props> {
         }
     };
 
+    _logOut = () => {
+        logOut().then((iResp) => {
+            if (Auth.AUTH_LOGOUT === iResp) {
+                this.props.onChoicePage(screens.AuthMng);
+                // this.props.navigation.navigate('Auth');
+            }
+        });
+    };
+
     _onBackClick = () => {
         if (this.state.showSubMenu){
             Animated.spring(this.state.pan, {
                 toValue: 0,
                 friction: 9,
                 useNativeDriver: true,
-            }).start( () => {this.setState({showSubMenu:false})});
+            }).start( () => {this.setState({showSubMenu:false});});
             this.setState({pointerEvents:'auto'});
         }
     };
 
     _onPageClick = (iId) => {
-        if (iId === screens.SubMenu){
+        if (iId === screens.Settings){
+            LoginManager.logOut();
+            this._logOut();
+        } else if (iId === screens.SubMenu){
             Animated.spring(this.state.pan, {
                 toValue: this.state.subMenuWidth,
                 friction: 9,

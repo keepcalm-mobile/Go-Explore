@@ -8,6 +8,7 @@ import {scale, verticalScale} from '../../../utils/resize';
 import LogoFb from '../../../../assets/logoFacebook.svg';
 import {screens} from '../../../constants';
 import TabResizer from './TabResizer';
+import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 const AnimatedInput = Animated.createAnimatedComponent(TextInput);
 const animValue = verticalScale(100);
@@ -41,7 +42,7 @@ class LoginTab extends TabResizer {
 
 
     _socialArea = () => {
-        if (this.state.animSocialHeight > animValue * .5) {
+        if (this.state.animSocialHeight > animValue * 0.5) {
             return (
                 <>
                     <Text style={s.socialTitle}>or login with</Text>
@@ -61,13 +62,68 @@ class LoginTab extends TabResizer {
     };
 
     _forgotArea = () => {
-        if (this.state.animSocialHeight > animValue * .5) {
+        if (this.state.animSocialHeight > animValue * 0.5) {
             return (<Text style={[s.forgot]} onPress={this.onForgotPress}>Forgot Password?</Text>);
         } else {
             return null;
         }
     };
 
+
+    onSignInPress = () => {
+        this.props.login({email:this.state.email, pass:this.state.password});
+    };
+
+    onForgotPress = () => {
+        this.props.navigation.navigate({ routeName: screens.ForgotTab, key:screens.ForgotTab + 'Key'});
+    };
+
+    onSignUpPress = () => {
+        this.props.navigation.navigate({ routeName: screens.SignUpTab, key:screens.SignUpTab + 'Key'});
+    };
+
+    onGooglePress = () => {
+        // LoginManager.logOut();
+        // alert('Google login');
+    };
+
+    /**** FACEBOOK ****/
+    _responseInfoCallback = (error: ?Object, result: ?Object) => {
+        if (error) {
+            console.log('Error fetching data: ' + error.toString());
+        } else {
+            this.props.registration({login:result.name, email:result.email, phone:'', password:''});
+            console.log('Success fetching data: ' + JSON.stringify(result));
+        }
+    };
+
+    _getUserData = () => {
+        const infoRequest = new GraphRequest(
+            '/me?locale=en_US&fields=name,email',
+            null,
+            this._responseInfoCallback,
+        );
+        new GraphRequestManager().addRequest(infoRequest).start();
+    };
+
+    onFacebookPress = () => {
+        LoginManager.logInWithPermissions(['public_profile', "email"]).then(
+            (result) => {
+                if (result.isCancelled) {
+                    console.log('Login cancelled');
+                } else {
+                    console.log(
+                        'Login success with permissions: ' +
+                        result.grantedPermissions.toString()
+                    );
+                    this._getUserData();
+                }
+            },
+            (error) => {
+                console.log('Login fail with error: ' + error);
+            }
+        );
+    };
 
     render() {
         const {bgStyle, textStyle} = super.render();
@@ -115,26 +171,6 @@ class LoginTab extends TabResizer {
             //{/*</KeyboardAvoidingView>*/}
         );
     }
-
-    onSignInPress = () => {
-        this.props.login({email:this.state.email, pass:this.state.password});
-    };
-
-    onForgotPress = () => {
-        this.props.navigation.navigate({ routeName: screens.ForgotTab, key:screens.ForgotTab + 'Key'});
-    };
-
-    onSignUpPress = () => {
-        this.props.navigation.navigate({ routeName: screens.SignUpTab, key:screens.SignUpTab + 'Key'});
-    };
-
-    onGooglePress = () => {
-        alert('Google login');
-    };
-
-    onFacebookPress = () => {
-        alert('Facebook login');
-    };
 }
 
 export default LoginTab;

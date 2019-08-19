@@ -16,25 +16,16 @@ import { NavigationActions as Actions } from 'react-navigation';
 //   });
 // };
 
-export const getCurrentRoute = (state) => {
+export const getCurrentRoute = (iState, iParam = 'routeName') => {
   const findCurrentRoute = (navState) => {
     if (navState.index !== undefined) {
       return findCurrentRoute(navState.routes[navState.index]);
     }
-    return navState.routeName;
+    return navState[iParam];
   };
-  return findCurrentRoute(state);
+  return findCurrentRoute(iState);
 };
 
-export const getCurrentRouteParams = (state) => {
-  const findCurrentRoute = (navState) => {
-    if (navState.index !== undefined) {
-      return findCurrentRoute(navState.routes[navState.index]);
-    }
-    return navState.params;
-  };
-  return findCurrentRoute(state);
-};
 
 export const navigate = (nav, screen, params) => () => nav.navigate(screen, params);
 

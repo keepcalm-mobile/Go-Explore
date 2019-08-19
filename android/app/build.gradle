@@ -109,6 +109,8 @@ def useIntlJsc = false
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    buildToolsVersion '28.0.3'
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -120,6 +122,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        renderscriptTargetApi 28
+        renderscriptSupportModeEnabled true
     }
     splits {
         abi {

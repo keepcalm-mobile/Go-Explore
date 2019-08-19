@@ -2,6 +2,7 @@ import HomeCategories from './HomeCategories';
 import PropTypes from 'prop-types';
 import ModMap from '../../../../../../modules/map';
 import {setCurCategory} from '../../../../../../modules/categories';
+import {setScrollOffset} from '../../../../../../modules/scrollOffset';
 import {connect} from 'react-redux';
 import React, {forwardRef} from 'react';
 
@@ -23,6 +24,7 @@ const stateToProps = (state) => {
 const dispatchToProps = (dispatch) => {
     return {
         setCurCategory: (iValue) => dispatch(setCurCategory(iValue)),
+        setScrollOffset: (iValue) => dispatch(setScrollOffset(iValue)),
     };
 };
 

@@ -3,7 +3,7 @@ import {ActivityIndicator, Text, View} from 'react-native';
 import s from './styles';
 import {screens} from '../../constants';
 import AuthBackground from '../../components/AppBackground';
-
+import { AccessToken } from 'react-native-fbsdk';
 
 
 class AuthLoader extends React.Component<Props> {
@@ -15,6 +15,8 @@ class AuthLoader extends React.Component<Props> {
         // this._checkAuth(props[ModMap.Auth]);
         // console.log(" AuthLoader : " + JSON.stringify(props));
         // this._auth();
+
+        AccessToken.getCurrentAccessToken().then(r => console.log('>>>> FACEBOOK ACCESS : ' + JSON.stringify(r)));
     }
 
     // componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
