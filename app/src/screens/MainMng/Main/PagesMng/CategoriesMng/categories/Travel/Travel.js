@@ -3,15 +3,14 @@ import {Text, View} from 'react-native';
 import s from './style';
 import ButtonOrange from '../../../../../../../components/ButtonOrange';
 import {Auth, logOut} from '../../../../../../../api/Auth';
+import ScrollablePage from '../../../ScrollablePage';
 
 
-class Travel extends React.Component<Props> {
-    state = {
-
-    };
-
+class Travel extends ScrollablePage {
     constructor(props) {
         super(props);
+        this.state = {
+        };
     }
 
     render() {

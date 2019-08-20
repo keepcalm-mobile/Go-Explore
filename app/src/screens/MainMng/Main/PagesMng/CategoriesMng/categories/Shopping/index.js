@@ -1,10 +1,10 @@
 import {connect} from 'react-redux';
-import React, {forwardRef} from 'react';
 import ModMap from '../../../../../../../modules/map';
-import {login} from '../../../../../../../modules/reg';
+import {setScrollOffset} from '../../../../../../../modules/scrollOffset';
 import Shopping from './Shopping';
+import React, {forwardRef} from 'react';
 
-const Connected = connect( state => (state[ ModMap.Reg ]), { login }, null, { forwardRef: true } )(Shopping);
+const Connected = connect( state => (state[ ModMap.Reg ]), { setScrollOffset }, null, { forwardRef: true } )(Shopping);
 
 export default forwardRef((props, ref) =>
     <Connected {...props} ref={ref} />

@@ -5,6 +5,7 @@ import {connect, Provider} from 'react-redux';
 import {Platform, NativeModules, StatusBar} from 'react-native';
 import store from './store';
 import {screens} from './constants';
+import {colors} from "./styles";
 
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -17,15 +18,16 @@ import {screens} from './constants';
 //Disable warnings box
 console.disableYellowBox = true;
 
+StatusBar.setBarStyle('light-content');
 if (Platform.OS === 'android'){
-    const { UIManager } = NativeModules;
+    StatusBar.setBackgroundColor(colors.bgCategory);
 
+    const { UIManager } = NativeModules;
     UIManager.setLayoutAnimationEnabledExperimental &&
     UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-StatusBar.setBarStyle('light-content');
 // StatusBar.setTranslucent(true);
-// StatusBar.setBackgroundColor('#00000000');
+
 
 const RootNavigationView = createAppContainer(
     createSwitchNavigator(

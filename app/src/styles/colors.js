@@ -10,6 +10,7 @@ const colors = {
     border: '#ffa83b',
     titleMenu: '#FF9B59',
     bgApp: '#212121',
+    bgSoonPage: '#121417',
     bgCategory: '#000000',
     shadowColor: '#000000',
     glow: '#FBC25A',

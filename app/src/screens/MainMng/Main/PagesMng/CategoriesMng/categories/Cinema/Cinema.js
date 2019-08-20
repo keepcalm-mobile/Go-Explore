@@ -5,17 +5,14 @@ import ButtonOrange from '../../../../../../../components/ButtonOrange';
 import LinearGradient from 'react-native-linear-gradient';
 import {scale} from '../../../../../../../utils/resize';
 import Rating from '../../../../../../../components/Rating';
-import ButtonBlack from '../../../../../../../components/ButtonBlack';
 import IconFilter from '../../../../../../../../assets/serviceIcons/playIcon.svg';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import {indent, windowW} from '../../../../../../../styles';
 import colors from '../../../../../../../styles/colors';
-import CarouselPersons from '../../../../../../../components/CarouselPersons';
-import Separator from '../../../../../../../../assets/serviceIcons/separator.svg';
-import {TextInput} from "react-native-gesture-handler";
 import {CinemaOverview, CinemaGallery, Comments, Explore} from '../../subTabs';
+import ScrollablePage from '../../../ScrollablePage';
 
-class Cinema extends React.Component<Props> {
+class Cinema extends ScrollablePage {
     constructor(props) {
         super(props);
 
@@ -27,9 +24,6 @@ class Cinema extends React.Component<Props> {
                 { key: 'comments', title: 'COMMENTS'},
                 { key: 'explore', title: 'EXPLORE'},
             ],
-            comment: '',
-            comment2: '',
-            rateValue: 0.0,
         };
     }
 
@@ -87,10 +81,10 @@ class Cinema extends React.Component<Props> {
     };
 
     render() {
-        const {type, header, overview, cinema, comments, explore} = this.props.data;
+        const { type, header } = this.props.data;
 
         return (
-            <ScrollView contentContainerStyle={s.container} >
+            <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
                 {this.header(type, header)}
                 <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/>
                 <TabView
@@ -117,15 +111,3 @@ class Cinema extends React.Component<Props> {
 }
 
 export default Cinema;
-
-{/*    {SceneMap({*/}
-{/*    overview: () => this.overview(overview),*/}
-{/*    cinema: () => this.cinema(cinema),*/}
-{/*    comments: () => this.comments(comments),*/}
-{/*    explore: () => this.explore(explore),*/}
-{/*})}*/}
-
-{/*<ScrollView contentContainerStyle={s.container} >*/}
-{/*    {this.header(type, header)}*/}
-{/*    <ButtonOrange onPress={this._logOut} title={'BOOK TICKET'}/>*/}
-{/*</ScrollView>*/}

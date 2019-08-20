@@ -10,22 +10,24 @@ import {scale} from '../../../../../../utils/resize';
 import IconFilter from '../../../../../../../assets/serviceIcons/filterIcon.svg';
 import {colors, windowW} from '../../../../../../styles';
 import Separator from '../../../../../../../assets/serviceIcons/separator.svg';
+import ScrollablePage from '../../ScrollablePage';
 
-class HomeCategories extends React.Component<Props> {
-    state = {
-        filterIsShow:false,
-    };
-
+class HomeCategories extends ScrollablePage {
     constructor(props) {
         super(props);
+
+        this.state = {
+            filterIsShow:false,
+        };
+
         console.log('>>>>> TEMPLATE : ' + JSON.stringify(props));
 
         const catId = props.navigation.state.params.categoryId;
+        props.setCurCategory(catId);
 
         //if(this.props.data[catId] === null)
-        props.setCurCategory(catId);
-        this._scrollOffset = 0;
-        props.setScrollOffset(this._scrollOffset);
+        // this._scrollOffset = 0;
+        // props.setScrollOffset(this._scrollOffset);
     }
 
     // componentDidUpdate(prevProps): void {
@@ -33,27 +35,6 @@ class HomeCategories extends React.Component<Props> {
     //     // if (prevProps.isFocused !== this.props.isFocused) {
     //     // }
     // }
-
-    componentDidMount() {
-        const { navigation } = this.props;
-        console.log('!!!!!! COMPONENT DID MOUNT : ' + navigation);
-        this.focusListener = navigation.addListener('didFocus', this.componentDidFocusHandler);
-    }
-
-    componentDidFocusHandler = () => {
-        this.props.setScrollOffset(this._scrollOffset);
-    };
-
-    componentWillUnmount() {
-        this.focusListener.remove();
-    }
-
-    onScroll = (e) => {
-        this._scrollOffset = e.nativeEvent.contentOffset.y;
-        this.props.setScrollOffset(this._scrollOffset);
-        // console.log(e.nativeEvent.contentOffset.y);
-    };
-
 
 
     /***    HEADER   ***/
@@ -128,7 +109,7 @@ class HomeCategories extends React.Component<Props> {
 
         const {header, data} = this.props.data[curCategory];
         return (
-            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false} onScroll={this.onScroll} scrollEventThrottle={500}>
+            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false} onScroll={this.onScroll} scrollEventThrottle={17000}>
                 <Header key={curCategory + 'HeaderKey'} onItemClick={this.onHeaderItemClick} items={header} />
                 {this.curTitle(curCategory)}
                 {this.generateContent(data, curCategory)}

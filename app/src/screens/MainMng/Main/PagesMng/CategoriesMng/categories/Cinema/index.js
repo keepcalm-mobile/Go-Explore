@@ -3,7 +3,7 @@ import ModMap from '../../../../../../../modules/map';
 import Cinema from './Cinema';
 import React, {forwardRef} from 'react';
 import PropTypes from 'prop-types';
-import {setCurCategory} from '../../../../../../../modules/categories';
+import {setScrollOffset} from '../../../../../../../modules/scrollOffset';
 
 const tempData = {
     type:'cinema',
@@ -74,7 +74,6 @@ const tempData = {
 };
 
 Cinema.propTypes = {
-    setCurCategory: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
     curCategory: PropTypes.string.isRequired,
     data : PropTypes.object.isRequired,
@@ -90,7 +89,7 @@ const stateToProps = (state) => {
 
 const dispatchToProps = (dispatch) => {
     return {
-        setCurCategory: (iValue) => dispatch(setCurCategory(iValue)),
+        setScrollOffset: (iValue) => dispatch(setScrollOffset(iValue)),
     };
 };
 

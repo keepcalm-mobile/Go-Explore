@@ -1,21 +1,22 @@
 import React from 'react';
-import {Text, View} from 'react-native';
-import s from './style';
+import ComingSoon from '../../../../../components/ComingSoon';
+import ScrollablePage from '../ScrollablePage';
 
-class Notifications extends React.Component<Props> {
-    state = {
-
-    };
-
+class Notifications extends ScrollablePage {
     constructor(props) {
         super(props);
+        this.state = {};
     }
+
+    onBackPress = () => {
+        this.props.navigation.goBack();
+    };
 
     render() {
         return (
-            <View style={s.container}>
-                <Text style={s.welcome}>Notifications coming soon</Text>
-            </View>
+            <>
+                {ComingSoon(this.onBackPress)}
+            </>
         );
     }
 }

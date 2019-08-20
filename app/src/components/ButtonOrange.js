@@ -14,8 +14,8 @@ class ButtonOrange extends React.Component<Props> {
         onLayout: PropTypes.func,
     };
 
-    render = () => {
-        const { title, onPress, onLayout, style } = this.props;
+    render() {
+        const { title } = this.props;
         return (
             <TouchableOpacity style={{marginHorizontal: indent}} activeOpacity={0.5} {...this.props}>
                 <LinearGradient colors={[colors.darkMain, colors.lightMain]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.linearGradient} >
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         marginTop: verticalScale(19),
         marginBottom: verticalScale(13),
         // lineHeight: scale(56),
-        color: colors.white,
+        color: colors.blackText,
         backgroundColor: 'transparent',
         letterSpacing: 2,
     },
