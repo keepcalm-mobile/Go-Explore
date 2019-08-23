@@ -9,6 +9,8 @@ import MenuCategories from './MenuCategories';
 import s from './style';
 import {windowH, windowW} from '../../../styles';
 
+const mainX = Math.round(windowW * 0.45);
+const mainY = Math.round(windowH * 0.01);
 
 class Main extends React.Component {
     constructor(props) {
@@ -56,6 +58,8 @@ class Main extends React.Component {
     }
 
     minimize = () => {
+        this.state.scale.flattenOffset();
+        this.state.pan.flattenOffset();
         Animated.parallel([
             Animated.spring(this.state.scale, {
                 toValue: 0.8,
@@ -63,7 +67,7 @@ class Main extends React.Component {
                 useNativeDriver: true,
             }),
             Animated.spring(this.state.pan, {
-                toValue: { x: windowW * 0.45, y: windowH * 0.01 },
+                toValue: { x: mainX, y: mainY },
                 friction: 5,
                 useNativeDriver: true,
             }),
@@ -73,6 +77,8 @@ class Main extends React.Component {
     };
 
     maximize = () => {
+        this.state.scale.flattenOffset();
+        this.state.pan.flattenOffset();
         Animated.parallel([
             Animated.spring(this.state.scale, {
                 toValue: 1,
@@ -87,6 +93,20 @@ class Main extends React.Component {
         ]).start();
 
         this.setState({cntEnable: 'auto'});
+    };
+
+    setTransformOffset = (iValue) => {
+        if (iValue > 0){
+            iValue = 0;
+        } else if (iValue < -mainX){
+            iValue = -mainX;
+        }
+        let offset = (Math.abs(mainX + iValue) / mainX) - 1;
+
+        this.state.scale.setOffset(-0.2 * offset);
+        this.state.pan.setOffset({x: iValue, y: mainY * offset});
+
+        return offset;
     };
 
     openPage = (iTabId, iJump = false) => {
@@ -116,15 +136,16 @@ class Main extends React.Component {
     };
 
     render() {
-        const { navigation, panHandlers } = this.props;
+        const panHandlers = this.state.cntEnable === 'auto' ? null : this.props.panHandlers;
+        const navigation = this.props.navigation;
         const { pan, scale } = this.state;
         const [translateX, translateY] = [pan.x, pan.y];
         const rotate = '0deg';
         const transformStyle = {transform: [{translateX}, {translateY}, {rotate}, {scale}]};
         const animStyle = {borderRadius : scale.interpolate({ inputRange: [0.8, 1], outputRange: [20, 0] })};
 
-        return (//{...this._panResponder.panHandlers}
-            <Animated.View {...(this.state.cntEnable ? null : panHandlers)} style={[s.container, transformStyle]} removeClippedSubviews={true} >
+        return (
+            <Animated.View {...panHandlers} style={[s.container, transformStyle]} removeClippedSubviews={true} >
                 <Animated.View style={[s.containerOverflow, animStyle]} pointerEvents={this.state.cntEnable} >
                     <PagesMng ref={c => this._pagesMng = c} navigation={navigation}/>
                     <Map ref={c => this._map = c}/>

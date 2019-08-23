@@ -35,19 +35,17 @@ class MainMng extends React.Component{
             onStartShouldSetPanResponder: (e, gesture) => true,
             onMoveShouldSetPanResponderCapture: () => true,
             onPanResponderMove: (evt, gestureState) => {
-                console.log('>>>>>>> MAIN MNG MOVE : ' + gestureState.dx);
-                // this.state.animVal.setOffset({x: 0, y: gestureState.dy > 0 ? gestureState.dy : 0});
-                // Animated.event([ null, { dy: this.state.animVal.y } ]);
+                let offset = this.main.setTransformOffset(gestureState.dx);
+                this.state.animVal.setOffset(Math.abs(offset));
             },
             onPanResponderRelease: (e, gesture) => {
-                // this.state.animVal.flattenOffset();
-                //
-                // let toAction = this.isOpen;
-                // if (Math.abs(gesture.dy) > 100){
-                //     toAction = gesture.dy < 0;
-                // }
+                this.state.animVal.flattenOffset();
 
-                // this.startAnimation(toAction);
+                if (gesture.dx < -50){
+                    this.closeDrawer();
+                } else {
+                    this.openDrawer();
+                }
             },
         });
     }
