@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import s, {colors, fontNames, fontSizes, windowH} from '../../../../styles';
+import s, {bottomIndent, colors, doubleIndent, fontNames, fontSizes, indent, windowH} from '../../../../styles';
 import {scale} from '../../../../utils/resize';
 
 export const btnSize = scale(96);
@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         flex:1,
         width:'100%',
-        height:(windowH * 0.8),
+        height:'100%',//(windowH * 0.8),
         justifyContent:'flex-end',
         alignContent:'flex-end',
         flexDirection:'column',
@@ -22,28 +22,33 @@ const styles = StyleSheet.create({
         height:'100%',
     },
     bgGradient:{
-        width:'100%',
-        height:'30%',
+        flex:1,
+        // width:'100%',
+        // height:'30%',
     },
     bgBlack:{
         width:'100%',
-        height:'72%',
+        height: btnSize * 3,//'55%',
         backgroundColor:'#000000',
     },
     btnsArea:{
-        height:'80%',
+        // height:'60%',
+        justifyContent:'flex-end',
     },
     btnsRow:{
         flex:1,
         justifyContent:'space-around',
         flexDirection:'row',
         alignItems:'center',
+        marginTop: btnSize + indent * 1.5,
     },
     closeBtn:{
         width: '100%',
         height: scale(40),
         alignItems:'center',
         justifyContent:'center',
+        marginTop: doubleIndent * 2,
+        marginBottom: bottomIndent,
     },
     btn:{
         width: btnSize,

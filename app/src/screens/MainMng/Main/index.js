@@ -4,11 +4,17 @@ import ModMap from '../../../modules/map';
 import {setCurCategory} from '../../../modules/categories';
 import Main from './Main';
 import PropTypes from 'prop-types';
+import {colors} from "../../../styles";
 
 Main.propTypes = {
     setCurCategory: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
     curCategory: PropTypes.string.isRequired,
+    panHandlers: PropTypes.object,
+};
+
+Main.defaultProps = {
+    panHandlers : null,
 };
 
 const stateToProps = (state) => {

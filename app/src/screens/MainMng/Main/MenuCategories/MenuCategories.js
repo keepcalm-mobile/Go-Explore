@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated, Text, TouchableOpacity, View} from 'react-native';
+import {Animated, PanResponder, Text, TouchableOpacity, View} from 'react-native';
 import {scale} from '../../../../utils/resize';
 import LinearGradient from 'react-native-linear-gradient';
 import s, {iconSize, ellipseSize} from './style';
@@ -30,22 +30,44 @@ class MenuCategories extends React.Component<Props> {
 
     constructor(props) {
         super(props);
+
+        this.isOpen = false;
+        this.panResponder = PanResponder.create({
+            onStartShouldSetPanResponder: (e, gesture) => true,
+            onMoveShouldSetPanResponderCapture: () => true,
+            onPanResponderMove: (evt, gestureState) => {
+                this.state.areaMargin.setOffset({x: 0, y: gestureState.dy > 0 ? gestureState.dy : 0});
+                // Animated.event([ null, { dy: this.state.areaMargin.y } ]);
+            },
+            onPanResponderRelease: (e, gesture) => {
+                this.state.areaMargin.flattenOffset();
+
+                let toAction = this.isOpen;
+                if (Math.abs(gesture.dy) > 100){
+                    toAction = gesture.dy < 0;
+                }
+
+                this.startAnimation(toAction);
+            },
+        });
     }
 
     hide = () => {
-        Animated.spring(this.state.areaMargin, {
-            toValue: { x: 0, y: windowH + bottomIndent },
-            friction: 10,
-            useNativeDriver: true,
-        }).start();
+        this.startAnimation(false);
     };
 
     show = () => {
+        this.startAnimation(true);
+    };
+
+    startAnimation = (iValue) => {
         Animated.spring(this.state.areaMargin, {
-            toValue: { x: 0, y: (windowH + bottomIndent) * 0.2 },
+            toValue: { x: 0, y: iValue ? 0 : windowH + bottomIndent},
             friction: 10,
             useNativeDriver: true,
         }).start();
+
+        this.isOpen = iValue;
     };
 
     render() {
@@ -56,11 +78,11 @@ class MenuCategories extends React.Component<Props> {
         return (
             <Animated.View style={[transformStyle, s.container]}>
                 <View style={s.containerBg}>
-                    <LinearGradient colors={['#00000000', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={s.bgGradient} />
+                    <LinearGradient {...this.panResponder.panHandlers} colors={['#00000000', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={s.bgGradient} />
                     <View  style={s.bgBlack}/>
                 </View>
-                <View style={s.btnsArea}>
 
+                <View style={s.btnsArea}>
                     <View style={s.btnsRow}>
                         {button(screens.Categories[screens.Attraction].icon, onButtonPress, screens.Attraction, screens.Categories[screens.Attraction].title)}
                         {button(screens.Categories[screens.Cinema].icon, onButtonPress, screens.Cinema, screens.Categories[screens.Cinema].title)}

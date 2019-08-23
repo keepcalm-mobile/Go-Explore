@@ -9,7 +9,9 @@ import MapViewDirections from 'react-native-maps-directions';
 import Geolocation from 'react-native-geolocation-service';
 
 import mapStyles from './mapStyles.json';
+import PropTypes from 'prop-types';
 
+const mapTopY = -Math.round(windowH * 0.8);
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
@@ -22,7 +24,7 @@ const GPS_TIMEOUT = 60000;
 const GPS_MAXIMUM_AGE = 60000; // current location caching duration in milliseconds
 
 async function requestPermission() {
-    if(Platform.OS === 'android') {
+    if (Platform.OS === 'android') {
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -58,6 +60,9 @@ async function requestPermission() {
 }
 
 class Map extends React.Component<Props> {
+    static propTypes = {
+        onViewChanged: PropTypes.func,
+    };
 
     constructor(props) {
         super(props);
@@ -80,18 +85,18 @@ class Map extends React.Component<Props> {
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
-            map: null,
-            targetMarker: null,
-            route: null,
-            lastGeolocation: null
+            mapBg: false,
         };
 
-    // }
-    //
-    // componentWillMount() {
-
         this._val = { x:0, y:0 };
-        this.state.pan.addListener((value) => this._val = value);
+        this.state.pan.addListener((value) => {
+            this._val = value;
+            if (this._val.y < -20 && !this.state.mapBg){
+                this.setState({mapBg : true});
+            } else if (this._val.y > -20 && this.state.mapBg){
+                this.setState({mapBg : false});
+            }
+        });
 
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: (e, gesture) => true,
@@ -104,25 +109,31 @@ class Map extends React.Component<Props> {
             onPanResponderRelease: (e, gesture) => {
                 this.state.pan.flattenOffset();
 
-                let toY = this.isOpen ? -windowH * 0.8 : 0;
+                let toAction = this.isOpen;// ? mapTopY : 0;
                 if ( Math.abs( gesture.dy) > 100 ){
-                    if (gesture.dy < 0){
-                        toY = -windowH * 0.8;
-                        this.isOpen = true;
-                    } else {
-                        toY = 0;
-                        this.isOpen = false;
-                    }
+                    toAction = gesture.dy < 0;
                 }
 
                 Animated.spring(this.state.pan, {
-                    toValue: { x: 0, y: toY },
+                    toValue: { x: 0, y: toAction ? mapTopY : 0 },
                     friction: 5,
                     useNativeDriver: true,
                 }).start();
+
+                this.isOpen = toAction;
             },
         });
+    }
 
+    get isOpen () : Boolean {
+        return this._isOpen;
+    }
+
+    set isOpen (iValue : Boolean) {
+        this._isOpen = iValue;
+        if (this.props.onViewChanged){
+            this.props.onViewChanged(iValue);
+        }
     }
 
     hide = () => {
@@ -137,6 +148,15 @@ class Map extends React.Component<Props> {
             useNativeDriver: true,
         }).start();
     };
+
+
+    /****
+     * NAVIGATION
+    ****/
+    async componentDidMount() {
+        this._lastGeolocation = await AsyncStorage.getItem('LastGPS');
+    }
+
     setPosition(position) {
         this.setState({
             initialPosition: ('\nlongitude = ' + position.coords.longitude + '\nlatitude = ' + position.coords.latitude),
@@ -145,20 +165,13 @@ class Map extends React.Component<Props> {
     }
 
     setTargetPosition(position) {
-        this.setState({
-            targetPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude},
-        });
+        this.setState({ targetPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude} });
     }
 
     getCurrentPosition() {
-
         if (Platform.OS === 'android' && PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
-
-            this.setState({
-                gpsGranted: 'true',
-            });
-        }
-        else {
+            this.setState({ gpsGranted: 'true' });
+        } else {
             return;
         }
 
@@ -173,9 +186,8 @@ class Map extends React.Component<Props> {
                 AsyncStorage.setItem('LastGPS', JSON.stringify(position));
 
                 setTimeout(() => {
-
-                    if (this.state.map != null)
-                        {this.state.map.animateToCoordinate(position.coords, 0);} // deprecated, but works
+                    if (this._map)
+                        {this._map.animateToCoordinate(position.coords, 0);} // deprecated, but works
 
                 }, 300);
 
@@ -187,7 +199,6 @@ class Map extends React.Component<Props> {
                         );
                     },
                     {enableHighAccuracy: true, timeout: GPS_TIMEOUT, maximumAge: GPS_MAXIMUM_AGE});
-
             },
             error => {
                 // ToastAndroid.showWithGravity(
@@ -195,58 +206,76 @@ class Map extends React.Component<Props> {
                 //     ToastAndroid.LONG,
                 //     ToastAndroid.CENTER,
                 // );
-
                 this.getCurrentPosition();
             },
             {enableHighAccuracy: true, timeout: GPS_TIMEOUT, maximumAge: GPS_TIMEOUT},
         );
     }
 
-    async componentDidMount() {
-        this.state.lastGeolocation = await AsyncStorage.getItem('LastGPS');
-    }
+    /****
+     * MAP
+     ****/
+    onMapPress = (e) => {
+        // this.state.targetPosition = e.nativeEvent.coordinate;
+        let pos = e.nativeEvent.coordinate;
+        this.setState({ targetPosition : pos} );
+
+        if (this._targetMarker)
+        {this._targetMarker.animateMarkerToCoordinate(pos, 300);}
+
+        setTimeout(() => {
+            if (this._route)
+            {this._route.destination = pos;}
+        }, 400);
+    };
+
+    onMapReady = (result) => {
+        if (this._lastGeolocation) {
+            let position = JSON.parse(this._lastGeolocation);
+            this.setPosition(position);
+
+            if (this._map)
+            {this._map.animateToCoordinate(position.coords, 300);} // deprecated, but works
+        }
+
+        if (Platform.OS !== 'android' || PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
+            this.getCurrentPosition();
+        }
+    };
+
+    onDirectionsError = (err) => {
+        ToastAndroid.showWithGravity(
+            'Error when making a route: ' + JSON.stringify(err),
+            ToastAndroid.LONG,
+            ToastAndroid.CENTER,
+        );
+    };
+
+    mapBg = () => {
+        if (this.state.mapBg) {
+            const opacity = {opacity: this.state.pan.y.interpolate({inputRange: [mapTopY, 0], outputRange: [0.5, 0]})};
+            return <Animated.View style={[s.mapBg, opacity]}/>;
+        } else {
+            return null;
+        }
+    };
 
     render() {
         const panStyle = { transform: this.state.pan.getTranslateTransform() };
-        return (
-            <Animated.View style={[panStyle, s.container]}>
 
+        return (
+            <>
+            {this.mapBg()}
+
+            <Animated.View style={[panStyle, s.container]}>
                 <MapView
                     style={s.mapView}
                     initialRegion={this.state.region}
                     customMapStyle={mapStyles}
                     loadingEnabled={true}
-                    ref={ref => {
-                        this.state.map = ref;
-                    }}
-                    onPress={(e) => {
-
-                        this.state.targetPosition = e.nativeEvent.coordinate;
-
-                        if (this.state.targetMarker != null)
-                            {this.state.targetMarker.animateMarkerToCoordinate(this.state.targetPosition, 300);}
-
-                        setTimeout(() => {
-                            if (this.state.route != null)
-                                {this.state.route.destination = this.state.targetPosition;}
-                        }, 400);
-
-                    }}
-                    onMapReady={result => {
-                        if (this.state.lastGeolocation != null)
-                        {
-                            let position = JSON.parse(this.state.lastGeolocation);
-
-                            this.setPosition(position);
-                            if (this.state.map != null)
-                                this.state.map.animateToCoordinate(position.coords, 300); // deprecated, but works
-                        }
-
-                        if (Platform.OS !== 'android' || PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))
-                        {
-                            this.getCurrentPosition();
-                        }
-                    }}
+                    ref={ref => this._map = ref}
+                    onPress={this.onMapPress}
+                    onMapReady={this.onMapReady}
                 >
                     <Marker
                         coordinate={this.state.currentPosition}
@@ -257,39 +286,26 @@ class Map extends React.Component<Props> {
                         coordinate={this.state.targetPosition}
                         title={'Point B'}
                         description={'This is where you want to get'}
-                        ref={ref => {
-                            this.state.targetMarker = ref;
-                        }}
+                        ref={ref => this._targetMarker = ref}
                     />
                     <MapViewDirections
                         origin={this.state.currentPosition}
                         destination={this.state.targetPosition}
                         apikey={GOOGLE_MAPS_APIKEY}
                         strokeWidth={5}
-                        strokeColor="#eaeaea"
+                        strokeColor={"#9c9c9c"}
                         optimizeWaypoints={false} // if true - more optimized route, but costs more (higher Google API tariff)
-                        ref={ref => {
-                            this.state.route = ref;
-                        }}
-                        onStart={(params) => {
-
-                        }}
-                        onReady={result => {
-
-                        }}
-                        onError={err => {
-                            ToastAndroid.showWithGravity(
-                                'Error when making a route: ' + JSON.stringify(err),
-                                ToastAndroid.LONG,
-                                ToastAndroid.CENTER,
-                            );
-                        }}
+                        ref={ref => this._route = ref}
+                        onStart={params => {}}
+                        onReady={result => {}}
+                        onError={this.onDirectionsError}
                     />
                 </MapView>
                 <View {...this.panResponder.panHandlers} style={s.dragArea}>
                     <View style={s.dragIcon}/>
                 </View>
             </Animated.View>
+            </>
         );
     }
 }

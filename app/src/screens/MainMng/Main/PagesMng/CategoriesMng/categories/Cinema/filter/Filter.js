@@ -15,6 +15,7 @@ import Languages from '../../../../../../../../components/filters/Languages';
 import RangeSlider from '../../../../../../../../components/filters/RangeSlider';
 import ButtonOrange from '../../../../../../../../components/ButtonOrange';
 
+const keywords = ['Superhero','Thor'];
 const locations = [{label:'Mall of Qatar - Doha', value:'place0'}, {label:'Another Place 1', value:'place1'}, {label:'Another Place 2', value:'place2'}, {label:'Another Place 3', value:'place3'}];
 
 const genres = [
@@ -58,7 +59,7 @@ const ranges = {
     valueMin: 40,
     valueMax: 200,
     setMin: 20,
-    setMax: 57,
+    setMax: 180,
 };
 
 class Filter extends React.Component<Props> {
@@ -86,7 +87,7 @@ class Filter extends React.Component<Props> {
                 <Text style={s.filtersHeader}>Filters</Text>
 
                 <Text style={s.filtersCategoryHeader}>Keywords</Text>
-                <Keywords data={['Superhero','Thor']} ref={c => this._keywords = c}/>
+                <Keywords data={keywords} ref={c => this._keywords = c}/>
 
                 <HorizontalLine />
 

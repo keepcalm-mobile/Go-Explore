@@ -20,7 +20,8 @@ console.disableYellowBox = true;
 
 StatusBar.setBarStyle('light-content');
 if (Platform.OS === 'android'){
-    StatusBar.setBackgroundColor(colors.bgCategory);
+    // StatusBar.setBackgroundColor(colors.bgCategory);
+    StatusBar.setBackgroundColor('#00000099');
 
     const { UIManager } = NativeModules;
     UIManager.setLayoutAnimationEnabledExperimental &&

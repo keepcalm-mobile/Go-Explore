@@ -26,8 +26,6 @@ class HomeCategories extends ScrollablePage {
         props.setCurCategory(catId);
 
         //if(this.props.data[catId] === null)
-        // this._scrollOffset = 0;
-        // props.setScrollOffset(this._scrollOffset);
     }
 
     // componentDidUpdate(prevProps): void {
@@ -87,6 +85,10 @@ class HomeCategories extends ScrollablePage {
     };
 
     generateContent = (iData, iId) => {
+        if (this.state.filterIsShow) {
+            return <CinemaFilter onApplyClick={this.onFilterBtnClick}/>;
+        }
+
         let list = [];
         for (let i = 0; i < iData.length; i++){
             list.push(iData[i].type === 'big'
@@ -109,11 +111,11 @@ class HomeCategories extends ScrollablePage {
 
         const {header, data} = this.props.data[curCategory];
         return (
-            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={false} onScroll={this.onScroll} scrollEventThrottle={17000}>
+            <ScrollView contentContainerStyle={s.container} removeClippedSubviews={true} onScroll={this.onScroll} scrollEventThrottle={17000}>
                 <Header key={curCategory + 'HeaderKey'} onItemClick={this.onHeaderItemClick} items={header} />
                 {this.curTitle(curCategory)}
                 {this.generateContent(data, curCategory)}
-                {this.filterPanel()}
+                {/*{this.filterPanel()}*/}
             </ScrollView>
         );
     }

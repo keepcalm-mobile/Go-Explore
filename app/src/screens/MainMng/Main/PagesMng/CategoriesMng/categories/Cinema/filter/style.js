@@ -5,15 +5,16 @@ import {scale} from '../../../../../../../../utils/resize';
 const styles = StyleSheet.create({
     filtersContainer: {
         width: windowW - doubleIndent,
-        position: 'absolute',
+        // position: 'absolute',
         backgroundColor: colors.lightSecondary,
         borderRadius: 10,
         flexDirection: 'column',
         marginHorizontal: indent,
-        marginVertical: scale(178),
+        // marginVertical: scale(178),
+        marginTop: -180,
+        marginBottom: doubleIndent,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        // paddingBottom: 100,
         padding: indent,
     },
     filtersHeader: {

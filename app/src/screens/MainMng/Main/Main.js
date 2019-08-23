@@ -20,7 +20,7 @@ class Main extends React.Component {
         this.state = {
             pan: new Animated.ValueXY(),
             scale: new Animated.Value(1),
-            pointerEvents: 'auto',
+            cntEnable: 'auto',
         };
 
         // this._panResponder = PanResponder.create({
@@ -69,7 +69,7 @@ class Main extends React.Component {
             }),
         ]).start();
 
-        this.setState({pointerEvents: 'none'});
+        this.setState({cntEnable: 'none'});
     };
 
     maximize = () => {
@@ -86,10 +86,10 @@ class Main extends React.Component {
             }),
         ]).start();
 
-        this.setState({pointerEvents: 'auto'});
+        this.setState({cntEnable: 'auto'});
     };
 
-    _openPage = (iTabId, iJump = false) => {
+    openPage = (iTabId, iJump = false) => {
         console.log('OPEN PAGE!! : ' + iTabId);
         if (iTabId === screens.DataPages && !iJump){
             this._panel.show();
@@ -101,18 +101,22 @@ class Main extends React.Component {
         this._map.hide();
     };
 
-    _openCategory = (iCategoryId) => {
+    openCategory = (iCategoryId) => {
         console.log('OPEN CATEGORY!! : ' + iCategoryId);
-        this._panel.hide();
+        this.hideAllPanels();
         // this.props.setCurCategory(iCategoryId);
         // this.props.navigation.navigate(screens.HotPicks);//iCategoryId);
         this.props.navigation.navigate({routeName:screens.HotPicks, key: screens.DataPages + iCategoryId + 'Key', params:{categoryId:iCategoryId}});
         this._bottom.changeIcon(screens.DataPages);
     };
 
+    hideAllPanels = () => {
+        this._map.hide();
+        this._panel.hide();
+    };
 
     render() {
-        const { navigation } = this.props;
+        const { navigation, panHandlers } = this.props;
         const { pan, scale } = this.state;
         const [translateX, translateY] = [pan.x, pan.y];
         const rotate = '0deg';
@@ -120,12 +124,12 @@ class Main extends React.Component {
         const animStyle = {borderRadius : scale.interpolate({ inputRange: [0.8, 1], outputRange: [20, 0] })};
 
         return (//{...this._panResponder.panHandlers}
-            <Animated.View style={[s.container, transformStyle]} pointerEvents={this.state.pointerEvents} removeClippedSubviews={true} >
-                <Animated.View style={[s.containerOverflow, animStyle]}>
+            <Animated.View {...(this.state.cntEnable ? null : panHandlers)} style={[s.container, transformStyle]} removeClippedSubviews={true} >
+                <Animated.View style={[s.containerOverflow, animStyle]} pointerEvents={this.state.cntEnable} >
                     <PagesMng ref={c => this._pagesMng = c} navigation={navigation}/>
                     <Map ref={c => this._map = c}/>
-                    <MenuPages ref={c => this._bottom = c} onButtonPress={this._openPage}/>
-                    <MenuCategories ref={c => this._panel = c} onButtonPress={this._openCategory}/>
+                    <MenuPages ref={c => this._bottom = c} onButtonPress={this.openPage}/>
+                    <MenuCategories ref={c => this._panel = c} onButtonPress={this.openCategory}/>
                 </Animated.View>
             </Animated.View>
         );
