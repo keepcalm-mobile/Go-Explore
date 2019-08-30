@@ -9,8 +9,8 @@ import {scale} from '../../../../utils/resize';
 import StarFull from '../../../../../assets/rating/starFull.svg';
 
 class Item extends React.Component<Props> {
-    static TYPE_RATING : string = 'type_rating';
-    static TYPE_AGE : string = 'type_age';
+    static TYPE_RATING : string = 'Rating';
+    static TYPE_AGE : string = 'Age';
 
     static propTypes = {
         id: PropTypes.number.isRequired,

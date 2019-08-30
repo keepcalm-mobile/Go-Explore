@@ -18,6 +18,7 @@ import IconDining from '../../assets/categoriesIcons/iconDining.svg';
 import IconHealthBeauty from '../../assets/categoriesIcons/iconHealth.svg';
 
 import IconSettings from '../../assets/serviceIcons/settingsIcon.svg';
+import {Keywords, SelectableItems, RangeSlider, Location, Languages, CircleValues, CircleItem} from '../components/filters';
 
 export default class {
     static InitialSetup = 'InitialSetup';
@@ -73,4 +74,52 @@ export default class {
         [this.SubMenu]:{title:'Categories'},
         [this.Settings]:{icon:IconSettings, title:'Settings'},
     };
+
+    static Filters = {
+        [this.HotPicks]:null,
+        [this.Cinema]:[
+            {id:'Keywords', item:Keywords},
+            {id:'Location', item:Location},
+            {id:CircleItem.TYPE_RATING, item:CircleValues},
+            {id:'Genre', item:SelectableItems},
+            {id:'Experience', item:SelectableItems},
+            {id:'Languages', item:Languages},
+            {id:CircleItem.TYPE_AGE, item:CircleValues},
+            {id:'Price', item:RangeSlider},
+        ],
+        [this.Attraction]:[
+            {id:'Keywords', item:Keywords},
+            {id:'Location', item:Location},
+            {id:CircleItem.TYPE_RATING, item:CircleValues},
+            {id:'Genre', item:SelectableItems},
+            {id:'Experience', item:SelectableItems},
+            {id:'Languages', item:Languages},
+            {id:CircleItem.TYPE_AGE, item:CircleValues},
+            {id:'Price', item:RangeSlider},
+        ],
+        [this.Travel]:[
+            {id:'Keywords', item:Keywords},
+            {id:'Location', item:Location},
+            {id:CircleItem.TYPE_RATING, item:CircleValues},
+            {id:'Genre', item:SelectableItems},
+        ],
+        [this.Shopping]:[
+            {id:'Experience', item:SelectableItems},
+            {id:'Languages', item:Languages},
+            {id:CircleItem.TYPE_AGE, item:CircleValues},
+            {id:'Price', item:RangeSlider},
+        ],
+        [this.Dining]:[
+            {id:'Keywords', item:Keywords},
+            {id:'Location', item:Location},
+            {id:CircleItem.TYPE_AGE, item:CircleValues},
+            {id:'Price', item:RangeSlider},
+        ],
+        [this.HealthBeauty]:[
+            {id:CircleItem.TYPE_RATING, item:CircleValues},
+            {id:'Genre', item:SelectableItems},
+            {id:'Experience', item:SelectableItems},
+            {id:'Languages', item:Languages},
+        ],
+    }
 }

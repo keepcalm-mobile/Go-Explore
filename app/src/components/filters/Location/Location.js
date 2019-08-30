@@ -10,6 +10,7 @@ import DropdownArrow from '../../../../assets/serviceIcons/dropdownArrow.svg';
 
 class Location extends React.Component<Props> {
     static propTypes = {
+        type: PropTypes.string.isRequired,
         data: PropTypes.arrayOf(PropTypes.shape({
             label: PropTypes.string.isRequired,
             value: PropTypes.oneOfType([
@@ -17,24 +18,36 @@ class Location extends React.Component<Props> {
                 PropTypes.number,
             ]).isRequired,
         })).isRequired,
-        selectedId : PropTypes.number,
+        presets: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         placeholder : PropTypes.string,
     };
 
     static defaultProps = {
-        selectedId : undefined,
+        presets : undefined,
         placeholder : 'Press to select location',
     };
 
     constructor(props) {
         super(props);
+
+        let id;
+        props.data.forEach((item, index, array) => {
+            if (item.value === props.presets) id = index;
+        });
+
         this.state = {
             isOpen: false,
-            selectedId: props.selectedId,
-            title: props.selectedId !== undefined ? props.data[props.selectedId].label : props.placeholder,
-            titleColor: props.selectedId !== undefined ? colors.white : colors.secondaryText,
+            selectedId: id,
+            title: id !== undefined ? props.data[id].label : props.placeholder,
+            titleColor: id !== undefined ? colors.white : colors.secondaryText,
         };
+        console.log('<><><><><><><><><> : ' + props.type);
     }
+
+    get value() {
+        return {[this.props.type]: this.state.selectedId !== undefined ? this.props.data[this.state.selectedId].value : ''};
+    }
+
 
     openPicker = () => {
         this.dropDown.measure( (fx, fy, width, height, px, py) => {
@@ -51,23 +64,23 @@ class Location extends React.Component<Props> {
             title = this.props.data[iValue].label;
         }
 
-        this.setState({ selectedValue: iValue, title: title, titleColor: color });
+        this.setState({ selectedId: iValue, title: title, titleColor: color });
     };
 
     render() {
         const {data} = this.props;
-        const {title, titleColor} = this.state;
+        const {title, titleColor, selectedId, isOpen} = this.state;
 
         return (
             <TouchableOpacity ref={ref => this.dropDown = ref} style={s.pickerContainer} onPress={this.openPicker} activeOpacity={1}>
                 <Text style={[s.pickerTitle, {color: titleColor}]} >{ title }</Text>
-                <DropdownArrow style={[s.pickerArrow, {transform:[{rotate: this.state.isOpen ? '180deg' : '0deg'}] }]}/>
+                <DropdownArrow style={[s.pickerArrow, {transform:[{rotate: isOpen ? '180deg' : '0deg'}] }]}/>
                 <PickerBox
                     ref={ref => this.myref = ref}
                     data={ data }
                     onValueChange={this.onValueChange}
                     onStatusChange={value => this.setState({ isOpen: value })}
-                    selectedValue={ this.state.selectedId }
+                    selectedValue={ selectedId }
                 />
             </TouchableOpacity>
         );

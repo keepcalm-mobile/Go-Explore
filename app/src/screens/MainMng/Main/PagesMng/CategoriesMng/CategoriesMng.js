@@ -44,7 +44,7 @@ class CategoriesMng extends React.Component<Props> {
 
     render() {
         const { navigation } = this.props;
-        const isLoading = (this.props.curCategory === '' || this.props.data[this.props.curCategory] === null);
+        const isLoading = this.props.isLoading;//(this.props.curCategory === '' || this.props.data[this.props.curCategory] === null);
 
         return (
             <View style={s.container}>

@@ -12,12 +12,12 @@ const VALUES_AGE = ['+0', '+6', '+12', '+16', '+18'];
 class CircleValues extends React.Component<Props> {
     static propTypes = {
         type: PropTypes.oneOf([Item.TYPE_RATING, Item.TYPE_AGE]),
-        active: PropTypes.string,
+        presets: PropTypes.string,
     };
 
     static defaultProps = {
-        type : Item.TYPE_RATING,
-        active : '',
+        type: Item.TYPE_RATING,
+        presets: '',
     };
 
     constructor(props) {
@@ -26,17 +26,19 @@ class CircleValues extends React.Component<Props> {
         this.state = {
             values: props.type === Item.TYPE_RATING ? VALUES_RATING : VALUES_AGE,
         };
+        console.log('<><><><><><><><><> : ' + props.type);
+        this.curActive = this.state.values.indexOf(props.presets);
+    }
 
-        if (props.active !== '') {
-            this.curActive = this.state.values.indexOf(props.active);
-        }
+    get value() {
+        return {[this.props.type] : this.state.values[this.curActive]};
     }
 
     onItemClick = (iId) => {
-        if (this.curActive !== undefined) {
+        if (this.curActive !== -1) {
             this.items[this.curActive].deactivate();
         }
-        this.curActive = iId === this.curActive ? undefined : iId;
+        this.curActive = iId === this.curActive ? -1 : iId;
     };
 
 

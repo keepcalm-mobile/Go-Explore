@@ -44,10 +44,10 @@ class PickerBox extends React.Component<Props> {
         };
     }
 
-    componentDidMount() {
-        this._onValueChange(this.state.selectedId);
-    }
-
+    // componentDidMount() {
+    //     this._onValueChange(this.state.selectedId);
+    // }
+    //
     // componentDidUpdate(prevProps, nextState) {
     //     nextState.visible !== this.state.visible && this._animatePicker();
     // }

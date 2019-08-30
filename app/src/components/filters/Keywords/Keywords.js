@@ -7,15 +7,25 @@ import Item from './Item';
 
 class Keywords extends React.Component<Props> {
     static propTypes = {
-        data: PropTypes.array.isRequired,
+        type: PropTypes.string.isRequired,
+        presets: PropTypes.array,
+    };
+
+    static defaultProps = {
+        presets: [],
     };
 
     constructor(props) {
         super(props);
         this.state = {
             keywordText:'',
-            keywordsList: [...props.data],
+            keywordsList: props.presets ? [...props.presets] : [],
         };
+        console.log('<><><><><><><><><> : ' + props.type);
+    }
+
+    get value() {
+        return {[this.props.type]:this.state.keywordsList};
     }
 
     removeKeyword = (iId) => {

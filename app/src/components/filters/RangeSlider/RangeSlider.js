@@ -9,25 +9,31 @@ import LinearGradient from 'react-native-linear-gradient';
 
 class RangeSlider extends React.Component<Props> {
     static propTypes = {
-        valueMin: PropTypes.number.isRequired,
-        valueMax: PropTypes.number.isRequired,
-        setMin: PropTypes.number,
-        setMax: PropTypes.number,
+        type: PropTypes.string.isRequired,
+        data: PropTypes.array.isRequired,
+        presets: PropTypes.array,
     };
 
     static defaultProps = {
-        setMin : 0,
-        setMax : 100,
+        // setMin : 0,
+        // setMax : 100,
+        data: [0,100],
+        presets:[-1,100000],
     };
 
     constructor(props) {
         super(props);
         this.state = {
-            valueMin:props.valueMin,
-            valueMax:props.valueMax,
-            setMin: props.setMin >= props.valueMin ? props.setMin : props.valueMin,
-            setMax: props.setMax <= props.valueMax ? props.setMax : props.valueMax,
+            valueMin:props.data[0],
+            valueMax:props.data[1],
+            setMin: props.presets ? (props.presets[0] >= props.data[0] ? props.presets[0] : props.data[0]) : props.data[0],
+            setMax: props.presets ? (props.presets[1] <= props.data[1] ? props.presets[1] : props.data[1]) : props.data[1],
         };
+        console.log('<><><><><><><><><> : ' + props.type);
+    }
+
+    get value() {
+        return {[this.props.type]:[this.state.setMin, this.state.setMax]};
     }
 
     enableScroll = () => this.setState({ scrollEnabled: true });

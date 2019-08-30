@@ -1,0 +1,6 @@
+export default class {
+  static IS_LOADING = 'CATEGORIES_IS_LOADING';
+  static HAS_ERRORED = 'CATEGORIES_HAS_ERRORED';
+  static UPDATE_ITEM_DATA = 'UPDATE_ITEM_DATA';
+  static SET_ITEM_DATA = 'SET_ITEM_DATA';
+}

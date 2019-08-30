@@ -1,8 +1,6 @@
 import t from './types';
 import api from '../../constants';
 import {writeUserData} from '../auth';
-import ModMap from '../map';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const tempData = {header:[
         {
@@ -166,14 +164,6 @@ const tempData = {header:[
     ],
 };
 
-const tempFilter = {
-    'Location':[{label:'Mall of Qatar - Doha', value:'place0'}, {label:'Another Place 1', value:'place1'}, {label:'Another Place 2', value:'place2'}, {label:'Another Place 3', value:'place3'}],
-    'Genre':['Action', 'Adult', 'Adventure', 'Avant-garde/Experimental', 'Comedy', 'Children\'s/Family', 'Comedy Drama', 'Crime', 'Drama', 'Epic', 'Fantasy', 'Historical Film', 'Horror', 'Musical', 'Mystery', 'Romance', 'Science Fiction', 'Spy Film', 'War', 'Western'],
-    'Experience':['2D', '2D IMAX', '3D', '3D IMAX'],
-    'Languages':['English', 'Arabian', 'French', 'Italian'],
-    'Price':[40, 200],
-};
-
 
 function isLoading(iBool) {
     return {
@@ -189,106 +179,74 @@ function hasErrored(iBool) {
     };
 }
 
-function curCategory(iValue) {
+function updateItemData(iValue) {
     return {
-        type: t.SET_CUR_CATEGORY,
+        type: t.UPDATE_ITEM_DATA,
         curCategory: iValue,
     };
 }
 
-function updateCategoryData(iData) {
+function setItemData(iData) {
     return {
-        type: t.UPDATE_DATA,
+        type: t.SET_ITEM_DATA,
         data: iData,
     };
 }
-
-function updateFilter(iData) {
-    return {
-        type: t.UPDATE_FILTER,
-        data: iData,
-    };
-}
-
-function updateFilterSettings(iData) {
-    return {
-        type: t.UPDATE_FILTERS_SETTINGS,
-        data: iData,
-    };
-}
-
-
-function loadCategoryData(iCategory, iFilter, iDispatch) {
-    console.log('>>>>>> LOAD DATA : ' + iCategory + " _ " + JSON.stringify(iFilter) + ' _ ');
-    fetch(api + '?' + (iFilter ? iFilter : 'user'))//'?user='+iUser.email+'&pass='+md5(iUser.pass)
-        .then((response) => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            iDispatch(isLoading(false));
-            return response;
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            data = tempData;
-            iDispatch(updateCategoryData({[iCategory]: data}));
-        })
-        .catch(() => iDispatch(hasErrored(true)));
-}
-
-
-function loadFilterData(iCategory, iDispatch) {
-    fetch(api + '?filter=' + iCategory)
-        .then((response) => {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response;
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            data = tempFilter;
-            iDispatch(updateFilter({[iCategory]: data}));
-        })
-        .catch(() => iDispatch(hasErrored(true)));
-}
-
 
 export function setCurCategory(iValue) {
-    return (dispatch, getState) => {
-        dispatch(curCategory(iValue));
-
-        if (getState()[ModMap.Categories][iValue]){
-            return Promise.resolve();
-        } else {
-            dispatch(isLoading(true));
-            loadFilterData(iValue, dispatch);
-            return loadCategoryData(iValue, getState()[ModMap.Categories].filters[iValue], dispatch);
-        }
-    };
-}
-
-
-export function applyFilter(iValue) {
-    return (dispatch, getState) => {
-        console.log('<<<<!!!!!!!>>>> APPLY FILTER : ' + JSON.stringify(iValue));
-        let _category = getState()[ModMap.Categories].curCategory;
-        writeFiltersData({...getState()[ModMap.Categories].filters, [_category]:iValue} );
-        dispatch(updateFilterSettings({[_category] : iValue}));
-
+    return (dispatch) => {
+        dispatch(updateItemData(iValue));
         dispatch(isLoading(true));
-        return loadCategoryData(_category, iValue, dispatch);
+
+        fetch(api + '?users')//'?user='+iUser.email+'&pass='+md5(iUser.pass)
+            .then((response) => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                dispatch(isLoading(false));
+                return response;
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                data = tempData;
+                dispatch(setItemData({[iValue]: data}));
+            })
+            .catch(() => dispatch(hasErrored(true)));
     };
 }
 
-export function readFiltersData() {
-    return (dispatch) => (
-        AsyncStorage.getItem('filters').then( filters => {
-            dispatch(updateFilterSettings(JSON.parse(filters)));
-        })
-    );
-}
 
-function writeFiltersData(iData) {
-    AsyncStorage.setItem('filters', JSON.stringify(iData));
-}
+// export const setCurCategory = value => ({
+//     type: t.SET_CUR_CATEGORY,
+//     category : value,
+// });
+
+
+// export function setCntHeight(value) {
+//     console.log("setCntHeight!!!!" + value);
+//     return (dispatch, getState) => {
+//         return dispatch({
+//             type: t.CHANGE_HEIGHT,
+//             payload: {value}
+//         });
+//     }
+// }
+
+// export function setCntHeight(value) {
+//     console.log("blabla !!!" + JSON.stringify(value));
+//     return {
+//         type: t.CHANGE_HEIGHT,
+//         payload : value
+//     }
+// }
+
+
+// export const setCntHeight = (value) => (dispatch, getState) => {
+//     console.log("blabla !!!" + JSON.stringify(value));
+//     dispatch({
+//         type: t.CHANGE_HEIGHT,
+//         payload: value,
+//     });
+// };
+
+// export setCntHeight;

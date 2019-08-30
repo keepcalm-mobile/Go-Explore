@@ -26,7 +26,9 @@ class Item extends React.Component<Props> {
         };
     }
 
-    isActive = () => (this.state.isActive);
+    get isActive() { return this.state.isActive; }
+    get label() { return this.props.data.label; }
+
     deactivate = () => {
         if (this.state.isActive){
             this.setActivate(false);

@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import s from './style';
-import CinemaFilter from '../categories/Cinema/filter';
+import Filter from './filter';
 import Header from '../../../../../../components/Header';
 import CarouselBig from '../../../../../../components/CarouselBig';
 import CarouselSmall from '../../../../../../components/CarouselSmall';
@@ -14,18 +14,22 @@ import ScrollablePage from '../../ScrollablePage';
 
 class HomeCategories extends ScrollablePage {
     constructor(props) {
+
+
+        console.log('>>>>> TEMPLATE : ' + JSON.stringify(props));
+
+        const catId = props.navigation.state.params.categoryId;
+        // if(props.data === null) {
+            props.setCurCategory(catId);
+        // }
+
+        //if(this.props.data[catId] === null)
+
         super(props);
 
         this.state = {
             filterIsShow:false,
         };
-
-        console.log('>>>>> TEMPLATE : ' + JSON.stringify(props));
-
-        const catId = props.navigation.state.params.categoryId;
-        props.setCurCategory(catId);
-
-        //if(this.props.data[catId] === null)
     }
 
     // componentDidUpdate(prevProps): void {
@@ -47,6 +51,11 @@ class HomeCategories extends ScrollablePage {
         this.setState({filterIsShow: !this.state.filterIsShow});
     };
 
+    onApplyFilterClick = (iValue) => {
+        this.onFilterBtnClick();
+        this.props.applyFilter(iValue);
+    };
+
     filterBtn = (iId) => {
         return iId !== screens.HotPicks ? (
             <TouchableOpacity onPress = {this.onFilterBtnClick} activeOpacity={0.5} style={{width: scale(40), height: scale(40), alignItems:'center', justifyContent:'center'}}>
@@ -55,11 +64,11 @@ class HomeCategories extends ScrollablePage {
         ) : null;
     };
 
-    filterPanel = () => {
-        return this.state.filterIsShow ? (
-            <CinemaFilter onApplyClick={this.onFilterBtnClick}/>
-        ) : null;
-    };
+    // filterPanel = () => {
+    //     return this.state.filterIsShow ? (
+    //         <Filter onApplyClick={this.onFilterBtnClick} />
+    //     ) : null;
+    // };
 
 
     /***    TITLE   ***/
@@ -86,7 +95,11 @@ class HomeCategories extends ScrollablePage {
 
     generateContent = (iData, iId) => {
         if (this.state.filterIsShow) {
-            return <CinemaFilter onApplyClick={this.onFilterBtnClick}/>;
+            console.log('>>>>>>>>>>>>> generateContent : ' + iId);
+            console.log('>>>>>>>>>>>>> items : ' + screens.Filters[iId]);
+            console.log('>>>>>>>>>>>>> presets : ' + this.props.presets);
+            console.log('>>>>>>>>>>>>> filters : ' + this.props.filters);
+            return <Filter onApplyClick={this.onApplyFilterClick} items={screens.Filters[iId]} presets={this.props.presets} filters={this.props.filters}/>;
         }
 
         let list = [];
@@ -105,11 +118,11 @@ class HomeCategories extends ScrollablePage {
     render() {
         const curCategory = this.props.navigation.state.params.categoryId;
 
-        if (this.props.data[curCategory] === null) {
+        if (!this.props.data) {// === null
             return ( <View style={s.containerEmpty} /> );
         }
 
-        const {header, data} = this.props.data[curCategory];
+        const {header, data} = this.props.data;
         return (
             <ScrollView contentContainerStyle={s.container} removeClippedSubviews={true} onScroll={this.onScroll} scrollEventThrottle={17000}>
                 <Header key={curCategory + 'HeaderKey'} onItemClick={this.onHeaderItemClick} items={header} />

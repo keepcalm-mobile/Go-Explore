@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: scale(60),
-        marginBottom: doubleIndent,
     },
 
     markerBorder: {

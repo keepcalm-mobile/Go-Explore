@@ -7,10 +7,13 @@ import Item from './Item';
 
 class SelectableItems extends React.Component<Props> {
     static propTypes = {
-        data: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            active: PropTypes.bool.isRequired,
-        })).isRequired,
+        type: PropTypes.string.isRequired,
+        data: PropTypes.array.isRequired,
+        presets: PropTypes.array,
+    };
+
+    static defaultProps = {
+        presets: [],
     };
 
     constructor(props) {
@@ -19,18 +22,27 @@ class SelectableItems extends React.Component<Props> {
         };
     }
 
+    get value() {
+        let items = [];
+        this.items.forEach((item, index, array) => {
+            if (item.isActive) items.push(item.label);
+        });
+
+        return {[this.props.type]:items};
+    }
+
     onItemClick = (iId) => {
 
     };
 
     render() {
-        const {data} = this.props;
+        const {data, presets} = this.props;
 
         this.items = [];
         return (
             <View style={s.itemsContainer}>
                 {data.map( (item, key) => (
-                    <Item key={key + 'Key'} id={key} data={item} onPress={ this.onItemClick } ref={ c => this.items.push(c) } />
+                    <Item key={key + 'Key'} id={key} data={{label:item, active: presets && presets.indexOf(item) !== -1 ? true : false }} onPress={ this.onItemClick } ref={ c => this.items.push(c) } />
                 ))}
             </View>
         );

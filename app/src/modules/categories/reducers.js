@@ -12,6 +12,24 @@ let dataState = {
     [screens.HealthBeauty]:null,
 };
 
+let filtersState = {
+    [screens.Cinema]:null,
+    [screens.Attraction]:null,
+    [screens.Travel]:null,
+    [screens.Shopping]:null,
+    [screens.Dining]:null,
+    [screens.HealthBeauty]:null,
+};
+
+let filtersSettingsState = {
+    [screens.Cinema]:null,
+    [screens.Attraction]:null,
+    [screens.Travel]:null,
+    [screens.Shopping]:null,
+    [screens.Dining]:null,
+    [screens.HealthBeauty]:null,
+};
+
 function isLoading(state = false, action) {
     switch (action.type) {
         case t.IS_LOADING:
@@ -30,9 +48,33 @@ function curCategory(state = '', action) {
     }
 }
 
-function data(state = dataState, action) {
+function categories(state = dataState, action) {
     switch (action.type) {
         case t.UPDATE_DATA:
+            return {
+                ...state,
+                ...action.data,
+            };
+        default:
+            return state;
+    }
+}
+
+function filters(state = filtersState, action) {
+    switch (action.type) {
+        case t.UPDATE_FILTER:
+            return {
+                ...state,
+                ...action.data,
+            };
+        default:
+            return state;
+    }
+}
+
+function filtersSettings(state = filtersSettingsState, action) {
+    switch (action.type) {
+        case t.UPDATE_FILTERS_SETTINGS:
             return {
                 ...state,
                 ...action.data,
@@ -45,7 +87,9 @@ function data(state = dataState, action) {
 const reducer = combineReducers({
     isLoading,
     curCategory,
-    data,
+    categories,
+    filters,
+    filtersSettings,
 });
 
 export default reducer;

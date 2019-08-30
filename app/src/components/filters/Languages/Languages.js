@@ -11,25 +11,45 @@ import Item from '../Keywords/Item';
 
 class Languages extends React.Component<Props> {
     static propTypes = {
-        data: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            active: PropTypes.bool.isRequired,
-        })).isRequired,
+        // data: PropTypes.arrayOf(PropTypes.shape({
+        //     label: PropTypes.string.isRequired,
+        //     active: PropTypes.bool.isRequired,
+        // })).isRequired,
+        type: PropTypes.string.isRequired,
+        data: PropTypes.array.isRequired,
+        presets: PropTypes.array,
         placeholder : PropTypes.string,
         placeholderColor : PropTypes.string,
     };
 
     static defaultProps = {
+        presets : [],
         placeholder : 'Press to select languages',
         placeholderColor : colors.secondaryText,
     };
 
     constructor(props) {
         super(props);
+        let _data = [];
+
+        props.data.forEach((item, index, array) => {
+            _data.push({label:item, active:props.presets ? props.presets.includes(item) : false});
+        });
+
         this.state = {
             isOpen: false,
-            data: props.data.slice(),
+            data: _data,
         };
+        console.log('<><><><><><><><><> : ' + props.type);
+    }
+
+    get value() {
+        let items = [];
+        this.state.data.forEach((item, index, array) => {
+            if (item.active) items.push(item.label);
+        });
+
+        return {[this.props.type]:items};
     }
 
     openPicker = () => {
@@ -64,7 +84,7 @@ class Languages extends React.Component<Props> {
 
 
     onItemPress = (iId) => {
-        let data = this.props.data.slice();
+        let data = this.state.data.slice();
         data[iId].active = !data[iId].active;
 
         this.setState({ data: data });
@@ -76,8 +96,7 @@ class Languages extends React.Component<Props> {
     };
 
     render() {
-        const {data} = this.props;
-        const {title, titleColor} = this.state;
+        const {title, titleColor, data} = this.state;
 
         return (
             <TouchableOpacity ref={ref => this.dropDown = ref} style={s.pickerContainer} onPress={this.openPicker} activeOpacity={1}>
