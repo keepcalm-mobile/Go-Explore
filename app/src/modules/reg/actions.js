@@ -72,15 +72,13 @@ export function login(iUser) {
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }
-
-                dispatch(loginIsLoading(false));
-
                 return response;
             })
             .then((response) => response.json())
             .then((data) => {
                 data = {key:'qw543wer4g16f', uid:'00001', name:'David'};
                 dispatch(loginSuccess(true));
+                dispatch(loginIsLoading(false));
                 dispatch(writeUserData(data));
             })
             .catch(() => dispatch(loginHasErrored(true)));
@@ -97,15 +95,13 @@ export function restorePassword(iMail) {
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }
-
-                dispatch(loginIsLoading(false));
-
                 return response;
             })
             .then((response) => response.json())
             .then((data) => {
                 // if(data.result){
                     dispatch(restoreSuccess(true));
+                    dispatch(loginIsLoading(false));
                 // }
             })
             .catch(() => dispatch(loginHasErrored(true)));
@@ -130,15 +126,13 @@ export function registration(iData) {
             if (!response.ok) {
                 throw Error(response.statusText);
             }
-
-            dispatch(loginIsLoading(false));
-
             return response;
         })
         .then((response) => response.json())
         .then((data) => {
             data = {key:'qw543wer4g16f', uid:'00001', name:'David'};
             dispatch(registrationSuccess(true));
+            dispatch(loginIsLoading(false));
             dispatch(writeUserData(data));
         })
         .catch(() => dispatch(loginHasErrored(true)));
@@ -155,15 +149,13 @@ export function confirmPhone(iValue) {
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }
-
-                dispatch(loginIsLoading(false));
-
                 return response;
             })
             .then((response) => response.json())
             .then((data) => {
                 // if(data.result){
                 dispatch(otpSuccess(true));
+                dispatch(loginIsLoading(false));
                 // }
             })
             .catch(() => dispatch(loginHasErrored(true)));
@@ -180,15 +172,13 @@ export function termsAgree() {
                 if (!response.ok) {
                     throw Error(response.statusText);
                 }
-
-                dispatch(loginIsLoading(false));
-
                 return response;
             })
             .then((response) => response.json())
             .then((data) => {
                 // if(data.result){
                 dispatch(termsSuccess(true));
+                dispatch(loginIsLoading(false));
                 // }
             })
             .catch(() => dispatch(loginHasErrored(true)));

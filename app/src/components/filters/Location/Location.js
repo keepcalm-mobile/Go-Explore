@@ -41,7 +41,6 @@ class Location extends React.Component<Props> {
             title: id !== undefined ? props.data[id].label : props.placeholder,
             titleColor: id !== undefined ? colors.white : colors.secondaryText,
         };
-        console.log('<><><><><><><><><> : ' + props.type);
     }
 
     get value() {
@@ -68,11 +67,11 @@ class Location extends React.Component<Props> {
     };
 
     render() {
-        const {data} = this.props;
+        const {data, style} = this.props;
         const {title, titleColor, selectedId, isOpen} = this.state;
 
         return (
-            <TouchableOpacity ref={ref => this.dropDown = ref} style={s.pickerContainer} onPress={this.openPicker} activeOpacity={1}>
+            <TouchableOpacity ref={ref => this.dropDown = ref} style={[s.pickerContainer, style]} onPress={this.openPicker} activeOpacity={1}>
                 <Text style={[s.pickerTitle, {color: titleColor}]} >{ title }</Text>
                 <DropdownArrow style={[s.pickerArrow, {transform:[{rotate: isOpen ? '180deg' : '0deg'}] }]}/>
                 <PickerBox

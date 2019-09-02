@@ -73,7 +73,7 @@ const rootReducer = combineReducers({
     restoreSuccess,
     registrationSuccess,
     otpSuccess,
-    termsSuccess
+    termsSuccess,
 });
 
 export default rootReducer;

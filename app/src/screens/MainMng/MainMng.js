@@ -12,6 +12,7 @@ import IconBack from '../../../assets/serviceIcons/backIconMain.svg';
 import {getCurrentRoute, getCurrentRouteParams, getCurrentRouteKey} from '../../utils/navHelper';
 import {screens} from '../../constants';
 import LinearGradient from 'react-native-linear-gradient';
+import {OverlayLoader} from "../../components";
 // import { BlurView, VibrancyView } from "@react-native-community/blur";
 
 const AnimatedGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -107,7 +108,7 @@ class MainMng extends React.Component{
     };
 
     render() {
-        const { navigation } = this.props;
+        const { navigation, isLoading } = this.props;
         const { animVal } = this.state;
         const rotate = '0deg';
         const scale = 1;
@@ -142,6 +143,7 @@ class MainMng extends React.Component{
                     </TouchableOpacity>
 
                 </Animated.View>
+                <OverlayLoader visible={isLoading} message="Loading..." />
             </View>
         );
     }

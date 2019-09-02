@@ -16,44 +16,16 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log('>>>>>>> MAIN cur Props : ' + JSON.stringify(props.setCurCategory));
-        // props.setCurCategory(screens.HotPicks);
-
         this.state = {
             pan: new Animated.ValueXY(),
             scale: new Animated.Value(1),
             cntEnable: 'auto',
         };
-
-        // this._panResponder = PanResponder.create({
-        //     onMoveShouldSetPanResponderCapture: () => true,
-        //
-        //     onPanResponderGrant: (e, gestureState) => {
-        //         this.state.pan.setOffset({x: this.state.pan.x._value, y: this.state.pan.y._value});
-        //         this.state.pan.setValue({x: 0, y: 0});
-        //         Animated.spring(
-        //             this.state.scale,
-        //             { toValue: 1.1, friction: 3 }
-        //         ).start();
-        //     },
-        //
-        //     onPanResponderMove: Animated.event([
-        //         null, {dx: this.state.pan.x, dy: this.state.pan.y},
-        //     ]),
-        //
-        //     onPanResponderRelease: (e, {vx, vy}) => {
-        //         this.state.pan.flattenOffset();
-        //         Animated.spring(
-        //             this.state.scale,
-        //             { toValue: 1, friction: 3 }
-        //         ).start();
-        //     },
-        // });
     }
 
     componentDidUpdate(prevProps, prevState) {
         const newRouteName = getCurrentRoute(this.props.navigation.state);
-        console.log('________ NAVI MAIN NEW RO UTE : ' + newRouteName);
+        console.log('________ NAVI MAIN NEW ROUTE : ' + newRouteName);
         this._bottom.changeIcon(newRouteName);
     }
 
@@ -122,10 +94,8 @@ class Main extends React.Component {
     };
 
     openCategory = (iCategoryId) => {
-        console.log('OPEN CATEGORY!! : ' + iCategoryId);
+        console.log('MAIN - OPEN CATEGORY!! : ' + iCategoryId);
         this.hideAllPanels();
-        // this.props.setCurCategory(iCategoryId);
-        // this.props.navigation.navigate(screens.HotPicks);//iCategoryId);
         this.props.navigation.navigate({routeName:screens.HotPicks, key: screens.DataPages + iCategoryId + 'Key', params:{categoryId:iCategoryId}});
         this._bottom.changeIcon(screens.DataPages);
     };

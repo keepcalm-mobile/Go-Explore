@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View, Linking} from 'react-native';
 import s from './style';
 import ButtonOrange from '../../../../../../../components/ButtonOrange';
 import LinearGradient from 'react-native-linear-gradient';
@@ -11,12 +11,17 @@ import {indent, windowW} from '../../../../../../../styles';
 import colors from '../../../../../../../styles/colors';
 import {CinemaOverview, CinemaGallery, Comments, Explore} from '../../subTabs';
 import ScrollablePage from '../../../ScrollablePage';
+import {screens} from "../../../../../../../constants";
 
 class Cinema extends ScrollablePage {
     constructor(props) {
+        const itemId = props.navigation.state.params.itemId;
+        props.getItem(itemId);
+
         super(props);
 
         this.state = {
+            curId: itemId,
             index: 0,
             routes: [
                 { key: 'overview', title: 'OVERVIEW' },
@@ -28,11 +33,17 @@ class Cinema extends ScrollablePage {
     }
 
     onPlayBtnPress = () => {
-
+        Linking.canOpenURL(this.props.data.header.url).then(supported => {
+            if (supported) {
+                Linking.openURL(this.props.data.header.url);
+            } else {
+                console.log("Don't know how to open URI: " + this.props.data.header.url);
+            }
+        });
     };
 
     onBookTicketPress = () => {
-
+        this.props.navigation.navigate({ routeName: screens.BookTickets, params:{id:'0003'}, key:screens.BookTickets + '0003' + 'Key'});
     };
 
 
@@ -81,6 +92,10 @@ class Cinema extends ScrollablePage {
     };
 
     render() {
+        if (!this.props.data) {
+            return ( <View style={s.containerEmpty} /> );
+        }
+
         const { type, header } = this.props.data;
 
         return (

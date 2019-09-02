@@ -9,21 +9,20 @@ import React, {forwardRef} from 'react';
 HomeCategories.propTypes = {
     setCurCategory: PropTypes.func.isRequired,
     applyFilter: PropTypes.func.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    curCategory: PropTypes.string.isRequired,
+    // isLoading: PropTypes.bool.isRequired,
+    // curCategory: PropTypes.string.isRequired,
     data : PropTypes.object,
     filters: PropTypes.object,
     presets: PropTypes.object,
 };
 
 const stateToProps = (state) => {
-    let _curCat = state[ ModMap.Categories ].curCategory;
     return {
-        isLoading: state[ ModMap.Categories ].isLoading,
-        curCategory: _curCat,
-        data: state[ ModMap.Categories ].categories[_curCat],
-        filters: state[ ModMap.Categories ].filters[_curCat],
-        presets: state[ ModMap.Categories ].filtersSettings[_curCat],
+        // isLoading: state[ ModMap.Categories ].isLoading,
+        // curCategory: _curCat,
+        data: state[ ModMap.Categories ].categories,
+        filters: state[ ModMap.Categories ].filters,
+        presets: state[ ModMap.Categories ].filtersSettings,
     };
 };
 
@@ -35,7 +34,21 @@ const dispatchToProps = (dispatch) => {
     };
 };
 
-const Connected = connect(stateToProps, dispatchToProps, null, { forwardRef: true })(HomeCategories);
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+    const _curCat = ownProps.navigation.state.params.categoryId;
+
+    let prop = {
+        // isLoading:stateProps.isLoading,
+        // curCategory:_curCat,
+        data: stateProps.data[_curCat],
+        filters: stateProps.filters[_curCat],
+        presets: stateProps.presets[_curCat],
+    };
+
+    return Object.assign({}, ownProps, prop, dispatchProps);
+};
+
+const Connected = connect(stateToProps, dispatchToProps, mergeProps, { forwardRef: true })(HomeCategories);
 
 export default forwardRef((props, ref) =>
     <Connected {...props} ref={ref} />

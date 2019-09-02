@@ -30,14 +30,6 @@ let filtersSettingsState = {
     [screens.HealthBeauty]:null,
 };
 
-function isLoading(state = false, action) {
-    switch (action.type) {
-        case t.IS_LOADING:
-            return action.isLoading;
-        default:
-            return state;
-    }
-}
 
 function curCategory(state = '', action) {
     switch (action.type) {
@@ -85,7 +77,6 @@ function filtersSettings(state = filtersSettingsState, action) {
 }
 
 const reducer = combineReducers({
-    isLoading,
     curCategory,
     categories,
     filters,

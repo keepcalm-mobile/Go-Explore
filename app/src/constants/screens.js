@@ -38,6 +38,7 @@ export default class {
         static DataPages = 'DataPages';
             static HotPicks = 'hotPicks';
             static Cinema = 'cinema';
+                static BookTickets = 'BookTickets';
             static Attraction = 'attractions';
             static Travel = 'travel';
             static Shopping = 'shopping';

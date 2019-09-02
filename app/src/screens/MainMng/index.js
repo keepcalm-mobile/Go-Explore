@@ -6,11 +6,13 @@ import PropTypes from 'prop-types';
 
 MainMng.propTypes = {
     scrollOffset: PropTypes.number.isRequired,
+    isLoading: PropTypes.bool.isRequired,
 };
 
 const stateToProps = (state) => {
     return {
         scrollOffset: state[ ModMap.Scroll ].scrollOffset,
+        isLoading: state.isLoading,
     };
 };
 
@@ -20,4 +22,3 @@ const dispatchToProps = (dispatch) => {
 };
 
 export default connect(stateToProps, dispatchToProps)(MainMng);
-// export default connect( state => (state[ ModMap.Scroll ]), { } )(MainMng);

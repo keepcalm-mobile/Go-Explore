@@ -34,7 +34,7 @@ class PagesMng extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-        console.log('________ PAGES MNG : ' + JSON.stringify(props));
+        console.log('MNG PAGES CONSTRUCT : ' + JSON.stringify(props));
     }
 
     render() {

@@ -5,27 +5,9 @@ import t from './types';
 let dataState = {
 };
 
-function isLoading(state = false, action) {
+function items(state = dataState, action) {
     switch (action.type) {
-        case t.IS_LOADING:
-            return action.isLoading;
-        default:
-            return state;
-    }
-}
-
-function updateItemData(state = '', action) {
-    switch (action.type) {
-        case t.UPDATE_ITEM_DATA:
-            return action.curCategory;
-        default:
-            return state;
-    }
-}
-
-function setItemData(state = dataState, action) {
-    switch (action.type) {
-        case t.SET_ITEM_DATA:
+        case t.ITEM_UPDATE_DATA:
             return {
                 ...state,
                 ...action.data,
@@ -35,10 +17,9 @@ function setItemData(state = dataState, action) {
     }
 }
 
-const reducer = combineReducers({
-    isLoading,
-    updateItemData,
-    data,
-});
-
-export default reducer;
+// const reducer = combineReducers({
+//     items,
+// });
+//
+// export default reducer;
+export default items;

@@ -1,7 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
 import {createStackNavigator, createSwitchNavigator} from 'react-navigation';
-import s from './style';
 import {screens} from '../../../../../constants';
 import Home from './HomeCategories';
 import Cinema from './categories/Cinema';
@@ -10,8 +8,7 @@ import Travel from './categories/Travel';
 import Shopping from './categories/Shopping';
 import Dining from './categories/Dining';
 import HealthBeauty from './categories/HealthBeauty';
-import {colors} from '../../../../../styles';
-import {OverlayLoader} from '../../../../../components';
+import BookTicket from './categories/Cinema/BookTicket';
 
 
 const CategoriesNavi = createStackNavigator({
@@ -22,6 +19,7 @@ const CategoriesNavi = createStackNavigator({
         [screens.Shopping]  : { screen: Shopping},
         [screens.Dining]  : { screen: Dining},
         [screens.HealthBeauty]  : { screen: HealthBeauty},
+        [screens.BookTickets]  : { screen: BookTicket},
     },{
         initialRouteName: screens.HotPicks,
         initialRouteKey: screens.DataPages + screens.HotPicks + 'Key',
@@ -39,18 +37,14 @@ class CategoriesMng extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-        console.log('________ CATEG MNG : ' + JSON.stringify(props));
+        console.log('MNG CATEGORIES CONSTRUCT : ' + JSON.stringify(props));
     }
 
     render() {
         const { navigation } = this.props;
-        const isLoading = this.props.isLoading;//(this.props.curCategory === '' || this.props.data[this.props.curCategory] === null);
 
         return (
-            <View style={s.container}>
-                <CategoriesNavi navigation={navigation}/>
-                <OverlayLoader visible={isLoading} message="Loading..." />
-            </View>
+            <CategoriesNavi navigation={navigation}/>
         );
     }
 }

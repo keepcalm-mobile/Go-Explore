@@ -14,8 +14,6 @@ import ScrollablePage from '../../ScrollablePage';
 
 class HomeCategories extends ScrollablePage {
     constructor(props) {
-
-
         console.log('>>>>> TEMPLATE : ' + JSON.stringify(props));
 
         const catId = props.navigation.state.params.categoryId;
@@ -29,6 +27,7 @@ class HomeCategories extends ScrollablePage {
 
         this.state = {
             filterIsShow:false,
+            catId: catId,
         };
     }
 
@@ -37,13 +36,16 @@ class HomeCategories extends ScrollablePage {
     //     // if (prevProps.isFocused !== this.props.isFocused) {
     //     // }
     // }
-
+    // componentDidFocusHandler = () => {
+    //     super.componentDidFocusHandler();
+    //     this.props.setCurCategory(this.props.navigation.state.params.categoryId);
+    // };
 
     /***    HEADER   ***/
-    onHeaderItemClick = (iId, iType) => {
-        console.log('HEADER CLICK : ' + iType + ' _ id : ' + iId);
-        this.props.navigation.navigate({ routeName: iType, params:{id:iId}, key:screens.ForgotTab + 'Key'});
-    };
+    // onHeaderItemClick = (iId, iType) => {
+    //     console.log('HEADER CLICK : ' + iType + ' _ id : ' + iId);
+    //     this.props.navigation.navigate({ routeName: iType, params:{itemId:iId}, key:screens.ForgotTab + 'Key'});
+    // };
 
 
     /***    FILTER   ***/
@@ -89,16 +91,11 @@ class HomeCategories extends ScrollablePage {
 
     /***    ITEMS   ***/
     onItemClick = (iId, iType) => {
-        console.log('ITEM CLICK : ' + iType + ' _ id : ' + JSON.stringify(iId));
-        this.props.navigation.navigate({ routeName: iType, params:{id:iId}, key:screens.ForgotTab + 'Key'});
+        this.props.navigation.navigate({ routeName: iType, params:{itemId:iId}, key:screens.DataPages + iType + iId + 'Key'});
     };
 
     generateContent = (iData, iId) => {
         if (this.state.filterIsShow) {
-            console.log('>>>>>>>>>>>>> generateContent : ' + iId);
-            console.log('>>>>>>>>>>>>> items : ' + screens.Filters[iId]);
-            console.log('>>>>>>>>>>>>> presets : ' + this.props.presets);
-            console.log('>>>>>>>>>>>>> filters : ' + this.props.filters);
             return <Filter onApplyClick={this.onApplyFilterClick} items={screens.Filters[iId]} presets={this.props.presets} filters={this.props.filters}/>;
         }
 
@@ -116,16 +113,16 @@ class HomeCategories extends ScrollablePage {
 
 
     render() {
-        const curCategory = this.props.navigation.state.params.categoryId;
+        const curCategory = this.state.catId;
 
-        if (!this.props.data) {// === null
+        if (!this.props.data) {
             return ( <View style={s.containerEmpty} /> );
         }
 
         const {header, data} = this.props.data;
         return (
             <ScrollView contentContainerStyle={s.container} removeClippedSubviews={true} onScroll={this.onScroll} scrollEventThrottle={17000}>
-                <Header key={curCategory + 'HeaderKey'} onItemClick={this.onHeaderItemClick} items={header} />
+                <Header key={curCategory + 'HeaderKey'} onItemClick={this.onItemClick} items={header} />
                 {this.curTitle(curCategory)}
                 {this.generateContent(data, curCategory)}
                 {/*{this.filterPanel()}*/}

@@ -3,6 +3,10 @@ import s, {colors, doubleIndent, fontNames, fontSizes, indent, windowW, headerH}
 import {scale, verticalScale} from '../../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
+    containerEmpty:{
+        flex:1,
+        backgroundColor: colors.bgCategory,
+    },
     container: {
         // flex: 1,
         backgroundColor: colors.bgCategory,
