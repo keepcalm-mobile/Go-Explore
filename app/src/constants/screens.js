@@ -62,7 +62,7 @@ export default class {
         [this.Travel]:{icon:IconTravel, title:'Travel'},
         [this.Shopping]:{icon:IconShopping, title:'Shopping'},
         [this.Dining]:{icon:IconDining, title:'Dining'},
-        [this.HealthBeauty]:{icon:IconHealthBeauty, title:'Health & Beauty'},// & Beauty
+        [this.HealthBeauty]:{icon:IconHealthBeauty, title:'Health & Beauty'},
     };
 
     static Drawer = {
@@ -122,5 +122,9 @@ export default class {
             {id:'Experience', item:SelectableItems},
             {id:'Languages', item:Languages},
         ],
-    }
+    };
+
+    static ItemsActions = {
+        [this.BookTickets]:true,
+    };
 }

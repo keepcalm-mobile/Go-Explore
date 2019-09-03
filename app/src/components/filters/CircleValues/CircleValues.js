@@ -2,7 +2,6 @@ import React from 'react';
 import type {Props} from 'react-native/Libraries/Components/View/View';
 import {View} from 'react-native';
 import s from './style';
-// import circleGlow from '../../../../assets/rating/circleGlow.png';
 import PropTypes from 'prop-types';
 import Item from './Item';
 
@@ -26,7 +25,6 @@ class CircleValues extends React.Component<Props> {
         this.state = {
             values: props.type === Item.TYPE_RATING ? VALUES_RATING : VALUES_AGE,
         };
-        console.log('<><><><><><><><><> : ' + props.type);
         this.curActive = this.state.values.indexOf(props.presets);
     }
 

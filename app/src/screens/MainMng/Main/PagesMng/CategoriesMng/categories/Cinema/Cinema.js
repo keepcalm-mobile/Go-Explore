@@ -11,7 +11,7 @@ import {indent, windowW} from '../../../../../../../styles';
 import colors from '../../../../../../../styles/colors';
 import {CinemaOverview, CinemaGallery, Comments, Explore} from '../../subTabs';
 import ScrollablePage from '../../../ScrollablePage';
-import {screens} from "../../../../../../../constants";
+import {screens} from '../../../../../../../constants';
 
 class Cinema extends ScrollablePage {
     constructor(props) {

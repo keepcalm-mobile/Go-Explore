@@ -103,8 +103,9 @@ const styles = StyleSheet.create({
 
 
 
-    firstCnt: {
+    dataCnt: {
         marginHorizontal: indent,
+        marginBottom:doubleIndent,
     },
 });
 export default styles;

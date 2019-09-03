@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
-import {scale} from '../../../../utils/resize';
-import {colors, fontNames, fontSizes, indent} from '../../../../styles';
+import {scale} from '../../../utils/resize';
+import {colors, fontNames, fontSizes, indent} from '../../../styles';
 
-const size = scale(44);
+const size = scale(33);
 
 const styles = StyleSheet.create({
     circle: {
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         height: size,
         borderColor: colors.border,
         borderRadius: size * 0.5,
-        borderWidth: 1,
+        borderWidth: 0,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -18,19 +18,23 @@ const styles = StyleSheet.create({
     circleActive: {
         borderWidth: 0,
     },
-    itemText: {
-        fontSize: fontSizes.big,
+    itemDayText:{
+        fontSize: fontSizes.small,
         fontFamily: fontNames.regular,
-        lineHeight: scale(26),
+        lineHeight: scale(18),
+        textAlign: 'center',
+        color: colors.white,
+        marginBottom: scale(10),
+    },
+    itemText: {
+        fontSize: fontSizes.description,
+        fontFamily: fontNames.regular,
+        lineHeight: scale(21),
         textAlign: 'center',
         color: colors.white,
     },
     itemTextActive: {
         color: colors.blackText,
-    },
-    starIcon: {
-        marginLeft: indent * 0.2,
-        marginTop: -2,
     },
     activeBg:{
         position: 'absolute',

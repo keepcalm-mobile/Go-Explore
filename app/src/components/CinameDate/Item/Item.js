@@ -3,21 +3,18 @@ import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 import s from './style';
-import StarBlack from '../../../../../assets/rating/starBlack.svg';
-import {scale} from '../../../../utils/resize';
-import StarFull from '../../../../../assets/rating/starFull.svg';
+import {colors} from '../../../styles';
 import LinearGradient from 'react-native-linear-gradient';
-import {colors} from '../../../../styles';
 
 class Item extends React.Component<Props> {
-    static TYPE_RATING : string = 'Rating';
-    static TYPE_AGE : string = 'Age';
-
     static propTypes = {
         id: PropTypes.number.isRequired,
-        value: PropTypes.string.isRequired,
+        value: PropTypes.shape({
+            showDay: PropTypes.string.isRequired,
+            showdate: PropTypes.string.isRequired,
+            passingDate: PropTypes.string.isRequired,
+        }).isRequired,//PropTypes.objectOf(
         onPress: PropTypes.func.isRequired,
-        type: PropTypes.oneOf([Item.TYPE_RATING, Item.TYPE_AGE]).isRequired,
         isActive: PropTypes.bool,
     };
 
@@ -33,7 +30,15 @@ class Item extends React.Component<Props> {
         };
     }
 
-    isActive = () => (this.state.isActive);
+    get isActive() {
+        return this.state.isActive;
+    }
+    set isActive(iValue) {
+        if (iValue !== this.state.isActive){
+            this.setState({isActive : iValue});
+        }
+    }
+
     deactivate = () => {
         if (this.state.isActive){
             this.setState({isActive : false});
@@ -48,22 +53,19 @@ class Item extends React.Component<Props> {
         /> : null
     );
 
-    itemIcon = (iValue) => (
-        this.props.type === Item.TYPE_RATING ? (iValue ? <StarBlack style={s.starIcon} width={scale(16.5)} height={scale(16.5)}/> : <StarFull style={s.starIcon} width={scale(16.5)} height={scale(16.5)} />) : null
-    );
-
     onPress = () => {
         this.props.onPress(this.props.id);
-        this.setState({isActive : !this.state.isActive});
     };
 
     render() {
         return (
-            <TouchableOpacity style={[s.circle, this.state.isActive ? s.circleActive : null]} onPress={this.onPress}>
-                {this.activeView(this.state.isActive)}
-                <Text style={[s.itemText, this.state.isActive ? s.itemTextActive : null]}>{this.props.value}</Text>
-                {this.itemIcon(this.state.isActive)}
-            </TouchableOpacity>
+            <View>
+                <Text style={s.itemDayText}>{this.props.value.showDay}</Text>
+                <TouchableOpacity style={[s.circle, this.state.isActive ? s.circleActive : null]} onPress={this.onPress}>
+                    {this.activeView(this.state.isActive)}
+                    <Text style={[s.itemText, this.state.isActive ? s.itemTextActive : null]}>{this.props.value.showdate}</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 }

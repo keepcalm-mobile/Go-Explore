@@ -3,22 +3,27 @@ import {Image, ScrollView, Text, TouchableOpacity, View, Linking} from 'react-na
 import s from './style';
 import ButtonOrange from '../../../../../../../../components/ButtonOrange';
 import LinearGradient from 'react-native-linear-gradient';
+import Toast from 'react-native-simple-toast';
 import {scale} from '../../../../../../../../utils/resize';
 import Rating from '../../../../../../../../components/Rating';
 import IconFilter from '../../../../../../../../../assets/serviceIcons/playIcon.svg';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import {indent, windowW} from '../../../../../../../../styles';
-import colors from '../../../../../../../../styles/colors';
-import {CinemaOverview, CinemaGallery, Comments, Explore} from '../../../subTabs';
 import ScrollablePage from '../../../../ScrollablePage';
-import {Location} from "../../../../../../../../components/filters";
+import {HorizontalLine, Location} from '../../../../../../../../components/filters';
+import CinemaDate from '../../../../../../../../components/CinameDate';
 
 class BookTicket extends ScrollablePage {
     constructor(props) {
         super(props);
 
-        this.state = {
+        let cinemas = [];
+        for (let i in props.data.cinemas){
+            cinemas.push({label:props.data.cinemas[i].cinemaName, value:props.data.cinemas[i].cinemasID});
+        }
 
+        this.state = {
+            cinemas:cinemas,
+            cinemaId:'',
+            date:'',
         };
     }
 
@@ -32,8 +37,22 @@ class BookTicket extends ScrollablePage {
         });
     };
 
-    onBookTicketPress = () => {
+    onLocationChoice = (iValue) => {
+        if (iValue === '') {
+            this._date.chosen = -1;
+        } else if (this.state.date === '') {
+            this._date.chosen = 0;
+        }
+        this.setState({cinemaId:iValue, date:this._date.value});
+    };
 
+    onDateChoice = (iValue) => {
+        if (this.state.cinemaId === ''){
+            Toast.showWithGravity('Select a location first', Toast.SHORT, Toast.CENTER);
+        } else {
+            this._date.chosen = iValue;
+            this.setState({date:this._date.value});
+        }
     };
 
 
@@ -66,17 +85,19 @@ class BookTicket extends ScrollablePage {
     };
 
 
-    // ren
-
     render() {
-        const { type, header } = this.props.data;
+        const { type, header, dates } = this.props.data;
+        const {cinemas} = this.state;
 
         return (
             <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
                 {this.header(type, header)}
-                <View style={s.firstCnt}>
-                    <Location type={'Location'} data={[{label:'Tawar Mall - Doha',value:'pos01'}, {label:'Souq Waqif - Doha',value:'pos02'}]}/>
+                <View style={s.dataCnt}>
+                    <Location type={'Location'} data={cinemas} onChoice={this.onLocationChoice} ref={c => this._location = c}/>
+                    <CinemaDate data={dates} onChoice={this.onDateChoice} ref={c => this._date = c}/>
+                    <HorizontalLine/>
                 </View>
+
             </ScrollView>
         );
     }

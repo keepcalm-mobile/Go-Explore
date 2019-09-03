@@ -39,7 +39,7 @@ class MenuPages extends React.Component<Props> {
 
     changeIcon = (iId) => {
         if (this.state.prevPage !== iId){
-            if (screens.Categories[iId]){ iId = screens.DataPages; }
+            if (screens.Categories[iId] || screens.ItemsActions[iId]){ iId = screens.DataPages; }
             let state = {prevPage:iId};
             if( screens.AppPages[this.state.prevPage] ){ state[this.state.prevPage] = screens.AppPages[this.state.prevPage].iconG; }
             if( screens.AppPages[iId] ){ state[iId] = screens.AppPages[iId].iconC; }
