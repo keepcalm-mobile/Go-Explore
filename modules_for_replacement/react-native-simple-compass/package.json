@@ -1,0 +1,45 @@
+{
+  "_args": [
+    [
+      "react-native-simple-compass@1.0.0",
+      "/WORK/ARMapsDemo"
+    ]
+  ],
+  "_from": "react-native-simple-compass@1.0.0",
+  "_id": "react-native-simple-compass@1.0.0",
+  "_inBundle": false,
+  "_integrity": "sha1-rGD/XgYMgAlB/1wEMhILKYaoppo=",
+  "_location": "/react-native-simple-compass",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-native-simple-compass@1.0.0",
+    "name": "react-native-simple-compass",
+    "escapedName": "react-native-simple-compass",
+    "rawSpec": "1.0.0",
+    "saveSpec": null,
+    "fetchSpec": "1.0.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-simple-compass/-/react-native-simple-compass-1.0.0.tgz",
+  "_spec": "1.0.0",
+  "_where": "/WORK/ARMapsDemo",
+  "author": "",
+  "description": "Simple module exposing the compass on iOS and Android",
+  "devDependencies": {
+    "react-native": "*"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "license": "",
+  "main": "index.js",
+  "name": "react-native-simple-compass",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}
