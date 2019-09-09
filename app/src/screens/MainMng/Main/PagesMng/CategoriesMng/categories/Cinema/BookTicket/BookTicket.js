@@ -8,11 +8,12 @@ import {scale} from '../../../../../../../../utils/resize';
 import Rating from '../../../../../../../../components/Rating';
 import IconFilter from '../../../../../../../../../assets/serviceIcons/playIcon.svg';
 import ScrollablePage from '../../../../ScrollablePage';
-import {HorizontalLine, Location} from '../../../../../../../../components/filters';
+import {HorizontalLine, Location, SelectableItems} from '../../../../../../../../components/filters';
 import CinemaDate from '../../../../../../../../components/CinameDate';
 
 class BookTicket extends ScrollablePage {
     constructor(props) {
+        const itemId = props.navigation.state.params.itemId;
         super(props);
 
         let cinemas = [];
@@ -21,9 +22,14 @@ class BookTicket extends ScrollablePage {
         }
 
         this.state = {
+            curId: itemId,
             cinemas:cinemas,
+            possibleExperience:[],
+            possibleSessions:[],
             cinemaId:'',
             date:'',
+            experience:[],
+            session:'',
         };
     }
 
@@ -43,7 +49,7 @@ class BookTicket extends ScrollablePage {
         } else if (this.state.date === '') {
             this._date.chosen = 0;
         }
-        this.setState({cinemaId:iValue, date:this._date.value});
+        this.generatePossibleValues(iValue, this._date.value);
     };
 
     onDateChoice = (iValue) => {
@@ -51,8 +57,66 @@ class BookTicket extends ScrollablePage {
             Toast.showWithGravity('Select a location first', Toast.SHORT, Toast.CENTER);
         } else {
             this._date.chosen = iValue;
-            this.setState({date:this._date.value});
+            this.generatePossibleValues(this.state.cinemaId, this._date.value);
         }
+    };
+
+    generatePossibleValues = (iCinema, iDate) => {
+        const possExperience = this.generatePossibleExperience(iCinema, iDate);
+
+        let experience = this.state.experience;
+        if (experience.length){
+            for (let i in experience){
+                if ( !possExperience.includes(experience[i]) ){
+                    experience = [];
+                    break;
+                }
+            }
+        }
+
+        const possSessions = this.generatePossibleSessions(iCinema, iDate, experience);
+        console.log('------------ possExperience : ' + JSON.stringify(possExperience) );
+        console.log('------------ experience : ' + JSON.stringify(experience) );
+        console.log('------------ possSessions : ' + JSON.stringify(possSessions) );
+        this.setState({cinemaId:iCinema, date:iDate, experience:experience, possibleExperience:possExperience, possibleSessions:possSessions});
+    };
+
+    generatePossibleExperience = (iCinema, iDate) => {
+        let items = [];
+
+        for (let i in this.props.data.times){
+            if (this.props.data.times[i].cinemaId === iCinema){
+                for (let ii in this.props.data.times[i].showtimelist){
+                    const session = this.props.data.times[i].showtimelist[ii];
+                    if (session.movieId === this.state.curId && session.showdate === iDate) {
+                        if (!items.includes(session.experience)) {
+                            items.push(session.experience);
+                        }
+                    }
+                }
+            }
+        }
+
+        return items;
+    };
+
+    generatePossibleSessions = (iCinema, iDate, experience) => {
+        let items = [];
+
+        for (let i in this.props.data.times){
+            if (this.props.data.times[i].cinemaId === iCinema){
+                for (let ii in this.props.data.times[i].showtimelist){
+                    const session = this.props.data.times[i].showtimelist[ii];
+                    if (session.movieId === this.state.curId && session.showdate === iDate) {
+                        if (!experience.length || experience.includes(session.experience)) {
+                            items.push(session);
+                        }
+                    }
+                }
+            }
+        }
+
+        return items;
     };
 
 
@@ -84,6 +148,15 @@ class BookTicket extends ScrollablePage {
         );
     };
 
+    sessionsRender = () => {
+        if (this.state.date !== ''){
+            return (
+                <SelectableItems type={'experience'} data={this.state.possibleExperience}/>
+            );
+        } else {
+            return null;
+        }
+    };
 
     render() {
         const { type, header, dates } = this.props.data;
@@ -96,6 +169,7 @@ class BookTicket extends ScrollablePage {
                     <Location type={'Location'} data={cinemas} onChoice={this.onLocationChoice} ref={c => this._location = c}/>
                     <CinemaDate data={dates} onChoice={this.onDateChoice} ref={c => this._date = c}/>
                     <HorizontalLine/>
+                    {this.sessionsRender()}
                 </View>
 
             </ScrollView>

@@ -4472,6 +4472,12 @@ const dispatchToProps = (dispatch) => {
     };
 };
 
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+    const _itemId = ownProps.navigation.state.params.itemId;
+
+    return Object.assign({}, ownProps, {data: stateProps.data[_itemId]}, dispatchProps);
+};
+
 const Connected = connect(stateToProps, dispatchToProps, null, { forwardRef: true })(BookTicket);
 
 export default forwardRef((props, ref) =>
