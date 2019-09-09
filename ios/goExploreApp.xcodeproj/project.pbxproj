@@ -5,7 +5,6 @@
 	};
 	objectVersion = 48;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* goExploreAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* goExploreAppTests.m */; };
 		073ACBD73A2B9D7CF5B2386F /* libPods-goExploreAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DD8F8023559E29FAAFB21C6 /* libPods-goExploreAppTests.a */; };
@@ -22,6 +21,8 @@
 		5314A1C275790064C9604C15 /* libPods-goExploreApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00A041AD7EFBBE682EF9137B /* libPods-goExploreApp-tvOS.a */; };
 		70B1B349C3CA494F49AFB5C2 /* libPods-goExploreApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B41A44FA25FEDBF948D364E2 /* libPods-goExploreApp-tvOSTests.a */; };
 		E8984F5E83FD4A5C903032B2 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 306787F588DC474E9DC2FAED /* Poppins-Regular.ttf */; };
+		135CC9724BF24604A3CB2829 /* Navigation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBA55B16EA3045BDA20AA543 /* Navigation.ttf */; };
+		D23A722E8DEC4C5FBD6C7306 /* libRNSimpleCompass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 536466685E68410783615A2E /* libRNSimpleCompass.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,9 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F2CFB8937BF307252304F940 /* Pods-goExploreApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-goExploreApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-goExploreApp-tvOSTests/Pods-goExploreApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		F59C9B38A3207673A0CED3C3 /* Pods-goExploreApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-goExploreApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-goExploreApp-tvOS/Pods-goExploreApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		EBA55B16EA3045BDA20AA543 /* Navigation.ttf */ = {isa = PBXFileReference; name = "Navigation.ttf"; path = "../node_modules/react-native-maps-navigation/assets/fonts/Navigation.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4C5F4AB19456479A8EB3F817 /* RNSimpleCompass.xcodeproj */ = {isa = PBXFileReference; name = "RNSimpleCompass.xcodeproj"; path = "../node_modules/react-native-simple-compass/ios/RNSimpleCompass.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		536466685E68410783615A2E /* libRNSimpleCompass.a */ = {isa = PBXFileReference; name = "libRNSimpleCompass.a"; path = "libRNSimpleCompass.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +92,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2ADF640A34D4BC3F384935A6 /* libPods-goExploreApp.a in Frameworks */,
+				D23A722E8DEC4C5FBD6C7306 /* libRNSimpleCompass.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +163,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				4C5F4AB19456479A8EB3F817 /* RNSimpleCompass.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -194,6 +200,7 @@
 			children = (
 				7CD51F5F04F444C7A276F02E /* Poppins-Bold.ttf */,
 				306787F588DC474E9DC2FAED /* Poppins-Regular.ttf */,
+				EBA55B16EA3045BDA20AA543 /* Navigation.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -356,6 +363,7 @@
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				111D36ACE19F49228BBE2A8A /* Poppins-Bold.ttf in Resources */,
 				E8984F5E83FD4A5C903032B2 /* Poppins-Regular.ttf in Resources */,
+				135CC9724BF24604A3CB2829 /* Navigation.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,6 +642,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp.app/goExploreApp";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Debug;
 		};
@@ -654,6 +670,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp.app/goExploreApp";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Release;
 		};
@@ -674,6 +698,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = goExploreApp;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Debug;
 		};
@@ -694,6 +722,10 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = goExploreApp;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Release;
 		};
@@ -722,6 +754,14 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Debug;
 		};
@@ -750,6 +790,14 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Release;
 		};
@@ -777,6 +825,14 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp-tvOS.app/goExploreApp-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Debug;
 		};
@@ -804,6 +860,14 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp-tvOS.app/goExploreApp-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
+				);
 			};
 			name = Release;
 		};

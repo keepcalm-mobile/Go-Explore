@@ -38,7 +38,10 @@
     "redux": "^4.0.4",
     "redux-actions": "^2.6.5",
     "redux-persist": "^5.10.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "react-viro": "^2.16.0",
+    "react-native-maps-navigation": "0.0.14",
+    "react-native-simple-compass": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
