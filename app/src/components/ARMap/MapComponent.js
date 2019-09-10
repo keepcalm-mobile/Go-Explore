@@ -324,7 +324,7 @@ export default class MapComponent extends Component {
   }
 
   exitNavigation() {
-    console.log('Exiting navigation...');
+    console.log('Exiting map navigation...');
 
     this.setState({
       navigationMode: NavigationModes.IDLE

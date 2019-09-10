@@ -11,6 +11,8 @@ import Geolocation from 'react-native-geolocation-service';
 import mapStyles from './mapStyles.json';
 import PropTypes from 'prop-types';
 
+import EventsBridge from '../../../../utils/EventsBridge';
+
 const mapTopY = -Math.round(windowH * 0.8);
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
@@ -86,7 +88,10 @@ class Map extends React.Component<Props> {
                 longitudeDelta: LONGITUDE_DELTA,
             },
             mapBg: false,
+            showMap: true, // to render map or not
         };
+
+        EventsBridge.mapRef = this;
 
         this._val = { x:0, y:0 };
         this.state.pan.addListener((value) => {
@@ -149,6 +154,9 @@ class Map extends React.Component<Props> {
         }).start();
     };
 
+    showMap = (show) => {
+      this.setState({showMap: show});
+    };
 
     /****
      * NAVIGATION
@@ -261,6 +269,11 @@ class Map extends React.Component<Props> {
     };
 
     render() {
+
+        if (this.state.showMap === false) {
+            return null;
+        }
+
         const panStyle = { transform: this.state.pan.getTranslateTransform() };
 
         return (

@@ -23,6 +23,8 @@ import Geolocation from 'react-native-geolocation-service';
 import ARComponent from '../../../../../../src/components/ARMap/ARComponent';
 import MapComponent from '../../../../../../src/components/ARMap/MapComponent';
 
+import EventsBridge from '../../../../../utils/EventsBridge';
+
 const GPS_TIMEOUT = 30000;
 const GPS_MAXIMUM_AGE = 60000;
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
@@ -38,7 +40,14 @@ class ArgReal extends ScrollablePage {
             currentPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
+
+        EventsBridge.arComponent = this;
     }
+
+    reset = () => {
+      this.mapComponent.exitNavigation();
+      this.setState({heading: 0, readyForAR: false});
+    };
 
     onBackPress = () => {
         this.props.navigation.goBack();
@@ -53,6 +62,9 @@ class ArgReal extends ScrollablePage {
         else {
             this.getCurrentPosition();
         }
+
+        // console.log('Map ref = ' + EventsBridge.mapRef);
+        // EventsBridge.mapRef.showMap(false);
     }
 
     trackDeviceHeading() {
