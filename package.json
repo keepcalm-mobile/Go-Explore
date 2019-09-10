@@ -29,6 +29,7 @@
     "react-native-range": "^1.0.1",
     "react-native-ratings": "^6.4.0",
     "react-native-reanimated": "^1.2.0",
+    "react-native-simple-compass": "^1.0.0",
     "react-native-simple-toast": "^0.1.1",
     "react-native-snap-carousel": "^3.8.0",
     "react-native-status-bar-height": "^2.4.0",

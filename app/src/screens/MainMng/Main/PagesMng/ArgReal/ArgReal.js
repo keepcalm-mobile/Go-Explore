@@ -17,7 +17,7 @@ import {
     ToastAndroid, PermissionsAndroid,
 } from 'react-native';
 
-// import RNSimpleCompass from 'react-native-simple-compass';
+import RNSimpleCompass from 'react-native-simple-compass';
 import Geolocation from 'react-native-geolocation-service';
 
 import ARComponent from '../../../../../../src/components/ARMap/ARComponent';
@@ -57,15 +57,15 @@ class ArgReal extends ScrollablePage {
 
     trackDeviceHeading() {
         const degree_update_rate = 3; // Number of degrees changed before the callback is triggered
-        // RNSimpleCompass.start(degree_update_rate, (degree) => {
-        //     this.setState({heading: degree});
-        //     this.mapComponent.setHeading(degree);
-        //
-        //     if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
-        //         this.setState({readyForAR: true});
-        //         console.log('Loading AR scene...');
-        //     }
-        // });
+        RNSimpleCompass.start(degree_update_rate, (degree) => {
+            this.setState({heading: degree});
+            this.mapComponent.setHeading(degree);
+
+            if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
+                this.setState({readyForAR: true});
+                console.log('Loading AR scene...');
+            }
+        });
     }
 
     setPosition(position) {
