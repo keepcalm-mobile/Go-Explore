@@ -121,7 +121,6 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    flavorDimensions "platform"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -132,7 +131,6 @@ android {
         applicationId "com.goexploreapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        multiDexEnabled true
         versionCode 1
         versionName "1.0"
     }
@@ -202,20 +200,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-
-    //react viro
-    implementation project(':gvr_common')
-    implementation project(':arcore_client')
-    implementation project(path: ':react_viro')
-    implementation project(path: ':viro_renderer')
-    implementation 'com.google.android.exoplayer:exoplayer:2.7.1'
-    implementation 'com.google.protobuf.nano:protobuf-javanano:3.0.0-alpha-7'
-    implementation 'com.amazonaws:aws-android-sdk-core:2.7.7'
-    implementation 'com.amazonaws:aws-android-sdk-ddb:2.7.7'
-    implementation 'com.amazonaws:aws-android-sdk-ddb-mapper:2.7.7'
-    implementation 'com.amazonaws:aws-android-sdk-cognito:2.7.7'
-    implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.7.7'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
