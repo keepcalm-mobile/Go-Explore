@@ -30,7 +30,14 @@ const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
 class ArgReal extends ScrollablePage {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            readyForAR: false,
+            heading: 0,
+            gpsGranted: false,
+            initialPosition: null,
+            currentPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
+            onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
+        };
     }
 
     onBackPress = () => {
@@ -162,9 +169,16 @@ class ArgReal extends ScrollablePage {
 
     render() {
         return (
-            <>
-                {ComingSoon(this.onBackPress)}
-            </>
+            <View style={{flex: 1}}>
+                {this.getTutorial()}
+                {this.getARComponent()}
+
+                <MapComponent
+                    heading={this.state.heading}
+                    location={this.state.currentPosition}
+                    ref={ref => this.mapComponent = ref}
+                />
+            </View>
         );
     }
 }
