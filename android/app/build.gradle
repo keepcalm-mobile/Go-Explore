@@ -146,11 +146,11 @@ android {
     }
     productFlavors {
         ar {
-            resValue 'string', 'app_name', 'goExplore-ar'
+//             resValue 'string', 'app_name', 'goExplore-ar'
             buildConfigField 'String', 'VR_PLATFORM', '"GVR"' //default to GVR
         }
         gvr {
-            resValue 'string', 'app_name', 'goExplore-gvr'
+//             resValue 'string', 'app_name', 'goExplore-gvr'
             buildConfigField 'String', 'VR_PLATFORM', '"GVR"'
         }
     }
@@ -200,7 +200,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-simple-compass')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
