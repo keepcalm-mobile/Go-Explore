@@ -33,7 +33,7 @@ export default class ManeuverArrow extends Component {
         maneuver: undefined,
         size: 25,
         opacity: 1,
-        color: '#000000',
+        color: '#cccccc',
     }
 
 

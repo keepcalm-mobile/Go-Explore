@@ -20,7 +20,7 @@ const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
 
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
-const CORRECTION_ANGLE = 70;
+const CORRECTION_ANGLE = 20; // poi image starts drawing from the left, so it compensates it
 
 //46.9537502
 //31.9936326
@@ -37,6 +37,8 @@ var POIs = [
 
     {latitude: 46.9664069, longitude: 32.001888, distance: 0, position: [0,10,0], title: 'City Center', rating: 5, votes: '900', type: 'shop'},
     {latitude: 46.9541553, longitude: 31.9935474, distance: 0, position: [0,10,0], title: 'ATM', rating: 3, votes: '817', type: 'atm'},
+    {latitude: 46.9678573, longitude: 31.9906763, distance: 0, position: [0,10,0], title: 'McDonalds', rating: 3, votes: '1.1k', type: 'coffee'},
+    {latitude: 46.8512408, longitude: 32.012833, distance: 0, position: [0,10,0], title: 'Skate Park', rating: 3, votes: '276', type: 'coffee'},
 ];
 
 var TRUE_NORTH = {latitude: 85, longitude: -135.0005567};
@@ -114,7 +116,7 @@ class ARScene extends React.Component {
 
         this.PoiRefs = [];
 
-        for(let i=0;i<5;i++) {
+        for(let i=0;i<POIs.length;i++) {
             this.PoiRefs.push(React.createRef());
         }
     }
@@ -132,7 +134,7 @@ class ARScene extends React.Component {
 
     getARScene() {
 
-        // console.log('AR scene render');
+        console.log('AR scene render');
 
         let pointsOfInterest = [];
         let currentPOIs = [...this.state.pois];
@@ -146,7 +148,7 @@ class ARScene extends React.Component {
                         position={[currentPOIs[i].position.x, currentPOIs[i].position.y, -currentPOIs[i].position.z]}
                         coords={{latitude: currentPOIs[i].latitude, longitude: currentPOIs[i].longitude}}
                         title={currentPOIs[i].title}
-                        distance={getDistanceBetweenCoordinates(currentPOIs[i].latitude, currentPOIs[i].longitude, CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1])}
+                        distance={getDistanceBetweenCoordinates(currentPOIs[i].latitude, currentPOIs[i].longitude, this.state.currentPosition.latitude, this.state.currentPosition.longitude)}
                         rating={currentPOIs[i].rating}
                         votes={currentPOIs[i].votes}
                         type={currentPOIs[i].type}
@@ -232,11 +234,12 @@ class ARScene extends React.Component {
 
             setTimeout(() => {
                 this.setPointsOfInterest();
-            }, 100);
+            }, 1000);
 
+            //setInterval
             setInterval(() => {
                 this.setPointsOfInterest();
-            }, 1000);
+            }, 10000);
         }
 
         this.setState({text2: 'Initial: ' + this.state.initialHeading + '\n current: ' + this.state.heading});
@@ -292,8 +295,8 @@ class ARScene extends React.Component {
 
     _transformPointToAR(lat, long) {
         var objPoint = this._latLongToMerc(lat, long);
-        //var devicePoint = this._latLongToMerc(this.state.initialPosition.latitude, this.state.initialPosition.longitude);  //this._latLongToMerc(47.618534, -122.338478);
-        var devicePoint = this._latLongToMerc(CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1]);
+        var devicePoint = this._latLongToMerc(this.state.initialPosition.latitude, this.state.initialPosition.longitude);  //this._latLongToMerc(47.618534, -122.338478);
+        // var devicePoint = this._latLongToMerc(CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1]);
 
         // latitude(north,south) maps to the z axis in AR
         // longitude(east, west) maps to the x axis in AR
@@ -306,13 +309,13 @@ class ARScene extends React.Component {
         // console.log('transform to AR: ' + polar.degrees);
 
         //180 + CORRECTION_ANGLE
-        polar.degrees += 180 + CORRECTION_ANGLE + this.state.calibrationOffset; // +90 cuz x is right to left, so 0 is left, -90 is forward     ////(360 - this.state.initialHeading) + 180; // +180 since we need to invert Z in AR space
+        polar.degrees += CORRECTION_ANGLE;// + this.state.calibrationOffset; // +90 cuz x is right to left, so 0 is left, -90 is forward     ////(360 - this.state.initialHeading) + 180; // +180 since we need to invert Z in AR space
 
         // console.log('Adjusted: ' + polar.degrees);
 
         let finalCoords = polarToCartesian(polar.degrees, polar.distance);
 
-        return ({x:finalCoords[0], z:finalCoords[1]});
+        return ({x:finalCoords[0], z:-finalCoords[1]});
         //return ({x: objFinalPosX, z: -objFinalPosZ});
     }
 
@@ -326,7 +329,7 @@ class ARScene extends React.Component {
         //ToastAndroid.showWithGravity('pos = ' + JSON.stringify(pos) + '  cur pos = ' + JSON.stringify(curPos), ToastAndroid.LONG, ToastAndroid.CENTER);
 
         let polar = cartesianToPolar(curPos.x, curPos.z);
-        polar.distance = NORMALIZATION_MAXIMUM * 2000 / distanceToPoint;
+        //polar.distance = NORMALIZATION_MAXIMUM * 2000 / distanceToPoint;
 
         // console.log('polar = ' + JSON.stringify(polar) + '  curPos = ' + JSON.stringify(curPos) + '  pos = ' + JSON.stringify(pos));
 

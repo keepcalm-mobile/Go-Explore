@@ -32,6 +32,7 @@ export default class ManeuverLabel extends Component {
         fontFamily: undefined,
         fontFamilyBold: undefined,
         fontSize: 15,
+        color: '#cccccc'
     }
 
     /**

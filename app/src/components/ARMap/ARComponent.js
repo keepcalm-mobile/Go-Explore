@@ -44,7 +44,7 @@ class ARComponent extends React.Component {
   render() {
 
     return (
-        <View style={{position: 'absolute', width: '100%', height: '100%', left: 0, top: 0, backgroundColor: '#33ff22'}}>{this.getARNavigator()}</View>
+        <View style={{position: 'absolute', width: '100%', height: '100%', left: 0, top: 0}}>{this.getARNavigator()}</View>
     );
   }
 
@@ -54,7 +54,7 @@ class ARComponent extends React.Component {
         <ViroARSceneNavigator
             {...this.state.sharedProps}
             initialScene={{scene:InitialARScene,
-            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), location: this.state.currentPosition}}}
+            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), location: this.state.currentPosition, heading: this.state.heading}}}
         />
     );
   }

@@ -46,7 +46,6 @@ export default class MapViewNavigation extends Component {
         maxZoom: PropTypes.number,
         minZoom: PropTypes.number,
         animationDuration: PropTypes.number,
-        navigationMode: PropTypes.string,
         navigationViewingAngle: PropTypes.number,
         navigationZoomLevel: PropTypes.number,
         directionZoomQuantifier: PropTypes.number,
@@ -256,7 +255,7 @@ export default class MapViewNavigation extends Component {
     {
         //return;
 
-        console.log('bearing = ' + bearing);
+        //console.log('bearing = ' + bearing);
 
         //return; // didn't help
         //this.props.map().animateToBearing(bearing, duration || this.props.animationDuration);

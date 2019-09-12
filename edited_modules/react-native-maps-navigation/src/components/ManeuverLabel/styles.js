@@ -26,19 +26,21 @@ export default props => StyleSheet.create({
         fontFamily: props.fontFamilyBold || props.fontFamily,
         fontSize: props.fontSize,
         flexWrap: 'wrap',
+        color: '#cccccc'
     },
 
     regular: {
         fontFamily: props.fontFamily,
         fontSize: props.fontSize,
         flexWrap: 'wrap',
+        color: '#cccccc'
     },
 
     extra: {
         fontFamily: props.fontFamily,
         fontSize: props.fontSize * 0.8,
         flexWrap: 'wrap',
-        color: '#387bc1',
+        color: '#fe9832',
         marginTop: 4,
     },
 
@@ -47,6 +49,7 @@ export default props => StyleSheet.create({
         fontSize: props.fontSize * 0.8,
         opacity: 0.8,
         flexWrap: 'wrap',
+        color: '#cccccc'
     },
 
 });

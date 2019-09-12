@@ -65,10 +65,16 @@ class ArgReal extends ScrollablePage {
 
         // console.log('Map ref = ' + EventsBridge.mapRef);
         // EventsBridge.mapRef.showMap(false);
+
+        //test
+        // setTimeout(() => {
+        //     let skatepark = {latitude: 46.8512408, longitude: 32.012833};
+        //     this.mapComponent.navigateTo(skatepark);
+        // }, 3000);
     }
 
     trackDeviceHeading() {
-        const degree_update_rate = 3; // Number of degrees changed before the callback is triggered
+        const degree_update_rate = 7; // Number of degrees changed before the callback is triggered
         RNSimpleCompass.start(degree_update_rate, (degree) => {
             this.setState({heading: degree});
             this.mapComponent.setHeading(degree);
@@ -81,6 +87,12 @@ class ArgReal extends ScrollablePage {
     }
 
     setPosition(position) {
+
+        if (!position) {
+            console.log('invalid position = ' + position);
+            return;
+        }
+
         this.setState({
             currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude}
         });
@@ -136,6 +148,7 @@ class ArgReal extends ScrollablePage {
         return (
             <ARComponent
                 location={this.state.initialPosition}
+                heading={this.state.heading}
                 onClickHandler={this.onPOIClickHandler.bind(this)}
                 ref={ref => this.arComponent = ref}
             />
