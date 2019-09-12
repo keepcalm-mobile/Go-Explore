@@ -33,7 +33,7 @@ class ArgReal extends ScrollablePage {
     constructor(props) {
         super(props);
         this.state = {
-            readyForAR: false,
+            readyForAR: true, //was false
             heading: 0,
             gpsGranted: false,
             initialPosition: null,
@@ -78,6 +78,10 @@ class ArgReal extends ScrollablePage {
         RNSimpleCompass.start(degree_update_rate, (degree) => {
             this.setState({heading: degree});
             this.mapComponent.setHeading(degree);
+
+            if (EventsBridge.arScene !== null) {
+                EventsBridge.arScene.setHeading(degree);
+            }
 
             if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
                 this.setState({readyForAR: true});

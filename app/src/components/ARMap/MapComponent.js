@@ -149,7 +149,7 @@ export default class MapComponent extends Component {
   setHeading(heading) {
     //this.setState({heading: heading});
 
-    console.log('Setting heading... this.isPositionSet = ' + this.isPositionSet);
+    // console.log('Setting heading... this.isPositionSet = ' + this.isPositionSet);
 
     if (this.startedNavigation) {
 

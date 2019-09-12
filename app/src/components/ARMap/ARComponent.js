@@ -32,6 +32,7 @@ class ARComponent extends React.Component {
     // Set initial state here
     this.state = {
       sharedProps: sharedProps,
+      heading: this.props.heading,
       currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
       onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
     };
@@ -42,6 +43,8 @@ class ARComponent extends React.Component {
   }
 
   render() {
+
+    // console.log('ar component render');
 
     return (
         <View style={{position: 'absolute', width: '100%', height: '100%', left: 0, top: 0}}>{this.getARNavigator()}</View>
@@ -58,6 +61,10 @@ class ARComponent extends React.Component {
         />
     );
   }
+
+  // setHeading(degree) {
+  //   this.setState();
+  // }
 
   onPOIClickHandler(poi) {
     console.log('AR Component CLICKED: ' + poi.title);

@@ -15,6 +15,7 @@ import {
 } from 'react-viro';
 
 import PointOfInterest from './PointOfInterest';
+import EventsBridge from '../../utils/EventsBridge';
 
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
@@ -98,8 +99,8 @@ class ARScene extends React.Component {
             currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             initialPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             normalizationMaximumPoint: null,
-            initialHeading: -1,
-            heading: props.heading,
+            // initialHeading: -1,
+            //heading: this.props.heading,
             pois: [],
             poisReady: true,
             northPosition: [0,0, -7],
@@ -114,15 +115,35 @@ class ARScene extends React.Component {
         this.trackDeviceHeading = this.trackDeviceHeading.bind(this);
         this.onPOIClickedHandler = this.onPOIClickedHandler.bind(this);
 
+        this.heading = 0;
+        this.initialHeading = -1;
+        this.cameraPosition = [0,0,0];
         this.PoiRefs = [];
 
         for(let i=0;i<POIs.length;i++) {
             this.PoiRefs.push(React.createRef());
         }
+
+        EventsBridge.arScene = this;
+
+        //console.log('props heading ' + this.props.heading);
     }
 
     componentDidMount() {
         this.trackDeviceHeading();
+
+        // setInterval(() => {
+        //
+        //     this.scene.getCameraOrientationAsync().then(
+        //         (orientation)=>{
+        //             // var cameraPosition = orientation.position;
+        //             // markerPosition = [markerPosition[0] + cameraPosition[0], 0, markerPosition[2] + cameraPosition[2]];
+        //             // markerPosition is now offset by the camera's offset.
+        //             console.log(orientation);
+        //         }
+        //     );
+        //
+        // }, 14000);
     }
 
     render() {
@@ -134,7 +155,7 @@ class ARScene extends React.Component {
 
     getARScene() {
 
-        console.log('AR scene render');
+        // console.log('AR scene render');
 
         let pointsOfInterest = [];
         let currentPOIs = [...this.state.pois];
@@ -161,7 +182,7 @@ class ARScene extends React.Component {
         }
 
         return (
-            <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized} >
+            <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized}>
                 {/*<ViroText text={this.state.text2} scale={[.5, .5, .5]} position={[0, 0, -5]} style={styles.helloWorldTextStyle} ref={(ref) => { this.refText = ref }} />*/}
 
                 {/*<ViroFlexView position={this.state.northPosition} width={2} height={1} style={{backgroundColor: '#ffffff', justifyContent: 'center'}}>*/}
@@ -172,6 +193,14 @@ class ARScene extends React.Component {
 
             </ViroARScene>
         );
+    }
+
+    setHeading(degree) {
+        this.heading = degree;
+
+        if (this.initialHeading === -1) {
+            this.initialHeading = degree;
+        }
     }
 
     setCalibrationOffset() {
@@ -202,16 +231,29 @@ class ARScene extends React.Component {
 
             console.log('Tracking normal');
 
+            this.scene.getCameraOrientationAsync().then(
+                (orientation)=>{
+                    console.log(orientation);
+
+                    this.cameraPosition = orientation.position;
+                    this.setState({poisReady: true});
+
+                    this.initialHeading = this.heading;
+
+                    console.log('Initial heading = ' + this.initialHeading);
+                }
+            );
+
         } else if (state == ViroConstants.TRACKING_NONE) {
             // Handle loss of tracking
             console.log('Tracking lost');
         }
         else {
             console.log('On Initialized else?');
+
+            this.setState({poisReady: false});
         }
     }
-
-
 
     trackDeviceHeading() {
 
@@ -223,10 +265,10 @@ class ARScene extends React.Component {
 
         //HEADING = degree;
 
-        let degree = this.state.heading;
+        let degree = this.heading;
 
-        if (this.state.initialHeading === -1) {
-            this.setState({initialHeading: degree});
+        if (this.initialHeading === -1) {
+            //this.setState({initialHeading: degree});
 
             console.log('Setting points of interest... initial heading set to = ' +  degree);
 
@@ -239,7 +281,7 @@ class ARScene extends React.Component {
             //setInterval
             setInterval(() => {
                 this.setPointsOfInterest();
-            }, 10000);
+            }, 2000);
         }
 
         this.setState({text2: 'Initial: ' + this.state.initialHeading + '\n current: ' + this.state.heading});
@@ -269,7 +311,12 @@ class ARScene extends React.Component {
         // problem with NaN persists
         for (let j=0;j<POIs.length;j++) {
             if (this.PoiRefs[j] && this.PoiRefs[j].setPosition && !isNaN(POIs[j].position.x) && !isNaN(POIs[j].position.y) && !isNaN(POIs[j].position.z)) {
-                this.PoiRefs[j].setPosition([POIs[j].position.x, POIs[j].position.y, POIs[j].position.z]);
+
+                let finalX = POIs[j].position.x;// + this.cameraPosition[0];
+                let finalY = POIs[j].position.y;
+                let finalZ = POIs[j].position.z;// + this.cameraPosition[2];
+
+                this.PoiRefs[j].setPosition([finalX, finalY, finalZ]);
 
                 //this.PoiRefs[j].setAngle(cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
             }
@@ -309,7 +356,7 @@ class ARScene extends React.Component {
         // console.log('transform to AR: ' + polar.degrees);
 
         //180 + CORRECTION_ANGLE
-        polar.degrees += CORRECTION_ANGLE;// + this.state.calibrationOffset; // +90 cuz x is right to left, so 0 is left, -90 is forward     ////(360 - this.state.initialHeading) + 180; // +180 since we need to invert Z in AR space
+        polar.degrees += CORRECTION_ANGLE; //+ this.initialHeading;// + this.state.calibrationOffset; // +90 cuz x is right to left, so 0 is left, -90 is forward     ////(360 - this.state.initialHeading) + 180; // +180 since we need to invert Z in AR space
 
         // console.log('Adjusted: ' + polar.degrees);
 
