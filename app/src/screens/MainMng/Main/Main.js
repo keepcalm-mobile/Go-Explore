@@ -95,10 +95,20 @@ class Main extends React.Component {
         this._map.hide();
 
         if (iTabId === screens.VirtualReality) {
-            EventsBridge.mapRef.showMap(false);
+            if (EventsBridge.mapRef != null)
+                EventsBridge.mapRef.showMap(false);
+
+            if (EventsBridge.arComponent != null) {
+                EventsBridge.arComponent.exitNavigation();
+                EventsBridge.arComponent.startAR();
+            }
         } else {
             EventsBridge.mapRef.showMap(true);
             EventsBridge.arComponent.reset();
+            if (EventsBridge.arScene != null) {
+                EventsBridge.arScene.reset();
+            }
+
         }
     };
 

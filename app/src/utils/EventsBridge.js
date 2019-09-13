@@ -1,7 +1,7 @@
 
 class EventsBridge {
-    static mapRef = 'unset';
-    static arComponent = 'unset';
+    static mapRef = null;
+    static arComponent = null;
     static arScene = null;
 }
 

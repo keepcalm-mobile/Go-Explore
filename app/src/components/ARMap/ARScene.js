@@ -21,7 +21,7 @@ const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
 
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
-const CORRECTION_ANGLE = 20; // poi image starts drawing from the left, so it compensates it
+const CORRECTION_ANGLE = 10; // poi image starts drawing from the left, so it compensates it
 
 //46.9537502
 //31.9936326
@@ -99,13 +99,15 @@ class ARScene extends React.Component {
             currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             initialPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             normalizationMaximumPoint: null,
-            // initialHeading: -1,
+            initialHeading: this.props.heading,
             //heading: this.props.heading,
             pois: [],
             poisReady: true,
             northPosition: [0,0, -7],
             calibrationOffset: false,
-            onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
+            trackingLostCount: 0,
+            onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {},
+            onTrackingLost: props.onTrackingLost ? this.props.onTrackingLost : () => {}
         };
 
         // bind 'this' to functions
@@ -115,10 +117,11 @@ class ARScene extends React.Component {
         this.trackDeviceHeading = this.trackDeviceHeading.bind(this);
         this.onPOIClickedHandler = this.onPOIClickedHandler.bind(this);
 
-        this.heading = 0;
-        this.initialHeading = -1;
+        //this.heading = 0;
+        //this.initialHeading = this.props.heading;
         this.cameraPosition = [0,0,0];
         this.PoiRefs = [];
+        this.updateTimer = null;
 
         for(let i=0;i<POIs.length;i++) {
             this.PoiRefs.push(React.createRef());
@@ -126,7 +129,9 @@ class ARScene extends React.Component {
 
         EventsBridge.arScene = this;
 
-        //console.log('props heading ' + this.props.heading);
+        console.log('ar scene props heading = ' + this.props.heading);
+        console.log('initial heading = ' + this.state.initialHeading);
+        console.log('trackingLostCount = ' + this.state.trackingLostCount);
     }
 
     componentDidMount() {
@@ -203,6 +208,17 @@ class ARScene extends React.Component {
         }
     }
 
+    reset() {
+        if (EventsBridge.arComponent != null) {
+            EventsBridge.arComponent.exitNavigation();
+        }
+
+        if (this.updateTimer !== null) {
+            clearInterval(this.updateTimer);
+            this.updateTimer = null;
+        }
+    }
+
     setCalibrationOffset() {
         let polar = cartesianToPolar(this.state.northPosition[0], this.state.northPosition[2]);
         let poiPolar = cartesianToPolar(TRUE_NORTH.latitude, TRUE_NORTH.longitude);
@@ -246,12 +262,24 @@ class ARScene extends React.Component {
 
         } else if (state == ViroConstants.TRACKING_NONE) {
             // Handle loss of tracking
-            console.log('Tracking lost');
+            console.log('Tracking NONE!!!!');
+
+            //this.state.onTrackingLost();
         }
         else {
-            console.log('On Initialized else?');
 
-            this.setState({poisReady: false});
+
+            let trackingLostCount = this.state.trackingLostCount + 1;
+            console.log('On Initialized else? Tracking lost count = ' + trackingLostCount);
+
+            this.setState({poisReady: false, trackingLostCount: trackingLostCount});
+
+            if (trackingLostCount >= 2) {
+
+                this.reset();
+
+                this.state.onTrackingLost();
+            }
         }
     }
 
@@ -267,9 +295,10 @@ class ARScene extends React.Component {
 
         let degree = this.heading;
 
-        if (this.initialHeading === -1) {
+        // if (this.initialHeading === -1) {
             //this.setState({initialHeading: degree});
 
+            this.initialHeading = this.props.heading;
             console.log('Setting points of interest... initial heading set to = ' +  degree);
 
             this.setPointsOfInterest();
@@ -279,12 +308,12 @@ class ARScene extends React.Component {
             }, 1000);
 
             //setInterval
-            setInterval(() => {
+        this.updateTimer = setInterval(() => {
                 this.setPointsOfInterest();
             }, 2000);
-        }
+        // }
 
-        this.setState({text2: 'Initial: ' + this.state.initialHeading + '\n current: ' + this.state.heading});
+        // this.setState({text2: 'Initial: ' + this.state.initialHeading + '\n current: ' + this.state.heading});
         // });
     }
 
@@ -294,6 +323,8 @@ class ARScene extends React.Component {
         for (let i = 0; i<POIs.length; i++){
             POIs[i].distance = getDistanceBetweenCoordinates(this.state.initialPosition.latitude, this.state.initialPosition.longitude, POIs[i].latitude, POIs[i].longitude);
         }
+
+        console.log('initial heading = ' + this.state.initialHeading);
 
         for (let j = 0; j < POIs.length; j++) {
             POIs[j].position = this._normalize({latitude: POIs[j].latitude, longitude: POIs[j].longitude});
@@ -321,8 +352,6 @@ class ARScene extends React.Component {
                 //this.PoiRefs[j].setAngle(cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
             }
         }
-
-        //ToastAndroid.showWithGravity(JSON.stringify(pos), ToastAndroid.LONG, ToastAndroid.CENTER);
 
         this.setState({pois: POIs});
 
@@ -356,7 +385,7 @@ class ARScene extends React.Component {
         // console.log('transform to AR: ' + polar.degrees);
 
         //180 + CORRECTION_ANGLE
-        polar.degrees += CORRECTION_ANGLE; //+ this.initialHeading;// + this.state.calibrationOffset; // +90 cuz x is right to left, so 0 is left, -90 is forward     ////(360 - this.state.initialHeading) + 180; // +180 since we need to invert Z in AR space
+        polar.degrees += CORRECTION_ANGLE + this.state.initialHeading; //+ this.initialHeading;// + this.state.calibrationOffset; // +90 cuz x is right to left, so 0 is left, -90 is forward     ////(360 - this.state.initialHeading) + 180; // +180 since we need to invert Z in AR space
 
         // console.log('Adjusted: ' + polar.degrees);
 

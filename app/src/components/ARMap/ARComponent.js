@@ -34,8 +34,11 @@ class ARComponent extends React.Component {
       sharedProps: sharedProps,
       heading: this.props.heading,
       currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
-      onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
+      onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {},
+      onTrackingLost: props.onTrackingLost ? this.props.onTrackingLost : () => {}
     };
+
+    console.log('ar component props heading = ' + this.props.heading);
   }
 
   componentDidMount() {
@@ -57,7 +60,7 @@ class ARComponent extends React.Component {
         <ViroARSceneNavigator
             {...this.state.sharedProps}
             initialScene={{scene:InitialARScene,
-            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), location: this.state.currentPosition, heading: this.state.heading}}}
+            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), onTrackingLost: this.onTrackingLostHandler.bind(this), location: this.state.currentPosition, heading: this.state.heading}}}
         />
     );
   }
@@ -72,6 +75,12 @@ class ARComponent extends React.Component {
     console.log('AR Component state = ' + this.state);
 
     this.state.onClickHandler(poi);
+  }
+
+  onTrackingLostHandler() {
+
+    console.log('on tracking lost ar component');
+    this.state.onTrackingLost();
   }
 }
 

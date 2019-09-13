@@ -33,7 +33,8 @@ class ArgReal extends ScrollablePage {
     constructor(props) {
         super(props);
         this.state = {
-            readyForAR: true, //was false
+            readyForAR: false, //was false
+            arRunning: true,
             heading: 0,
             gpsGranted: false,
             initialPosition: null,
@@ -46,8 +47,12 @@ class ArgReal extends ScrollablePage {
 
     reset = () => {
       this.mapComponent.exitNavigation();
-      this.setState({heading: 0, readyForAR: false});
+      this.setState({heading: 0, readyForAR: false, arRunning: true});
     };
+
+    exitNavigation() {
+        this.mapComponent.exitNavigation();
+    }
 
     onBackPress = () => {
         this.props.navigation.goBack();
@@ -66,11 +71,8 @@ class ArgReal extends ScrollablePage {
         // console.log('Map ref = ' + EventsBridge.mapRef);
         // EventsBridge.mapRef.showMap(false);
 
-        //test
-        // setTimeout(() => {
-        //     let skatepark = {latitude: 46.8512408, longitude: 32.012833};
-        //     this.mapComponent.navigateTo(skatepark);
-        // }, 3000);
+        //
+        this.startAR();
     }
 
     trackDeviceHeading() {
@@ -83,10 +85,10 @@ class ArgReal extends ScrollablePage {
                 EventsBridge.arScene.setHeading(degree);
             }
 
-            if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
-                this.setState({readyForAR: true});
-                console.log('Loading AR scene...');
-            }
+            // if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
+            //     this.setState({readyForAR: true});
+            //     console.log('Loading AR scene...');
+            // }
         });
     }
 
@@ -131,17 +133,36 @@ class ArgReal extends ScrollablePage {
         if (this.state.readyForAR === false) {
             let tutorialText = 'Place your phone vertically\nLook around until it\'s zero, meaning you\'re heading North\nHeading = ' + this.state.heading;
 
+            tutorialText = 'Please keep your phone stable\nStarting AR...';
+
+            if (this.state.arRunning === false) {
+                tutorialText = 'Probably it was too dark or too bright, try pointing your camera to better lighting conditions and hit the button';
+            }
+
             return (
-                <View style={{width: '100%', height: '100%', position: 'absolute', top: 0, paddingTop: 50}}>
-
-                    <Text style={{fontSize: 22, color: '#444444', textAlign: 'center'}}>{tutorialText}</Text>
-
-                </View>
+                    <Text style={{fontSize: 22, color: '#dddddd', textAlign: 'center'}}>{tutorialText}</Text>
             );
         }
         else {
             return null;
         }
+    }
+
+    getARButton() {
+        if (this.state.arRunning === true) {
+            return null;
+        }
+        else {
+            return (<ButtonOrange title={'Launch AR'} onPress={this.startAR.bind(this)} style={{marginTop: 15}} />);
+        }
+    }
+
+    startAR() {
+        this.setState({readyForAR: false, arRunning: true});
+
+        setTimeout(() => {
+            this.setState({readyForAR: true, arRunning: true});
+        }, 1000);
     }
 
     getARComponent() {
@@ -154,6 +175,7 @@ class ArgReal extends ScrollablePage {
                 location={this.state.initialPosition}
                 heading={this.state.heading}
                 onClickHandler={this.onPOIClickHandler.bind(this)}
+                onTrackingLost={this.onTrackingLostHandler.bind(this)}
                 ref={ref => this.arComponent = ref}
             />
         );
@@ -164,6 +186,14 @@ class ArgReal extends ScrollablePage {
         //console.log('app this.state = ' + this.state);
 
         this.mapComponent.navigateTo(poi.coords);
+    }
+
+    onTrackingLostHandler() {
+
+        console.log('on tracking lost main script');
+        this.setState({readyForAR: false, arRunning: false});
+
+
     }
 
     async requestPermission() {
@@ -199,7 +229,14 @@ class ArgReal extends ScrollablePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                {this.getTutorial()}
+
+                <View style={{width: '100%', height: '100%', position: 'absolute', top: 0, paddingTop: 150, paddingRight: 50, paddingLeft: 50}}>
+
+                    {this.getTutorial()}
+                    {this.getARButton()}
+
+                </View>
+
                 {this.getARComponent()}
 
                 <MapComponent
