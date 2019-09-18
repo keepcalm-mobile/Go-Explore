@@ -33,8 +33,8 @@ class ArgReal extends ScrollablePage {
     constructor(props) {
         super(props);
         this.state = {
-            readyForAR: false, //was false
-            arRunning: true,
+            readyForAR: false,
+            arRunning: false, //was false
             heading: 0,
             gpsGranted: false,
             initialPosition: null,
@@ -72,24 +72,32 @@ class ArgReal extends ScrollablePage {
         // EventsBridge.mapRef.showMap(false);
 
         //
-        this.startAR();
+        //this.startAR();
     }
 
     trackDeviceHeading() {
-        const degree_update_rate = 7; // Number of degrees changed before the callback is triggered
+        const degree_update_rate = 3; // Number of degrees changed before the callback is triggered
         RNSimpleCompass.start(degree_update_rate, (degree) => {
             this.setState({heading: degree});
-            this.mapComponent.setHeading(degree);
+            // this.mapComponent.setHeading(degree);
 
-            if (EventsBridge.arScene !== null) {
-                EventsBridge.arScene.setHeading(degree);
-            }
+            // if (EventsBridge.arScene !== null) {
+            //     EventsBridge.arScene.setHeading(degree);
+            // }
 
             // if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
             //     this.setState({readyForAR: true});
             //     console.log('Loading AR scene...');
             // }
         });
+
+        setInterval(() => {
+            this.mapComponent.setHeading(this.state.heading);
+            if (EventsBridge.arScene !== null) {
+                EventsBridge.arScene.setHeading(this.state.heading);
+            }
+            console.log('updating heading to ' + this.state.heading);
+        }, 1000);
     }
 
     setPosition(position) {
@@ -133,10 +141,10 @@ class ArgReal extends ScrollablePage {
         if (this.state.readyForAR === false) {
             let tutorialText = 'Place your phone vertically\nLook around until it\'s zero, meaning you\'re heading North\nHeading = ' + this.state.heading;
 
-            tutorialText = 'Please keep your phone stable\nStarting AR...';
+            tutorialText = 'Please keep your phone stable\nStarting AR...\nHeading =' + this.state.heading;
 
             if (this.state.arRunning === false) {
-                tutorialText = 'Probably it was too dark or too bright, try pointing your camera to better lighting conditions and hit the button';
+                tutorialText = 'Probably it was too dark or too bright, try pointing your camera to better lighting conditions and hit the button\nHeading =' + this.state.heading;
             }
 
             return (
@@ -192,7 +200,6 @@ class ArgReal extends ScrollablePage {
 
         console.log('on tracking lost main script');
         this.setState({readyForAR: false, arRunning: false});
-
 
     }
 

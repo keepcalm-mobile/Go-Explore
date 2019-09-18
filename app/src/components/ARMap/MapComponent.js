@@ -159,7 +159,7 @@ export default class MapComponent extends Component {
       }
 
       if (this.isPositionSet === true) {
-        this.refNavigation.updateBearing(heading, 200);
+        this.refNavigation.updateBearing(heading);
       }
       else {
 

@@ -21,7 +21,9 @@ const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
 
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
-const CORRECTION_ANGLE = 10; // poi image starts drawing from the left, so it compensates it
+const CORRECTION_ANGLE = 0; // poi image starts drawing from the left, so it compensates it
+
+var canUpdateCamera = true;
 
 //46.9537502
 //31.9936326
@@ -30,11 +32,15 @@ const CORRECTION_ANGLE = 10; // poi image starts drawing from the left, so it co
 //lat: 46.95364
 //lon: 31.99375
 
+//near north
+//46.9591975,31.9945625
+
 var updateCounter = 0;
 
 var POIs = [
 
     // {latitude: 85, longitude: -135.0005567, distance: 0, position: [0,10,0], title: 'NORTH poi', rating: 0, votes: '0', type: 'custom'},
+    {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Near north poi', rating: 0, votes: '0', type: 'custom'},
 
     {latitude: 46.9664069, longitude: 32.001888, distance: 0, position: [0,10,0], title: 'City Center', rating: 5, votes: '900', type: 'shop'},
     {latitude: 46.9541553, longitude: 31.9935474, distance: 0, position: [0,10,0], title: 'ATM', rating: 3, votes: '817', type: 'atm'},
@@ -102,7 +108,7 @@ class ARScene extends React.Component {
             initialHeading: this.props.heading,
             //heading: this.props.heading,
             pois: [],
-            poisReady: true,
+            poisReady: false,
             northPosition: [0,0, -7],
             calibrationOffset: false,
             trackingLostCount: 0,
@@ -136,6 +142,12 @@ class ARScene extends React.Component {
 
     componentDidMount() {
         this.trackDeviceHeading();
+
+        setInterval(() => {
+
+            canUpdateCamera = true;
+
+        }, 400);
 
         // setInterval(() => {
         //
@@ -187,12 +199,10 @@ class ARScene extends React.Component {
         }
 
         return (
-            <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized}>
+            <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this.onCameraTransformUpdateHandler}>
                 {/*<ViroText text={this.state.text2} scale={[.5, .5, .5]} position={[0, 0, -5]} style={styles.helloWorldTextStyle} ref={(ref) => { this.refText = ref }} />*/}
 
-                {/*<ViroFlexView position={this.state.northPosition} width={2} height={1} style={{backgroundColor: '#ffffff', justifyContent: 'center'}}>*/}
-                {/*  <ViroText text={'NORTH'} width={2} height={0.5} style={styles.helloWorldTextStyle} />*/}
-                {/*</ViroFlexView>*/}
+                {/*{this.getTestPOI()}*/}
 
                 {pointsOfInterest}
 
@@ -200,12 +210,27 @@ class ARScene extends React.Component {
         );
     }
 
+    getTestPOI() {
+        if (this.state.poisReady === true) {
+            return (
+                <ViroFlexView ref={(ref) => {
+                    this.testRef = ref;
+                }} position={this.state.northPosition} width={2} height={1} style={{backgroundColor: '#ffffff', justifyContent: 'center'}}>
+                    <ViroText text={'NORTH???'} width={2} height={0.5} style={styles.helloWorldTextStyle} />
+                </ViroFlexView>
+            );
+        }
+        else {
+            return null;
+        }
+    }
+
     setHeading(degree) {
         this.heading = degree;
 
-        if (this.initialHeading === -1) {
-            this.initialHeading = degree;
-        }
+        // if (this.initialHeading === -1) {
+        //     this.initialHeading = degree;
+        // }
     }
 
     reset() {
@@ -231,6 +256,21 @@ class ARScene extends React.Component {
         // console.log('Difference = ' + difference);
     }
 
+    onCameraTransformUpdateHandler(camera) {
+
+        return;
+
+        if (canUpdateCamera === true) {
+            console.log('position: '+JSON.stringify(camera.position));
+            console.log('rotation: '+JSON.stringify(camera.rotation));
+            console.log('forward: '+JSON.stringify(camera.forward));
+            console.log('up: '+JSON.stringify(camera.up));
+
+            canUpdateCamera = false;
+        }
+
+    }
+
     onPOIClickedHandler(poi) {
 
         console.log('AR Scene CLICKED: ' + poi.title);
@@ -252,13 +292,23 @@ class ARScene extends React.Component {
                     console.log(orientation);
 
                     this.cameraPosition = orientation.position;
-                    this.setState({poisReady: true});
+                    // this.setState({northPosition: [3,1, -8]});
 
                     this.initialHeading = this.heading;
 
-                    console.log('Initial heading = ' + this.initialHeading);
+                    this.setPointsOfInterest();
+                    setTimeout(() => {
+                        this.setPointsOfInterest();
+                    }, 1000);
+
+                    console.log('>>Initial heading = ' + this.initialHeading);
                 }
             );
+
+            //setTimeout(() => {
+            //     this.setState({northPosition: [3,1, -8]});
+            //     console.log('repositioned');
+            //}, 200);
 
         } else if (state == ViroConstants.TRACKING_NONE) {
             // Handle loss of tracking
@@ -299,17 +349,18 @@ class ARScene extends React.Component {
             //this.setState({initialHeading: degree});
 
             this.initialHeading = this.props.heading;
-            console.log('Setting points of interest... initial heading set to = ' +  degree);
+            // console.log('Setting points of interest... initial heading set to = ' +  degree);
 
-            this.setPointsOfInterest();
+            //this.setPointsOfInterest();
 
-            setTimeout(() => {
-                this.setPointsOfInterest();
-            }, 1000);
+            // setTimeout(() => {
+            //     this.setPointsOfInterest();
+            // }, 1000);
 
             //setInterval
         this.updateTimer = setInterval(() => {
                 this.setPointsOfInterest();
+                // console.log('pois ready = ' + this.state.poisReady);
             }, 2000);
         // }
 
@@ -324,7 +375,7 @@ class ARScene extends React.Component {
             POIs[i].distance = getDistanceBetweenCoordinates(this.state.initialPosition.latitude, this.state.initialPosition.longitude, POIs[i].latitude, POIs[i].longitude);
         }
 
-        console.log('initial heading = ' + this.state.initialHeading);
+        // console.log('initial heading = ' + this.state.initialHeading);
 
         for (let j = 0; j < POIs.length; j++) {
             POIs[j].position = this._normalize({latitude: POIs[j].latitude, longitude: POIs[j].longitude});
@@ -339,25 +390,29 @@ class ARScene extends React.Component {
             deg += difference;
         }
 
-        // problem with NaN persists
-        for (let j=0;j<POIs.length;j++) {
-            if (this.PoiRefs[j] && this.PoiRefs[j].setPosition && !isNaN(POIs[j].position.x) && !isNaN(POIs[j].position.y) && !isNaN(POIs[j].position.z)) {
+        this.setState({pois: POIs, poisReady: true});
 
-                let finalX = POIs[j].position.x;// + this.cameraPosition[0];
-                let finalY = POIs[j].position.y;
-                let finalZ = POIs[j].position.z;// + this.cameraPosition[2];
+        if (this.state.poisReady === true) {
+            // problem with NaN persists
+            for (let j=0;j<POIs.length;j++) {
+                if (this.PoiRefs[j] && this.PoiRefs[j].setPosition && !isNaN(POIs[j].position.x) && !isNaN(POIs[j].position.y) && !isNaN(POIs[j].position.z)) {
 
-                this.PoiRefs[j].setPosition([finalX, finalY, finalZ]);
+                    let finalX = POIs[j].position.x;// + this.cameraPosition[0];
+                    let finalY = POIs[j].position.y;
+                    let finalZ = POIs[j].position.z;// + this.cameraPosition[2];
 
-                //this.PoiRefs[j].setAngle(cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
+                    this.PoiRefs[j].setPosition([finalX, finalY, finalZ]);
+                }
             }
+
+            // console.log('pois repositioned');
         }
 
-        this.setState({pois: POIs});
+        console.log('Skate park: ' + JSON.stringify(POIs[3].position) + '  ih = ' + this.state.initialHeading);
 
-        if (this.state.calibrationOffset === false) {
-            this.setCalibrationOffset();
-        }
+        // if (this.state.calibrationOffset === false) {
+        //     this.setCalibrationOffset();
+        // }
     }
 
     _latLongToMerc(lat_deg, lon_deg) {
@@ -379,6 +434,9 @@ class ARScene extends React.Component {
         var objFinalPosZ = objPoint.y - devicePoint.y;
         var objFinalPosX = objPoint.x - devicePoint.x;
         //flip the z, as negative z(is in front of us which is north, pos z is behind(south).
+
+        //TEST
+        // return ({x:objFinalPosX, z:-objFinalPosZ});
 
         let polar = cartesianToPolar(objFinalPosX, objFinalPosZ);
 
@@ -402,12 +460,12 @@ class ARScene extends React.Component {
         let distanceToPoint = getDistanceBetweenCoordinates(pos.latitude, pos.longitude, CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1]);
         let curPos = this._transformPointToAR(pos.latitude, pos.longitude);
 
+        //TEST
+        //return {x: curPos[0], y: 0, z: curPos[1]};
+
         //ToastAndroid.showWithGravity('pos = ' + JSON.stringify(pos) + '  cur pos = ' + JSON.stringify(curPos), ToastAndroid.LONG, ToastAndroid.CENTER);
 
         let polar = cartesianToPolar(curPos.x, curPos.z);
-        //polar.distance = NORMALIZATION_MAXIMUM * 2000 / distanceToPoint;
-
-        // console.log('polar = ' + JSON.stringify(polar) + '  curPos = ' + JSON.stringify(curPos) + '  pos = ' + JSON.stringify(pos));
 
         if (polar.distance < 6)
             polar.distance = 6;
@@ -415,10 +473,6 @@ class ARScene extends React.Component {
             polar.distance = 10;
 
         let finalCoords = polarToCartesian(polar.degrees, polar.distance);
-
-        //console.log('poi: pos = ' + JSON.stringify(pos) + '  ||  ' + JSON.stringify(finalCoords));
-
-        //ToastAndroid.showWithGravity('north = ' + JSON.stringify(finalCoords), ToastAndroid.LONG, ToastAndroid.CENTER);
 
         return {x: finalCoords[0], y: 0, z: finalCoords[1]};
     }

@@ -222,7 +222,7 @@ export default class MapViewNavigation extends Component {
      * @param coordinate
      * @param duration
      */
-    updatePosition(coordinate, duration = 0)
+    updatePosition(coordinate, duration = false)
     {
         // coordinate.latitude -= 0.006;
         // coordinate.longitude -= 0.006;
