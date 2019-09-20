@@ -237,13 +237,6 @@ class ArgReal extends ScrollablePage {
         return (
             <View style={{flex: 1}}>
 
-                <View style={{width: '100%', height: '100%', position: 'absolute', top: 0, paddingTop: 150, paddingRight: 50, paddingLeft: 50}}>
-
-                    {this.getTutorial()}
-                    {this.getARButton()}
-
-                </View>
-
                 {this.getARComponent()}
 
                 <MapComponent
@@ -251,6 +244,14 @@ class ArgReal extends ScrollablePage {
                     location={this.state.currentPosition}
                     ref={ref => this.mapComponent = ref}
                 />
+
+                <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
+
+                {this.getTutorial()}
+                {this.getARButton()}
+
+                </View>
+
             </View>
         );
     }
