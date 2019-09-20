@@ -16,6 +16,7 @@ import {
 
 import PointOfInterest from './PointOfInterest';
 import EventsBridge from '../../utils/EventsBridge';
+import PoisData from './pois.json';
 
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
@@ -40,13 +41,21 @@ var updateCounter = 0;
 var POIs = [
 
     // {latitude: 85, longitude: -135.0005567, distance: 0, position: [0,10,0], title: 'NORTH poi', rating: 0, votes: '0', type: 'custom'},
-    {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Near north poi', rating: 0, votes: '0', type: 'custom'},
+    {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Loading pois from json', rating: 0, votes: '0', type: 'custom'},
 
-    {latitude: 46.9664069, longitude: 32.001888, distance: 0, position: [0,10,0], title: 'City Center', rating: 5, votes: '900', type: 'shop'},
-    {latitude: 46.9541553, longitude: 31.9935474, distance: 0, position: [0,10,0], title: 'ATM', rating: 3, votes: '817', type: 'atm'},
-    {latitude: 46.9678573, longitude: 31.9906763, distance: 0, position: [0,10,0], title: 'McDonalds', rating: 3, votes: '1.1k', type: 'coffee'},
-    {latitude: 46.8512408, longitude: 32.012833, distance: 0, position: [0,10,0], title: 'Skate Park', rating: 3, votes: '276', type: 'coffee'},
+    // {latitude: 46.9664069, longitude: 32.001888, distance: 0, position: [0,10,0], title: 'City Center', rating: 5, votes: '900', type: 'shop'},
+    // {latitude: 46.9541553, longitude: 31.9935474, distance: 0, position: [0,10,0], title: 'ATM', rating: 3, votes: '817', type: 'atm'},
+    // {latitude: 46.9678573, longitude: 31.9906763, distance: 0, position: [0,10,0], title: 'McDonalds', rating: 3, votes: '1.1k', type: 'coffee'},
+    // {latitude: 46.8512408, longitude: 32.012833, distance: 0, position: [0,10,0], title: 'Skate Park', rating: 3, votes: '276', type: 'coffee'},
 ];
+
+// [
+//     {"latitude": 46.9591975, "longitude": 31.9945625, "distance": 0, "position": [0,10,0], "title": "Near north poi", "rating": 0, "votes": "0", "type": "custom"},
+//     {"latitude": 46.9664069, "longitude": 32.001888, "distance": 0, "position": [0,10,0], "title": "City Center", "rating": 5, "votes": "900", "type": "shop"},
+//     {"latitude": 46.9541553, "longitude": 31.9935474, "distance": 0, "position": [0,10,0], "title": "ATM", "rating": 3, "votes": "817", "type": "atm"},
+//     {"latitude": 46.9678573, "longitude": 31.9906763, "distance": 0, "position": [0,10,0], "title": "McDonalds", "rating": 3, "votes": "1.1k", "type": "coffee"},
+//     {"latitude": 46.8512408, "longitude": 32.012833, "distance": 0, "position": [0,10,0], "title": "Skate Park", "rating": 3, "votes": "276", "type": "coffee"}
+// ]
 
 var TRUE_NORTH = {latitude: 85, longitude: -135.0005567};
 
@@ -141,6 +150,16 @@ class ARScene extends React.Component {
     }
 
     componentDidMount() {
+
+        console.log(PoisData);
+        console.log(JSON.stringify(PoisData));
+
+        console.log('Before json: pois length = ' + POIs.length); 
+        POIs  = PoisData;
+        //POIs = JSON.parse(PoisData);
+
+        console.log('After json: pois length = ' + POIs.length);
+
         this.trackDeviceHeading();
 
         setInterval(() => {
@@ -178,7 +197,7 @@ class ARScene extends React.Component {
         let currentPOIs = [...this.state.pois];
 
         if (this.state.poisReady) {
-            for (let i = 0; i < 10 && i < currentPOIs.length; i++) {
+            for (let i = 0; i < currentPOIs.length; i++) {
                 pointsOfInterest.push(
                     <PointOfInterest
                         onClickHandler={this.onPOIClickedHandler}
@@ -408,7 +427,7 @@ class ARScene extends React.Component {
             // console.log('pois repositioned');
         }
 
-        console.log('Skate park: ' + JSON.stringify(POIs[3].position) + '  ih = ' + this.state.initialHeading);
+        //console.log('Skate park: ' + JSON.stringify(POIs[3].position) + '  ih = ' + this.state.initialHeading);
 
         // if (this.state.calibrationOffset === false) {
         //     this.setCalibrationOffset();

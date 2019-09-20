@@ -1,0 +1,7 @@
+[
+    {"latitude": 46.9591975, "longitude": 31.9945625, "distance": 0, "position": [0,10,0], "title": "Near north poi", "rating": 0, "votes": "0", "type": "custom"},
+    {"latitude": 46.9664069, "longitude": 32.001888, "distance": 0, "position": [0,10,0], "title": "City Center", "rating": 5, "votes": "900", "type": "shop"},
+    {"latitude": 46.9541553, "longitude": 31.9935474, "distance": 0, "position": [0,10,0], "title": "ATM", "rating": 3, "votes": "817", "type": "atm"},
+    {"latitude": 46.9678573, "longitude": 31.9906763, "distance": 0, "position": [0,10,0], "title": "McDonalds", "rating": 3, "votes": "1.1k", "type": "coffee"},
+    {"latitude": 46.8512408, "longitude": 32.012833, "distance": 0, "position": [0,10,0], "title": "Skate Park", "rating": 3, "votes": "276", "type": "coffee"}
+]
