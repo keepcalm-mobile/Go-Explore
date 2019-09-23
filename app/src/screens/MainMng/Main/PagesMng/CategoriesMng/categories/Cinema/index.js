@@ -81,7 +81,7 @@ Cinema.propTypes = {
 const stateToProps = (state) => {
     return {
         // curCategory: state[ ModMap.Items ].curCategory,
-        data: state[ ModMap.Items ],//state[ ModMap.Categories ].data,
+        data: state[ ModMap.Items ].items,//state[ ModMap.Categories ].data,
     };
 };
 

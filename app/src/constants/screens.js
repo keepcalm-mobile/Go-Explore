@@ -38,7 +38,7 @@ export default class {
         static DataPages = 'DataPages';
             static HotPicks = 'hotPicks';
             static Cinema = 'cinema';
-                static BookTickets = 'BookTickets';
+                static BookingTickets = 'BookingTickets';
             static Attraction = 'attractions';
             static Travel = 'travel';
             static Shopping = 'shopping';
@@ -125,6 +125,6 @@ export default class {
     };
 
     static ItemsActions = {
-        [this.BookTickets]:true,
+        [this.BookingTickets]:this.Cinema,
     };
 }

@@ -62,18 +62,20 @@ class Keywords extends React.Component<Props> {
 
         return (
             <View style={s.keywordsContainer}>
-                {this.keywords()}
-                <TextInput
-                    style={s.keywordsInput}
-                    placeholder={'Type a keyword here...'}
-                    placeholderTextColor={'#ffffff'}
-                    value={this.state.keywordText}
-                    onChangeText={this.onChangeText}
-                    onEndEditing={this.onEndEditing}
-                />
+
+
             </View>
         );
     }
 }
 
 export default Keywords;
+// {/*<TextInput*/}
+// {/*    style={s.keywordsInput}*/}
+// {/*    placeholder={'Type a keyword here...'}*/}
+// {/*    placeholderTextColor={'#ffffff'}*/}
+// {/*    value={this.state.keywordText}*/}
+// {/*    onChangeText={this.onChangeText}*/}
+// {/*    onEndEditing={this.onEndEditing}*/}
+// {/*/>*/}
+//{this.keywords()}

@@ -8,7 +8,8 @@ import Travel from './categories/Travel';
 import Shopping from './categories/Shopping';
 import Dining from './categories/Dining';
 import HealthBeauty from './categories/HealthBeauty';
-import BookTicket from './categories/Cinema/BookTicket';
+import BookingTicket from './categories/Cinema/BookingTicket';
+import {colors} from "../../../../../styles";
 
 
 const CategoriesNavi = createStackNavigator({
@@ -19,7 +20,7 @@ const CategoriesNavi = createStackNavigator({
         [screens.Shopping]  : { screen: Shopping},
         [screens.Dining]  : { screen: Dining},
         [screens.HealthBeauty]  : { screen: HealthBeauty},
-        [screens.BookTickets]  : { screen: BookTicket},
+        [screens.BookingTickets]  : { screen: BookingTicket},
     },{
         initialRouteName: screens.HotPicks,
         initialRouteKey: screens.DataPages + screens.HotPicks + 'Key',
@@ -28,6 +29,14 @@ const CategoriesNavi = createStackNavigator({
         defaultNavigationOptions: {
             gesturesEnabled: true,
         },
+        cardStyle: {
+            backgroundColor: colors.bgCategory,
+        },
+        transitionConfig: () => ({
+            containerStyle: {
+                backgroundColor: colors.bgCategory,
+            },
+        }),
         cardShadowEnabled: false,
     }
 );

@@ -80,19 +80,20 @@ function hasErrored(iBool) {
     };
 }
 
-// function curItem(iValue) {
-//     return {
-//         type: t.SET_CUR_ITEM,
-//         curItem: iValue,
-//     };
-// }
-
 function updateItemData(iData) {
     return {
         type: t.ITEM_UPDATE_DATA,
         data: iData,
     };
 }
+
+function updateBookingCinemaData(iData) {
+    return {
+        type: t.BOOKING_CINEMA_DATA,
+        data: iData,
+    };
+}
+
 
 function loadItemData(iItemId, iDispatch) {
     fetch(api + '?user')//'?user='+iUser.email+'&pass='+md5(iUser.pass)
@@ -111,11 +112,42 @@ function loadItemData(iItemId, iDispatch) {
         .catch(() => iDispatch(hasErrored(true)));
 }
 
+function loadBookingCinemaData(iData, iDispatch) {
+    fetch('https://goexploreapi.azure-api.net/novo/cinema/getCinemasbyCountry?subscription-key=bbc34cdbc2df4e09b177542c6da3fb35&countryId=2')
+        .then((response) => {
+            if (!response.ok) throw Error(response.statusText);
+            return response.json();
+        })
+        .then((data) => {
+            iData.cinemas = data;
+            fetch('https://goexploreapi.azure-api.net/novo/showTime/getShowDate?subscription-key=bbc34cdbc2df4e09b177542c6da3fb35&countryId=2')
+                .then((response) => {
+                    if (!response.ok) throw Error(response.statusText);
+                    return response.json();
+                })
+                .then((data) => {
+                    iData.dates = data;
+                    fetch('https://goexploreapi.azure-api.net/novo/showTime/getShowTime?subscription-key=bbc34cdbc2df4e09b177542c6da3fb35&countryId=2')
+                        .then((response) => {
+                            if (!response.ok) throw Error(response.statusText);
+                            return response.json();
+                        })
+                        .then((data) => {
+                            iData.times = data;
+                            iDispatch(updateBookingCinemaData(iData));
+                            iDispatch(isLoading(false));
+                        });
+                });
+        })
+        .catch(() => iDispatch(hasErrored(true)));
+}
+
+
 export function getItem(iValue) {
     return (dispatch, getState) => {
         // dispatch(curItem(iValue));
 
-        if (getState()[ModMap.Items][iValue]){
+        if (getState()[ModMap.Items].items[iValue]){
             return Promise.resolve();
         } else {
             dispatch(isLoading(true));
@@ -123,3 +155,26 @@ export function getItem(iValue) {
         }
     };
 }
+
+export function getCinemasData(iValue = null) {
+    return (dispatch, getState) => {
+        if (getState()[ModMap.Items].bookingCinema.receivedAt - Date.now() > -600000){
+            return Promise.resolve();
+        } else {
+            dispatch(isLoading(true));
+            return loadBookingCinemaData( {receivedAt: Date.now()}, dispatch );
+        }
+    };
+}
+
+// export function getTicketTypeDetails(iValue) {
+//     return (dispatch, getState) => {
+//         if (getState()[ModMap.Items].bookingCinema.receivedAt - Date.now() > -600000){
+//             return Promise.resolve();
+//         } else {
+//             dispatch(isLoading(true));
+//             return loadBookingCinemaData( {receivedAt: Date.now()}, dispatch );
+//         }
+//     };
+// }
+//GetTicketTypeDetails - POST : countryid, cinemaid and sessionid

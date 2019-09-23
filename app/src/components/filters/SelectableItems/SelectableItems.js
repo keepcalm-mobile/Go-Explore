@@ -10,6 +10,7 @@ class SelectableItems extends React.Component<Props> {
         type: PropTypes.string.isRequired,
         data: PropTypes.array.isRequired,
         presets: PropTypes.array,
+        onChange: PropTypes.func,
     };
 
     static defaultProps = {
@@ -18,8 +19,15 @@ class SelectableItems extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-        this.state = {
-        };
+        this.state = { };
+        this.items = [];
+    }
+
+    componentWillUnmount(): void {
+        while (this.items.length !== 0){
+            this.items.shift();
+        }
+        this.items = null;
     }
 
     get value() {
@@ -32,17 +40,22 @@ class SelectableItems extends React.Component<Props> {
     }
 
     onItemClick = (iId) => {
+        if (this.props.onChange){
+            this.props.onChange(this.value);
+        }
+    };
 
+    onItemRef = iItem => {
+        if (iItem && this.items) {this.items.push(iItem);}
     };
 
     render() {
         const {data, presets} = this.props;
 
-        this.items = [];
         return (
             <View style={s.itemsContainer}>
                 {data.map( (item, key) => (
-                    <Item key={key + 'Key'} id={key} data={{label:item, active: presets && presets.indexOf(item) !== -1 ? true : false }} onPress={ this.onItemClick } ref={ c => this.items.push(c) } />
+                    <Item key={key + 'Key'} id={key} data={{label:item, active: presets && presets.indexOf(item) !== -1 ? true : false }} onPress={ this.onItemClick } ref={ this.onItemRef } />
                 ))}
             </View>
         );

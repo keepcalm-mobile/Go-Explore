@@ -43,7 +43,8 @@ class Cinema extends ScrollablePage {
     };
 
     onBookTicketPress = () => {
-        this.props.navigation.navigate({ routeName: screens.BookTickets, params:{itemId:'HO00005022'}, key:screens.BookTickets + '0003' + 'Key'});
+        // this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:'HO00005022'}, key:screens.BookingTickets + '0003' + 'Key'});
+        this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:this.state.curId}, key:screens.BookingTickets + this.state.curId + 'Key'});
     };
 
 

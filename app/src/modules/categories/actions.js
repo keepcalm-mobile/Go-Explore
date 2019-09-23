@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 const tempDataCinama = {header:[
         {
-            id : '0001',
+            id : 'HO00005013',
             image : 'https://naxlabel.mobi/products/goexplore/001.jpg',
             title : 'Avengers: Endgame',
             subTitle : 'Action, PG 13, English | 3h 2m',
@@ -26,7 +26,7 @@ const tempDataCinama = {header:[
             type : 'health',
         },
         {
-            id : '0003',
+            id : 'HO00005029',
             image : 'https://naxlabel.mobi/products/goexplore/003.jpg',
             title : 'The Lalit Golf & Spa Resort',
             subTitle : '1.1 km from Fatread Beach',
@@ -42,7 +42,7 @@ const tempDataCinama = {header:[
             title : 'Trending Now',
             data : [
                 {
-                    id: '00001',
+                    id: 'HO00005022',
                     image: 'https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/howtotraindragon-250x366.jpg',
                     title: 'How to Train\nYour Dragon:\nThe Hidden World',
                     subTitle: '1.1 km from Fatread Beach',
@@ -52,7 +52,7 @@ const tempDataCinama = {header:[
                     type: 'cinema',
                 },
                 {
-                    id: '00002',
+                    id: 'HO00005006',
                     image: 'https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/manikarnika-250x366.jpg',
                     title: 'Manikarnika:\nThe Queen of Jhansi',
                     subTitle: 'CHI, The SPA, the only luxury',
@@ -62,7 +62,7 @@ const tempDataCinama = {header:[
                     type: 'cinema',
                 },
                 {
-                    id: '00003',
+                    id: 'HO00005023',
                     image: 'https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/humming_250x366_1.jpg',
                     title: 'Cold Pursuit',
                     subTitle: '1.1 km from Fatread Beach',
@@ -78,7 +78,7 @@ const tempDataCinama = {header:[
             title : 'Things To Do',
             data : [
                 {
-                    id: '00001',
+                    id: 'HO00005006',
                     image: 'https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/alita-250x366.jpg',
                     title: 'Alita:\nBattle Angel',
                     rating: 3.5,
@@ -86,7 +86,7 @@ const tempDataCinama = {header:[
                     type: 'cinema',
                 },
                 {
-                    id: '00002',
+                    id: 'HO00005022',
                     image: 'https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/glass250x366.jpg',
                     title: 'Glass',
                     rating: 3.5,
@@ -94,7 +94,7 @@ const tempDataCinama = {header:[
                     type: 'cinema',
                 },
                 {
-                    id: '00003',
+                    id: 'HO00005023',
                     image: 'https://cmsapi-uat.novocinemas.com/images/NoImage/Movie/250x366/placeholder.jpg',
                     title: 'Spider-Man:\nFar From Home',
                     rating: 3.5,
@@ -108,7 +108,7 @@ const tempDataCinama = {header:[
             title : 'Newly Added',
             data : [
                 {
-                    id: '00001',
+                    id: 'HO00005029',
                     image: 'https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/poisonrose250x366.jpg',
                     title: 'The Poison Rose',
                     rating: 3.5,
@@ -138,7 +138,7 @@ const tempDataCinama = {header:[
             title : 'We Explored',
             data : [
                 {
-                    id: '00001',
+                    id: 'HO00005012',
                     image: 'https://naxlabel.mobi/img/portfolio/cabin.png',
                     title: 'Deepwater',
                     rating: 3.5,
@@ -146,7 +146,7 @@ const tempDataCinama = {header:[
                     type: 'cinema',
                 },
                 {
-                    id: '00002',
+                    id: 'HO00005013',
                     image: 'https://naxlabel.mobi/img/portfolio/cake.png',
                     title: 'Un Beau Soleil\nInterieur',
                     rating: 3.5,
@@ -154,7 +154,7 @@ const tempDataCinama = {header:[
                     type: 'cinema',
                 },
                 {
-                    id: '00003',
+                    id: 'HO00005029',
                     image: 'https://naxlabel.mobi/img/portfolio/submarine.png',
                     title: 'Deepwater',
                     rating: 3.5,

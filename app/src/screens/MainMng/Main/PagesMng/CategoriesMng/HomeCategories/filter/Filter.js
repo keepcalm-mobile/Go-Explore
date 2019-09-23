@@ -21,21 +21,31 @@ class Filter extends React.Component<Props> {
     constructor(props) {
         super(props);
 
-        this.state = {
-        };
+        this.state = { };
+        this.items = [];
+    }
+
+    componentWillUnmount(): void {
+        while (this.items.length !== 0){
+            this.items.shift();
+        }
+        this.items = null;
     }
 
     onApplyClick = () => {
         let presets = {};
-        this._items.forEach((item, index, array) => {
+        this.items.forEach((item, index, array) => {
             presets = {...presets, ...item.value};
         });
         this.props.onApplyClick(presets);
     };
 
+    onItemRef = iItem => {
+        if (iItem && this.items) {this.items.push(iItem);}
+    };
+
     render() {
         const {items, presets, filters} = this.props;
-        this._items = [];
 
         return (
             <LinearGradient style={s.filtersContainer} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={92} angleCenter={{ x: 0.5, y: 0.5}}>
@@ -44,7 +54,7 @@ class Filter extends React.Component<Props> {
                 {items.map( (item, key) => (
                     <>
                          <Text key={item.id + 'TitleKey'} style={s.filtersCategoryHeader}>{item.id}</Text>
-                         <item.item key={item.id + 'ItemKey'} ref={c => this._items.push(c)} type={item.id} presets={presets ? presets[item.id] : null} data={filters[item.id]}/>
+                         <item.item key={item.id + 'ItemKey'} ref={this.onItemRef} type={item.id} presets={presets ? presets[item.id] : null} data={filters[item.id]}/>
 
                          {key !== items.length - 1 && <HorizontalLine key={item.id + 'LineKey'}/>}
                     </>

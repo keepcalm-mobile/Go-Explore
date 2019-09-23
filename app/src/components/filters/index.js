@@ -5,4 +5,6 @@ export { default as Location } from './Location';
 export { default as Languages } from './Languages';
 export { default as RangeSlider } from './RangeSlider';
 export { default as SelectableItems } from './SelectableItems';
+export { default as NamedSwitch } from './SelectableItems/Item';
+export { default as ExperienceSelector } from './ExperienceSelector';
 export { default as HorizontalLine } from './HorizontalLine/HorizontalLine';

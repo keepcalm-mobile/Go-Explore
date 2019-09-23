@@ -20,13 +20,12 @@ class Location extends React.Component<Props> {
         })).isRequired,
         presets: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         placeholder : PropTypes.string,
-        onChoice: PropTypes.func,
+        onSelect: PropTypes.func,
     };
 
     static defaultProps = {
-        presets : undefined,
+        presets : null,
         placeholder : 'Press to select location',
-        onChoice:() => {},
     };
 
     constructor(props) {
@@ -68,7 +67,9 @@ class Location extends React.Component<Props> {
         }
 
         this.setState({ selectedId: iValue, title: title, titleColor: color });
-        this.props.onChoice(id);
+        if(this.props.onSelect) {
+            this.props.onSelect(id);
+        }
     };
 
     render() {

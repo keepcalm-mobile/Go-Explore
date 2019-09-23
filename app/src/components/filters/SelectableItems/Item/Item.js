@@ -1,5 +1,5 @@
 import type {Props} from 'react-native/Libraries/Components/View/View';
-import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import PropTypes from 'prop-types';
 import s from './style';
@@ -8,7 +8,7 @@ import {colors} from '../../../../styles';
 
 class Item extends React.Component<Props> {
     static propTypes = {
-        id: PropTypes.number.isRequired,
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number ]).isRequired,
         data: PropTypes.shape({
                 label: PropTypes.string.isRequired,
                 active: PropTypes.bool.isRequired,
@@ -18,30 +18,26 @@ class Item extends React.Component<Props> {
 
     constructor(props) {
         super(props);
-
         this.view = props.data.active ? this.viewActive : this.viewCommon;
-
         this.state = {
             isActive : props.data.active,
         };
     }
 
-    get isActive() { return this.state.isActive; }
+    set isActive(iValue){
+        if (this.state.isActive !== iValue){
+            this._setActivate(iValue);
+        }
+    }
+    get isActive() { return this.view === this.viewActive; } /** FASTER THEN AFTER "setState" (this.state.isActive) **/
     get label() { return this.props.data.label; }
 
-    deactivate = () => {
-        if (this.state.isActive){
-            this.setActivate(false);
-        }
-    };
-
     onItemPress = () => {
+        this._setActivate(!this.state.isActive);
         this.props.onPress(this.props.id);
-        this.setActivate(!this.state.isActive);
-        this.setState({isActive : !this.state.isActive});
     };
 
-    setActivate = (iValue) => {
+    _setActivate = (iValue) => {
         this.view = iValue ? this.viewActive : this.viewCommon;
         this.setState({isActive : iValue});
     };
@@ -65,7 +61,7 @@ class Item extends React.Component<Props> {
         const {label} = this.props.data;
 
         return (
-            <TouchableOpacity style={s.touchableArea} onPress={ this.onItemPress }>
+            <TouchableOpacity style={[s.touchableArea, this.props.style]} onPress={ this.onItemPress } disabled={this.state.isActive && this.props.id === -1}>
                 {this.view(label)}
             </TouchableOpacity>
         );

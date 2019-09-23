@@ -8,4 +8,7 @@ export { default as CarouselBig } from './CarouselBig';
 export { default as CarouselPersons } from './CarouselPersons';
 export { default as CarouselSmall } from './CarouselSmall';
 export { default as ComingSoon } from './ComingSoon';
-export {Keywords, CircleValues, CircleItem, HorizontalLine, Languages, Location, RangeSlider, SelectableItems} from './filters';
+export { default as CinemaDate } from './CinemeDate';
+export { default as CinemaTime } from './CinemeTime';
+export { default as CinemaTicketType } from './CinemaTicketType';
+export {Keywords, CircleValues, CircleItem, HorizontalLine, Languages, Location, RangeSlider, SelectableItems, NamedSwitch, ExperienceSelector} from './filters';

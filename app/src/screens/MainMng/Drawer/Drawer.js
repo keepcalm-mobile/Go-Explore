@@ -21,7 +21,7 @@ const icon = (Icon) => {
 };
 
 const button = (iTitle, iPress, iId, iCur, Icon = null) => {
-    let _disabled = iCur === iId ? true : false;
+    let _disabled = iCur === iId;
     return (
         <TouchableOpacity onPress = {() => iPress(iId)} activeOpacity={0.5} disabled={_disabled} style={{flexDirection:'row', width: '100%', height: scale(40), marginTop: scale(Icon ? 50 : 10), marginLeft: indent, marginRight: indent}}>
             {icon(Icon)}
@@ -62,8 +62,10 @@ class Drawer extends React.Component<Props> {
     };
 
     setCurPage = (iId) => {
-        if (screens.Categories[iId]){
-            this.setState({parentPage:screens.DataPages, curPage:iId});
+        if (screens.Categories[iId]) {
+            this.setState({parentPage: screens.DataPages, curPage: iId});
+        } else if (screens.ItemsActions[iId]) {
+            this.setState({parentPage: screens.DataPages, curPage: screens.ItemsActions[iId]});
         } else {
             this.setState({parentPage:iId, curPage:''});
         }
