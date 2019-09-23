@@ -33,10 +33,11 @@ export default class PointOfInterest extends React.Component {
             votes: props.votes ? props.votes : 0,
             title: props.title ? props.title : 'Coffee shop',
             distance: props.distance ? props.distance : 47,
-            position: props.position ? props.position : [0,0,-7],
+            position: props.position ? props.position : [0,10,-7],
             coords: props.coords ? props.coords : {latitude: 0, longitude: 0},
-            type: props.type ? props.type : 'coffee',
+            icon: props.icon ? props.icon : 'coffee',
             scale: [1,1,1],
+            specialOffer: props.specialOffer ? props.specialOffer : undefined,
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
 
@@ -59,34 +60,49 @@ export default class PointOfInterest extends React.Component {
     }
 
     onClickHandler(position, source) {
-        const CITY_CENTER = `Central Ave, 98, Mykolaiv, Mykolaivs\'ka oblast, 54000`; // {latitude: 46.9664069, longitude: 32.001888};
         console.log('CLICKED: ' + this.state.title);
         this.state.onClickHandler({
             title: this.state.title,
-            coords: this.state.coords,
-            target: CITY_CENTER
+            coords: this.state.coords
         });
     }
 
-    render() {
+    getSpecialOffer() {
+        if (typeof (this.state.specialOffer) === 'undefined') {
+            return null;
+        }
 
+        let pos = [0, -0.95, 0];
+
+        return (
+            <ViroNode scale={[0.8,0.8,0.8]} position={pos} transformBehaviors={["billboard"]} >
+                <ViroImage  height={1} width={4} source={frame} />
+                <ViroImage position={[-1.45,0,0.25]}  height={0.8} width={0.8} source={iconShop} />
+
+                <ViroText position={[0.6,0.15,0.25]} width={3} text={(this.state.specialOffer.title)} style={styles.text}  />
+                <ViroText position={[0.6,-0.15,0.25]} width={3} text={this.state.specialOffer.text} style={styles.text}  />
+            </ViroNode>
+        );
+    }
+
+    render() {
 
         let currentIcon = iconCafe;
         let currentPosition = [0,0.5, -9];
         let rate = rating4;
 
-        if (this.state.type === 'shop') {
+        if (this.state.icon === 'shop') {
             currentIcon = iconShop;
             rate = rating5;
             currentPosition = [-6,0, -11];
         }
-        else if (this.state.type === 'atm') {
+        else if (this.state.icon === 'atm') {
             currentIcon = iconATM;
             rate = rating3;
             currentPosition = [4.5, 0, -7];
         }
 
-        if (this.state.type !== 'custom') {
+        if (this.state.icon !== 'custom') {
             return (
 
                 <ViroNode scale={this.state.scale} position={currentPosition} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
@@ -97,6 +113,8 @@ export default class PointOfInterest extends React.Component {
                     <ViroText position={[0.6,0.15,0.25]} width={3} text={(this.state.title + '   ' + this.state.distance + 'm')} style={styles.text}  />
                     <ViroText position={[1.55,-0.35,0.25]} width={1} text={this.state.votes + ' votes'} style={styles.textSmall}  />
                     <ViroText position={[1.55,-0.15,0.25]} width={1} text={(this.state.distance / 1000 / 5 * 60).toFixed(2) + ' min'} style={styles.textSmall}  />
+
+                    {this.getSpecialOffer()}
 
                     {/*<ViroImage position={[-0.4,-0.1,0.05]}  height={0.2} width={0.2} source={require('../../res/icon_star.png')} />*/}
                     {/*<ViroImage source={require('../../res/cs.png')} width={2.79} height={1} />*/}
@@ -128,8 +146,6 @@ export default class PointOfInterest extends React.Component {
                 </ViroNode>
             );
         }
-
-
     }
 }
 

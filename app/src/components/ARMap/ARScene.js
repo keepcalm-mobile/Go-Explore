@@ -17,6 +17,7 @@ import {
 import PointOfInterest from './PointOfInterest';
 import EventsBridge from '../../utils/EventsBridge';
 import PoisData from './pois.json';
+import OffersData from './offers.json';
 
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
@@ -41,7 +42,7 @@ var updateCounter = 0;
 var POIs = [
 
     // {latitude: 85, longitude: -135.0005567, distance: 0, position: [0,10,0], title: 'NORTH poi', rating: 0, votes: '0', type: 'custom'},
-    {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Loading pois from json', rating: 0, votes: '0', type: 'custom'},
+    {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Loading pois from json', rating: 0, votes: '0', icon: 'custom'},
 
     // {latitude: 46.9664069, longitude: 32.001888, distance: 0, position: [0,10,0], title: 'City Center', rating: 5, votes: '900', type: 'shop'},
     // {latitude: 46.9541553, longitude: 31.9935474, distance: 0, position: [0,10,0], title: 'ATM', rating: 3, votes: '817', type: 'atm'},
@@ -154,7 +155,7 @@ class ARScene extends React.Component {
         console.log(PoisData);
         console.log(JSON.stringify(PoisData));
 
-        console.log('Before json: pois length = ' + POIs.length); 
+        console.log('Before json: pois length = ' + POIs.length);
         POIs  = PoisData;
         //POIs = JSON.parse(PoisData);
 
@@ -167,6 +168,8 @@ class ARScene extends React.Component {
             canUpdateCamera = true;
 
         }, 400);
+
+        this._formARObjectsCollection();
 
         // setInterval(() => {
         //
@@ -208,7 +211,8 @@ class ARScene extends React.Component {
                         distance={getDistanceBetweenCoordinates(currentPOIs[i].latitude, currentPOIs[i].longitude, this.state.currentPosition.latitude, this.state.currentPosition.longitude)}
                         rating={currentPOIs[i].rating}
                         votes={currentPOIs[i].votes}
-                        type={currentPOIs[i].type}
+                        icon={currentPOIs[i].icon}
+                        specialOffer={currentPOIs[i].specialOffer}
                         ref={(ref) => {
                             this.PoiRefs[i] = ref;
                         }}
@@ -530,6 +534,10 @@ class ARScene extends React.Component {
                 POIs[i].position.y = height;
                 height += inc;
 
+                if (typeof (this.PoiRefs[i]) !== 'undefined' && typeof (this.PoiRefs[i].state) !== 'undefined' && typeof (this.PoiRefs[i].state.specialOffer) !== 'undefined') {
+                    height += 0.8; // TODO: Set offer height somewhere
+                }
+
                 if (found == 0) {
                     firstIndex = i;
                 }
@@ -543,6 +551,26 @@ class ARScene extends React.Component {
         }
 
         //ToastAndroid.showWithGravity('found = '+found + '  degrees = ' + res, ToastAndroid.LONG, ToastAndroid.CENTER);
+    }
+
+    _formARObjectsCollection() {
+        let collection = [];
+        let k = 0;
+
+        for (let i = 0; i < PoisData.length; i++, k++) {
+            collection.push(PoisData[i]);
+            collection[k].position = [0, 10, 0];
+            collection[k].distance = 0;
+        }
+
+        for (let i = 0; i < OffersData.length; i++, k++) {
+            collection.push(OffersData[i]);
+            collection[k].position = [0, 10, 0];
+            collection[k].distance = 0;
+        }
+
+        console.log("Formed collection:");
+        console.log(JSON.stringify(collection));
     }
 }
 
