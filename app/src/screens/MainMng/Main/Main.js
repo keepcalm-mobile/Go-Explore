@@ -9,6 +9,8 @@ import MenuCategories from './MenuCategories';
 import s from './style';
 import {windowH, windowW} from '../../../styles';
 
+import EventsBridge from '../../../utils/EventsBridge';
+
 const mainX = Math.round(windowW * 0.45);
 const mainY = Math.round(windowH * 0.01);
 
@@ -91,6 +93,23 @@ class Main extends React.Component {
         }
 
         this._map.hide();
+
+        if (iTabId === screens.VirtualReality) {
+            if (EventsBridge.mapRef != null)
+                EventsBridge.mapRef.showMap(false);
+
+            if (EventsBridge.arComponent != null) {
+                EventsBridge.arComponent.exitNavigation();
+                EventsBridge.arComponent.startAR();
+            }
+        } else {
+            EventsBridge.mapRef.showMap(true);
+            EventsBridge.arComponent.reset();
+            if (EventsBridge.arScene != null) {
+                EventsBridge.arScene.reset();
+            }
+
+        }
     };
 
     openCategory = (iCategoryId) => {

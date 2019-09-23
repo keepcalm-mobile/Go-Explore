@@ -46,7 +46,6 @@ export default class MapViewNavigation extends Component {
         maxZoom: PropTypes.number,
         minZoom: PropTypes.number,
         animationDuration: PropTypes.number,
-        navigationMode: PropTypes.string,
         navigationViewingAngle: PropTypes.number,
         navigationZoomLevel: PropTypes.number,
         directionZoomQuantifier: PropTypes.number,
@@ -223,7 +222,7 @@ export default class MapViewNavigation extends Component {
      * @param coordinate
      * @param duration
      */
-    updatePosition(coordinate, duration = 0)
+    updatePosition(coordinate, duration = false)
     {
         // coordinate.latitude -= 0.006;
         // coordinate.longitude -= 0.006;
@@ -256,7 +255,7 @@ export default class MapViewNavigation extends Component {
     {
         //return;
 
-        console.log('bearing = ' + bearing);
+        //console.log('bearing = ' + bearing);
 
         //return; // didn't help
         //this.props.map().animateToBearing(bearing, duration || this.props.animationDuration);

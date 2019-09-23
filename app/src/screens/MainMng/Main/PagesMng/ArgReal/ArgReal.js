@@ -23,6 +23,8 @@ import Geolocation from 'react-native-geolocation-service';
 import ARComponent from '../../../../../../src/components/ARMap/ARComponent';
 import MapComponent from '../../../../../../src/components/ARMap/MapComponent';
 
+import EventsBridge from '../../../../../utils/EventsBridge';
+
 const GPS_TIMEOUT = 30000;
 const GPS_MAXIMUM_AGE = 60000;
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
@@ -32,12 +34,24 @@ class ArgReal extends ScrollablePage {
         super(props);
         this.state = {
             readyForAR: false,
+            arRunning: false, //was false
             heading: 0,
             gpsGranted: false,
             initialPosition: null,
             currentPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
+
+        EventsBridge.arComponent = this;
+    }
+
+    reset = () => {
+      this.mapComponent.exitNavigation();
+      this.setState({heading: 0, readyForAR: false, arRunning: true});
+    };
+
+    exitNavigation() {
+        this.mapComponent.exitNavigation();
     }
 
     onBackPress = () => {
@@ -53,22 +67,46 @@ class ArgReal extends ScrollablePage {
         else {
             this.getCurrentPosition();
         }
+
+        // console.log('Map ref = ' + EventsBridge.mapRef);
+        // EventsBridge.mapRef.showMap(false);
+
+        //
+        //this.startAR();
     }
 
     trackDeviceHeading() {
         const degree_update_rate = 3; // Number of degrees changed before the callback is triggered
         RNSimpleCompass.start(degree_update_rate, (degree) => {
             this.setState({heading: degree});
-            this.mapComponent.setHeading(degree);
+            // this.mapComponent.setHeading(degree);
 
-            if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
-                this.setState({readyForAR: true});
-                console.log('Loading AR scene...');
-            }
+            // if (EventsBridge.arScene !== null) {
+            //     EventsBridge.arScene.setHeading(degree);
+            // }
+
+            // if (this.state.readyForAR === false && this.state.heading >= 0 && this.state.heading <= 3) {
+            //     this.setState({readyForAR: true});
+            //     console.log('Loading AR scene...');
+            // }
         });
+
+        setInterval(() => {
+            this.mapComponent.setHeading(this.state.heading);
+            if (EventsBridge.arScene !== null) {
+                EventsBridge.arScene.setHeading(this.state.heading);
+            }
+            console.log('updating heading to ' + this.state.heading);
+        }, 1000);
     }
 
     setPosition(position) {
+
+        if (!position) {
+            console.log('invalid position = ' + position);
+            return;
+        }
+
         this.setState({
             currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude}
         });
@@ -103,17 +141,36 @@ class ArgReal extends ScrollablePage {
         if (this.state.readyForAR === false) {
             let tutorialText = 'Place your phone vertically\nLook around until it\'s zero, meaning you\'re heading North\nHeading = ' + this.state.heading;
 
+            tutorialText = 'Please keep your phone stable\nStarting AR...\nHeading =' + this.state.heading;
+
+            if (this.state.arRunning === false) {
+                tutorialText = 'Probably it was too dark or too bright, try pointing your camera to better lighting conditions and hit the button\nHeading =' + this.state.heading;
+            }
+
             return (
-                <View style={{width: '100%', height: '100%', position: 'absolute', top: 0, paddingTop: 50}}>
-
-                    <Text style={{fontSize: 22, color: '#444444', textAlign: 'center'}}>{tutorialText}</Text>
-
-                </View>
+                    <Text style={{fontSize: 22, color: '#dddddd', textAlign: 'center'}}>{tutorialText}</Text>
             );
         }
         else {
             return null;
         }
+    }
+
+    getARButton() {
+        if (this.state.arRunning === true) {
+            return null;
+        }
+        else {
+            return (<ButtonOrange title={'Launch AR'} onPress={this.startAR.bind(this)} style={{marginTop: 15}} />);
+        }
+    }
+
+    startAR() {
+        this.setState({readyForAR: false, arRunning: true});
+
+        setTimeout(() => {
+            this.setState({readyForAR: true, arRunning: true});
+        }, 1000);
     }
 
     getARComponent() {
@@ -124,7 +181,9 @@ class ArgReal extends ScrollablePage {
         return (
             <ARComponent
                 location={this.state.initialPosition}
+                heading={this.state.heading}
                 onClickHandler={this.onPOIClickHandler.bind(this)}
+                onTrackingLost={this.onTrackingLostHandler.bind(this)}
                 ref={ref => this.arComponent = ref}
             />
         );
@@ -135,6 +194,13 @@ class ArgReal extends ScrollablePage {
         //console.log('app this.state = ' + this.state);
 
         this.mapComponent.navigateTo(poi.coords);
+    }
+
+    onTrackingLostHandler() {
+
+        console.log('on tracking lost main script');
+        this.setState({readyForAR: false, arRunning: false});
+
     }
 
     async requestPermission() {
@@ -170,7 +236,7 @@ class ArgReal extends ScrollablePage {
     render() {
         return (
             <View style={{flex: 1}}>
-                {this.getTutorial()}
+
                 {this.getARComponent()}
 
                 <MapComponent
@@ -178,6 +244,14 @@ class ArgReal extends ScrollablePage {
                     location={this.state.currentPosition}
                     ref={ref => this.mapComponent = ref}
                 />
+
+                <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
+
+                {this.getTutorial()}
+                {this.getARButton()}
+
+                </View>
+
             </View>
         );
     }

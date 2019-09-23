@@ -1,0 +1,14 @@
+[
+    {"latitude": 46.9591975, "longitude": 31.9945625, "kind":  "poi", "title": "Near north poi", "rating": 0, "votes": "0", "icon": "custom"},
+    {"latitude": 46.9664069, "longitude": 32.001888, "kind":  "poi", "title": "City Center", "rating": 5, "votes": "900", "icon": "shop"},
+    {"latitude": 46.9541553, "longitude": 31.9935474, "kind":  "poi", "title": "ATM", "rating": 3, "votes": "817", "icon": "atm"},
+    {"latitude": 46.9678573, "longitude": 31.9906763, "kind":  "poi", "title": "McDonalds", "rating": 3, "votes": "1.1k", "icon": "coffee"},
+    {
+        "latitude": 46.8512408, "longitude": 32.012833, "kind":  "poi", "title": "Skate Park", "rating": 3, "votes": "276", "icon": "coffee",
+        "specialOffer":
+        {
+            "title":  "Special Offer",
+            "text": "30% Discount!!!"
+        }
+    }
+]

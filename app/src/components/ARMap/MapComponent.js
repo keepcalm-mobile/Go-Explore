@@ -75,8 +75,9 @@ export default class MapComponent extends Component {
       step: false
     };
 
-    this.navigationTimer = null;
-
+    //this.navigationTimer = null;
+    this.startedNavigation = false;
+    this.isPositionSet = false;
   }
 
   componentDidMount() {
@@ -95,7 +96,7 @@ export default class MapComponent extends Component {
             <View style={{backgroundColor: '#a0a0ff', width: tripleWidth, height: tripleWidth, borderRadius: tripleWidth, overflow: 'hidden', justifyContent: 'flex-start', alignItems: 'center'}}>
               <View
                   style={{
-                    backgroundColor: '#ff8800',
+                    backgroundColor: '#afc3ff',
                     width: windowW,//tripleWidth,
                     height: maskOffset, //700
                     //paddingTop: 50
@@ -146,7 +147,35 @@ export default class MapComponent extends Component {
   }
 
   setHeading(heading) {
-    this.setState({heading: heading});
+    //this.setState({heading: heading});
+
+    // console.log('Setting heading... this.isPositionSet = ' + this.isPositionSet);
+
+    if (this.startedNavigation) {
+
+      if (!this.refNavigation) {
+        console.log('invalid this.refNavigation = ' + this.refNavigation);
+        return;
+      }
+
+      if (this.isPositionSet === true) {
+        this.refNavigation.updateBearing(heading);
+      }
+      else {
+
+        this.isPositionSet = true;
+
+        this.refNavigation.setPosition({
+          ...this.state.currentPosition,
+          heading: heading,
+        });
+      }
+
+
+
+      //
+      // this.refNavigation.allowUpdate(false); // TODO: add ability to update the map?
+    }
   }
 
   setLocation(location) {
@@ -155,11 +184,13 @@ export default class MapComponent extends Component {
 
   navigateTo(target) {
 
-    if (this.navigationTimer !== null) {
-      clearInterval(this.navigationTimer);
-      this.navigationTimer = null;
-    }
+    // if (this.state.navigationMode !== NavigationModes.IDLE) {
+    //   clearInterval(this.navigationTimer);
+    //   // this.navigationTimer = null;
+    // }
 
+    this.isPositionSet = false;
+    this.startedNavigation = true;
     this.setState({destination: target});
 
     //setTimeout(() => {
@@ -168,28 +199,32 @@ export default class MapComponent extends Component {
     //}, 1000);
 
      setTimeout(() => {
-      this.goNavigateRoute();
 
-       if (this.navigationTimer !== null) {
-         clearInterval(this.navigationTimer);
-         this.navigationTimer = null;
+       if (this.startedNavigation === true) {
+         this.goNavigateRoute();
        }
 
-       this.navigationTimer = setInterval(() => {
-        this.refNavigation.setPosition({
-          ...this.state.currentPosition,
-          heading: this.state.heading,
-        });
 
-        this.refNavigation.allowUpdate(false); // TODO: add ability to update the map?
+       // if (this.state.navigationMode !== NavigationModes.IDLE) {
+       //   // clearInterval(this.navigationTimer);
+       //   // this.navigationTimer = null;
+       // }
 
-      }, 500);
+      //  this.navigationTimer = setInterval(() => {
+      //   this.refNavigation.setPosition({
+      //     ...this.state.currentPosition,
+      //     heading: this.state.heading,
+      //   });
+      //
+      //   this.refNavigation.allowUpdate(false); // TODO: add ability to update the map?
+      //
+      // }, 500);
 
     }, 200);
   }
 
   getCurrentPositionMarker() {
-    if (this.navigationTimer !== null) {
+    if (this.startedNavigation === true) {
       return null;
     }
 
@@ -203,7 +238,7 @@ export default class MapComponent extends Component {
   }
 
   getExitNavigation() {
-    if (this.navigationTimer === null) {
+    if (this.startedNavigation === false) {
       return null;
     }
 
@@ -224,7 +259,7 @@ export default class MapComponent extends Component {
         <View style={{
           position: 'absolute',
           width: windowW,
-          top: maskOffset - 185,
+          top: maskOffset - 170,
           //left: 0,
           //backgroundColor: '#aa66dd'
         }}>
@@ -232,6 +267,7 @@ export default class MapComponent extends Component {
               step={this.state.step}
               fontFamily={AppFonts.light}
               fontFamilyBold={AppFonts.bold}
+              arrowColor={'#cccccc'}
           />
         </View>
     );
@@ -324,17 +360,26 @@ export default class MapComponent extends Component {
   }
 
   exitNavigation() {
-    console.log('Exiting navigation...');
+    console.log('Exiting map navigation...');
 
     this.setState({
       navigationMode: NavigationModes.IDLE
     });
 
     this.refNavigation.clearRoute();
-    if (this.navigationTimer !== null) {
-      clearInterval(this.navigationTimer);
-      this.navigationTimer = null;
-    }
+    this.startedNavigation = false;
+
+    this.refNavigation.setPosition({
+      ...this.state.currentPosition,
+      heading: 0,
+    });
+
+    this.isPositionSet = false;
+
+    // if (this.navigationTimer !== null) {
+    //   clearInterval(this.navigationTimer);
+    //   this.navigationTimer = null;
+    // }
   }
 }
 
