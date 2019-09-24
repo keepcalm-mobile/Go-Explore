@@ -46,12 +46,17 @@ class ArgReal extends ScrollablePage {
     }
 
     reset = () => {
-      this.mapComponent.exitNavigation();
+        clearInterval(this._interval);
+        this._interval = null;
+        RNSimpleCompass.stop();
+      this.exitNavigation();
       this.setState({heading: 0, readyForAR: false, arRunning: true});
     };
 
     exitNavigation() {
-        this.mapComponent.exitNavigation();
+        if (this.mapComponent) {
+            this.mapComponent.exitNavigation();
+        }
     }
 
     onBackPress = () => {
@@ -59,6 +64,7 @@ class ArgReal extends ScrollablePage {
     };
 
     componentDidMount() {
+        super.componentDidMount();
         this.trackDeviceHeading();
 
         if (this.state.gpsGranted === false) {
@@ -73,6 +79,11 @@ class ArgReal extends ScrollablePage {
 
         //
         //this.startAR();
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+        this.reset();
     }
 
     trackDeviceHeading() {
@@ -91,7 +102,7 @@ class ArgReal extends ScrollablePage {
             // }
         });
 
-        setInterval(() => {
+        this._interval = setInterval(() => {
             this.mapComponent.setHeading(this.state.heading);
             if (EventsBridge.arScene !== null) {
                 EventsBridge.arScene.setHeading(this.state.heading);
@@ -167,7 +178,7 @@ class ArgReal extends ScrollablePage {
 
     startAR() {
         this.setState({readyForAR: false, arRunning: true});
-
+        if (!this._interval) this.trackDeviceHeading();
         setTimeout(() => {
             this.setState({readyForAR: true, arRunning: true});
         }, 1000);

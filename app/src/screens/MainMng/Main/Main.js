@@ -26,9 +26,28 @@ class Main extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        const prevRouteName = getCurrentRoute(prevProps.navigation.state);
         const newRouteName = getCurrentRoute(this.props.navigation.state);
+        console.log('________ NAVI MAIN PREV ROUTE : ' + prevRouteName);
         console.log('________ NAVI MAIN NEW ROUTE : ' + newRouteName);
+
         this._bottom.changeIcon(newRouteName);
+
+        if (newRouteName === screens.VirtualReality) {
+            this._map.showMap(false);
+
+            if (EventsBridge.arComponent != null) {
+                // EventsBridge.arComponent.exitNavigation();
+                EventsBridge.arComponent.startAR();
+            }
+        } else if (prevRouteName === screens.VirtualReality) {
+            this._map.showMap(true);
+            if (EventsBridge.arComponent != null)
+                EventsBridge.arComponent.reset();
+
+            if (EventsBridge.arScene != null)
+                EventsBridge.arScene.reset();
+        }
     }
 
     minimize = () => {
@@ -93,23 +112,6 @@ class Main extends React.Component {
         }
 
         this._map.hide();
-
-        if (iTabId === screens.VirtualReality) {
-            if (EventsBridge.mapRef != null)
-                EventsBridge.mapRef.showMap(false);
-
-            if (EventsBridge.arComponent != null) {
-                EventsBridge.arComponent.exitNavigation();
-                EventsBridge.arComponent.startAR();
-            }
-        } else {
-            EventsBridge.mapRef.showMap(true);
-            EventsBridge.arComponent.reset();
-            if (EventsBridge.arScene != null) {
-                EventsBridge.arScene.reset();
-            }
-
-        }
     };
 
     openCategory = (iCategoryId) => {
