@@ -12,8 +12,13 @@ import {
     ViroImage, ViroNode
 } from 'react-viro';
 
-import frame from './res/frame.png';
+import offerMinFrame from './res/offerMinFrame.png';
+import offerTimerFrame from './res/offerTimerFrame.png';
+import frame from '../../../assets/poiFrame.png';
+import iconAttraction from '../../../assets/attractionIcon.png';
 
+
+import iconOffer from './res/iconOffer.png';
 import iconCafe from './res/icon_cafe.png';
 import iconShop from './res/icon_shop.png';
 import iconATM from './res/icon_atm.png';
@@ -29,6 +34,8 @@ export default class PointOfInterest extends React.Component {
         super(props);
 
         this.state = {
+            kind: props.kind ? props.kind : 'poi',
+            text: props.text ? props.text : 'some offer text',
             rating: props.rating ? props.rating : 3,
             votes: props.votes ? props.votes : 0,
             title: props.title ? props.title : 'Coffee shop',
@@ -45,6 +52,12 @@ export default class PointOfInterest extends React.Component {
     }
 
     setPosition(position) {
+
+        if (typeof(this.node) === 'undefined') {
+            console.log('this.node = undefined for kind: ' + this.state.kind + '  title: ' + this.state.title);
+            return;
+        }
+
         this.node.setNativeProps({position: position});
 
         //this.setState({title: 'y = ' + position[1]});
@@ -72,78 +85,120 @@ export default class PointOfInterest extends React.Component {
             return null;
         }
 
-        let pos = [0, -0.95, 0];
+        let pos = [0, 1.05, 0];
+        let scale = [1,1,1];
 
+        if (this.state.kind === 'offer') {
+            pos = this.state.position;
+            scale = [1,1,1];
+
+            return (
+                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
+                    <ViroImage height={1} width={5} source={frame} />
+                    <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} />
+
+                    {/*<ViroImage position={[-0.55,-0.1,0.25]} height={0.2} width={1} source={rate} />*/}
+                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
+                    <ViroText position={[-1.15,-0.175,0.25]} width={3} text={this.state.text} style={styles.rating}  />
+                    <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall}  />
+                </ViroNode>
+            );
+        }
+        else {
+
+            pos = [-0.65, 1.05, 0];
+            scale = [0.8, 0.8, 0.8];
+
+            //TODO: Switch by offer type, types: percentage, fixed, timer
+            //TODO: adjust fontSize
+
+            //frame
+            let frameImage = offerMinFrame;
+            let frameHeight = 1;
+            let frameWidth = 4.57;
+
+            //icon
+            let iconPosition = [-1.7,0,0.25];
+            let iconImage = iconOffer;
+
+            //text
+            let textScale = [0.7,0.7,0.7];
+            let leftTextPosition = [-0.15,-0.1,0.25];
+            let rightTextPosition = [1.45,-0.1,0.25];
+            let leftTextWidth = 3;
+            let rightTextWidth = 2;
+
+            if (this.state.specialOffer.type === 'fixed') {
+                // values for an offer with the fixed price
+
+                frameWidth = 6;
+                iconPosition = [-2.4,0,0.25];
+                pos = [-0.1, 1.05, 0];
+                leftTextPosition = [-0.75,-0.1,0.25];
+                rightTextPosition = [1.65,-0.1,0.25];
+            }
+            else if (this.state.specialOffer.type === 'timer') {
+                // values for an offer with the timer
+                // this.state.specialOffer.expireDate in this case must be set
+
+                frameImage = offerTimerFrame;
+                frameWidth = 6.667;
+            }
+
+            return (
+                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} >
+                    <ViroImage  height={frameHeight} width={frameWidth} source={frameImage} />
+                    <ViroImage position={iconPosition}  height={0.8} width={0.8} source={iconImage} />
+
+                    <ViroText scale={textScale} position={leftTextPosition} width={leftTextWidth} text={(this.state.specialOffer.title)} style={styles.offerMainText}  />
+                    <ViroText scale={textScale} position={rightTextPosition} width={rightTextWidth} text={(this.state.specialOffer.text)} style={styles.offerSubText}  />
+                </ViroNode>
+            );
+        }
+    }
+
+    getPOI(currentIcon, rate) {
         return (
-            <ViroNode scale={[0.8,0.8,0.8]} position={pos} transformBehaviors={["billboard"]} >
-                <ViroImage  height={1} width={4} source={frame} />
-                <ViroImage position={[-1.45,0,0.25]}  height={0.8} width={0.8} source={iconShop} />
+            <ViroNode scale={this.state.scale} position={this.state.position} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
+                <ViroImage  height={1} width={5} source={frame} />
+                <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={currentIcon} />
 
-                <ViroText position={[0.6,0.15,0.25]} width={3} text={(this.state.specialOffer.title)} style={styles.text}  />
-                <ViroText position={[0.6,-0.15,0.25]} width={3} text={this.state.specialOffer.text} style={styles.text}  />
+                <ViroImage position={[-0.55,-0.1,0.25]} height={0.2} width={1} source={rate} />
+                <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
+                <ViroText position={[-1.15,-0.175,0.25]} width={0.5} text={(''+this.state.rating.toFixed(1))} style={styles.rating}  />
+                <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall}  />
+                {/*<ViroText position={[1.55,-0.15,0.25]} width={1} text={(this.state.distance / 1000 / 5 * 60).toFixed(2) + ' min'} style={styles.textSmall}  />*/}
+
+                {this.getSpecialOffer()}
             </ViroNode>
         );
     }
 
     render() {
 
-        let currentIcon = iconCafe;
-        let currentPosition = [0,0.5, -9];
-        let rate = rating4;
+        let currentIcon = iconAttraction;
+        //let currentPosition = [0,0.5, -9];
+        let rate = rating5;
 
         if (this.state.icon === 'shop') {
-            currentIcon = iconShop;
-            rate = rating5;
-            currentPosition = [-6,0, -11];
+            //currentIcon = iconShop;
+            //rate = rating5;
+            //currentPosition = [-6,0, -11];
         }
         else if (this.state.icon === 'atm') {
-            currentIcon = iconATM;
-            rate = rating3;
-            currentPosition = [4.5, 0, -7];
+            //currentIcon = iconATM;
+            //rate = rating3;
+            //currentPosition = [4.5, 0, -7];
         }
 
-        if (this.state.icon !== 'custom') {
+        if (this.state.kind === 'poi') {
             return (
-
-                <ViroNode scale={this.state.scale} position={currentPosition} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
-                    <ViroImage  height={1} width={4} source={frame} />
-                    <ViroImage position={[-1.45,0,0.25]}  height={0.8} width={0.8} source={currentIcon} />
-
-                    <ViroImage position={[0,-0.2,0.25]} height={0.315} width={1.83} source={rate} />
-                    <ViroText position={[0.6,0.15,0.25]} width={3} text={(this.state.title + '   ' + this.state.distance + 'm')} style={styles.text}  />
-                    <ViroText position={[1.55,-0.35,0.25]} width={1} text={this.state.votes + ' votes'} style={styles.textSmall}  />
-                    <ViroText position={[1.55,-0.15,0.25]} width={1} text={(this.state.distance / 1000 / 5 * 60).toFixed(2) + ' min'} style={styles.textSmall}  />
-
-                    {this.getSpecialOffer()}
-
-                    {/*<ViroImage position={[-0.4,-0.1,0.05]}  height={0.2} width={0.2} source={require('../../res/icon_star.png')} />*/}
-                    {/*<ViroImage source={require('../../res/cs.png')} width={2.79} height={1} />*/}
-
-                    {/*<ViroFlexView position={[0,-0.1,0.5]} height={0.4} width={1.2}>*/}
-                    {/*    {rating}*/}
-                    {/*</ViroFlexView>*/}
-                </ViroNode>
+                this.getPOI(currentIcon, rate)
             );
         }
         else {
             return (
-
-                <ViroNode scale={this.state.scale} position={currentPosition} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }}>
-                    <ViroImage  height={1} width={4} source={frame} />
-                    <ViroImage position={[-1.45,0,0.25]}  height={0.8} width={0.8} source={currentIcon} />
-
-                    <ViroImage position={[0,-0.2,0.25]} height={0.315} width={1.83} source={rate} />
-                    <ViroText position={[0.6,0.15,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
-                    {/*<ViroText position={[1.55,-0.35,0.25]} width={1} text={this.state.votes + ' votes'} style={styles.textSmall}  />*/}
-                    {/*<ViroText position={[1.55,-0.15,0.25]} width={1} text={(this.state.distance / 1000 / 5 * 60).toFixed(2) + ' min'} style={styles.textSmall}  />*/}
-
-                    {/*<ViroImage position={[-0.4,-0.1,0.05]}  height={0.2} width={0.2} source={require('../../res/icon_star.png')} />*/}
-                    {/*<ViroImage source={require('../../res/cs.png')} width={2.79} height={1} />*/}
-
-                    {/*<ViroFlexView position={[0,-0.1,0.5]} height={0.4} width={1.2}>*/}
-                    {/*    {rating}*/}
-                    {/*</ViroFlexView>*/}
-                </ViroNode>
+                this.getSpecialOffer(currentIcon, rate)
             );
         }
     }
@@ -152,17 +207,41 @@ export default class PointOfInterest extends React.Component {
 
 var styles = StyleSheet.create({
     text: {
-        fontFamily: 'Arial',
-        fontSize: 20,
-        color: '#222222',
+        fontFamily: 'Poppins, Arial',
+        fontSize: 35,
+        color: '#ffffff',
         textAlignVertical: 'center',
         textAlign: 'left',
         fontWeight: 'bold'
     },
     textSmall: {
-        fontFamily: 'Arial',
-        fontSize: 15,
-        color: '#222222',
+        fontFamily: 'Poppins, Arial',
+        fontSize: 17,
+        color: '#939393',
+        textAlignVertical: 'center',
+        textAlign: 'left',
+        fontWeight: 'bold'
+    },
+    rating: {
+        fontFamily: 'Poppins, Arial',
+        fontSize: 20,
+        color: '#F2C94C',
+        textAlignVertical: 'center',
+        textAlign: 'left',
+        fontWeight: 'bold'
+    },
+    offerMainText: {
+        fontFamily: 'Poppins, Arial',
+        fontSize: 50,
+        color: '#F2C94C',
+        textAlignVertical: 'center',
+        textAlign: 'left',
+        fontWeight: 'bold'
+    },
+    offerSubText: {
+        fontFamily: 'Poppins, Arial',
+        fontSize: 60,
+        color: '#000000',
         textAlignVertical: 'center',
         textAlign: 'left',
         fontWeight: 'bold'

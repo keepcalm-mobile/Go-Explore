@@ -19,6 +19,8 @@ import EventsBridge from '../../utils/EventsBridge';
 import PoisData from './pois.json';
 import OffersData from './offers.json';
 
+import PoiFrame from '../../../assets/poiFrame.png';
+
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
 
@@ -213,6 +215,7 @@ class ARScene extends React.Component {
                         votes={currentPOIs[i].votes}
                         icon={currentPOIs[i].icon}
                         specialOffer={currentPOIs[i].specialOffer}
+                        kind={currentPOIs[i].kind}
                         ref={(ref) => {
                             this.PoiRefs[i] = ref;
                         }}
@@ -224,6 +227,8 @@ class ARScene extends React.Component {
         return (
             <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this.onCameraTransformUpdateHandler}>
                 {/*<ViroText text={this.state.text2} scale={[.5, .5, .5]} position={[0, 0, -5]} style={styles.helloWorldTextStyle} ref={(ref) => { this.refText = ref }} />*/}
+
+                {/*<ViroImage source={PoiFrame} position={[0,1,-9]} width={5} height={1} />*/}
 
                 {/*{this.getTestPOI()}*/}
 
@@ -393,6 +398,8 @@ class ARScene extends React.Component {
 
     setPointsOfInterest() {
         updateCounter++;
+
+        this._formARObjectsCollection(); // Merge Offers and POIs into a single array
 
         for (let i = 0; i<POIs.length; i++){
             POIs[i].distance = getDistanceBetweenCoordinates(this.state.initialPosition.latitude, this.state.initialPosition.longitude, POIs[i].latitude, POIs[i].longitude);
@@ -569,8 +576,10 @@ class ARScene extends React.Component {
             collection[k].distance = 0;
         }
 
-        console.log("Formed collection:");
-        console.log(JSON.stringify(collection));
+        POIs = collection;
+
+        // console.log("Formed collection:");
+        // console.log(JSON.stringify(collection));
     }
 }
 
