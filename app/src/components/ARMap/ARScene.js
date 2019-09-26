@@ -19,8 +19,6 @@ import EventsBridge from '../../utils/EventsBridge';
 import PoisData from './pois.json';
 import OffersData from './offers.json';
 
-import PoiFrame from '../../../assets/poiFrame.png';
-
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
 
@@ -228,7 +226,24 @@ class ARScene extends React.Component {
             <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this.onCameraTransformUpdateHandler}>
                 {/*<ViroText text={this.state.text2} scale={[.5, .5, .5]} position={[0, 0, -5]} style={styles.helloWorldTextStyle} ref={(ref) => { this.refText = ref }} />*/}
 
-                {/*<ViroImage source={PoiFrame} position={[0,1,-9]} width={5} height={1} />*/}
+                {/*<ViroFlexView position={[0,0, -8]} width={5} height={1} style={{*/}
+                {/*    backgroundColor: '#66aa77',*/}
+                {/*    flexDirection: 'row',*/}
+                {/*}}>*/}
+                {/*    <ViroFlexView style={{*/}
+                {/*        backgroundColor: '#4a5dff',*/}
+                {/*        paddingLeft: 0.8,*/}
+                {/*        flex: 3*/}
+                {/*    }}>*/}
+                {/*        <ViroText text={'Sale'} style={{flex: 1, textAlignVertical: 'center', textAlign: 'left'}} />*/}
+                {/*    </ViroFlexView>*/}
+                {/*    <ViroFlexView style={{*/}
+                {/*        backgroundColor: '#ffe543',*/}
+                {/*        flex: 2*/}
+                {/*    }}>*/}
+
+                {/*    </ViroFlexView>*/}
+                {/*</ViroFlexView>*/}
 
                 {/*{this.getTestPOI()}*/}
 

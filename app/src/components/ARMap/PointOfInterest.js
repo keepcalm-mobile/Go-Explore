@@ -9,12 +9,22 @@ import {
     ViroText,
     ViroConstants,
     ViroFlexView,
-    ViroImage, ViroNode
+    ViroImage,
+    ViroNode,
+    ViroMaterials
 } from 'react-viro';
 
+import frameLeftBlackStart from './res/frameLeftBlackStart.png';
+import frameLeftBlackBody from './res/frameLeftBlackBody.png';
+import frameRightGoldBody from './res/frameRightGoldBody.png';
+import frameRightGoldEnd from './res/frameRightGoldEnd.png';
+
+import offerFrameLeftBlack from './res/frameLeftBlack.png';
+import offerFrameRightGold from './res/frameRightGold.png';
 import offerMinFrame from './res/offerMinFrame.png';
 import offerTimerFrame from './res/offerTimerFrame.png';
-import frame from '../../../assets/poiFrame.png';
+import frame from './res/poiFrame.png';
+import expandFrame from './res/expandFrame.png';
 import iconAttraction from '../../../assets/attractionIcon.png';
 
 
@@ -106,19 +116,31 @@ export default class PointOfInterest extends React.Component {
         }
         else {
 
-            pos = [-0.65, 1.05, 0];
-            scale = [0.8, 0.8, 0.8];
+            pos = [0, 1.05, 0];
+            scale = [0.7, 0.7, 0.7];//[0.8, 0.8, 0.8];
+
+            let minimized = true;
+
+            if (minimized === false) {
+                return (
+                    this.getMaximizedOffer()
+                );
+            }
 
             //TODO: Switch by offer type, types: percentage, fixed, timer
             //TODO: adjust fontSize
 
             //frame
             let frameImage = offerMinFrame;
-            let frameHeight = 1;
-            let frameWidth = 4.57;
+            let leftFrameHeight = 1;
+            let leftFrameWidth = 2.69;
+            let rightFrameHeight = 1;
+            let rightFrameWidth = 1.88;
+            let leftFramePosition = [-0.9,0,0];
+            let rightFramePosition = [1.38,0,0];
 
             //icon
-            let iconPosition = [-1.7,0,0.25];
+            let iconPosition = [-2,0,0.25];
             let iconImage = iconOffer;
 
             //text
@@ -128,33 +150,99 @@ export default class PointOfInterest extends React.Component {
             let leftTextWidth = 3;
             let rightTextWidth = 2;
 
+            //let leftTextFontSize = 80;
+
             if (this.state.specialOffer.type === 'fixed') {
                 // values for an offer with the fixed price
 
-                frameWidth = 6;
-                iconPosition = [-2.4,0,0.25];
-                pos = [-0.1, 1.05, 0];
-                leftTextPosition = [-0.75,-0.1,0.25];
-                rightTextPosition = [1.65,-0.1,0.25];
+                //frameWidth = 6;
+                // iconPosition = [-2.4,0,0.25];
+                // pos = [-0.1, 1.05, 0];
+                // leftTextPosition = [-0.75,-0.1,0.25];
+                // rightTextPosition = [1.65,-0.1,0.25];
+
+
             }
             else if (this.state.specialOffer.type === 'timer') {
                 // values for an offer with the timer
                 // this.state.specialOffer.expireDate in this case must be set
 
                 frameImage = offerTimerFrame;
-                frameWidth = 6.667;
+                //frameWidth = 6.667;
             }
 
+            let containerWidth = 4.96;
+            let leftImageWidth = containerWidth;
+            let pivot = [-2.5, 0, 0];
+
             return (
-                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} >
-                    <ViroImage  height={frameHeight} width={frameWidth} source={frameImage} />
+                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} scalePivot={pivot} >
+                    {/*<ViroImage  height={frameHeight} width={frameWidth} source={frameImage} />*/}
+
+                    <ViroFlexView width={containerWidth} height={1}
+                    style={{
+                        //backgroundColor: '#777777',
+                        flexDirection: 'row',
+                    }}>
+
+                        <ViroFlexView style={{
+                            //backgroundColor: '#b7671b',
+                            flex: 5,
+                        }} width={leftImageWidth} height={1} materials={["blackPartLeftStart"]}>
+                        </ViroFlexView>
+
+                        <ViroFlexView style={{
+                            //backgroundColor: '#b7671b',
+                            flex: 65,
+                            paddingTop: 0.4,
+                            paddingLeft: 0.8,
+                        }} width={leftImageWidth} height={1} materials={["blackPartLeft"]}>
+                            <ViroText text={(this.state.specialOffer.title)} style={styles.offerMainText} />
+                        </ViroFlexView>
+
+                        <ViroFlexView style={{
+                            //backgroundColor: '#b7671b',
+                            flex: 30,
+                            paddingTop: 0.4
+                        }} width={leftImageWidth} height={1} materials={["goldenPartRight"]}>
+                            <ViroText text={(this.state.specialOffer.text)} style={styles.offerSubText}  />
+                        </ViroFlexView>
+
+                        <ViroFlexView style={{
+                            //backgroundColor: '#b7671b',
+                            flex: 5
+                        }} width={leftImageWidth} height={1} materials={["goldenPartRightEnd"]}>
+                        </ViroFlexView>
+
+                        {/*<ViroImage height={1} width={2.69} source={offerFrameLeftBlack} />*/}
+                        {/*<ViroImage height={1} width={1.88} source={offerFrameRightGold} />*/}
+                    </ViroFlexView>
+
                     <ViroImage position={iconPosition}  height={0.8} width={0.8} source={iconImage} />
 
-                    <ViroText scale={textScale} position={leftTextPosition} width={leftTextWidth} text={(this.state.specialOffer.title)} style={styles.offerMainText}  />
-                    <ViroText scale={textScale} position={rightTextPosition} width={rightTextWidth} text={(this.state.specialOffer.text)} style={styles.offerSubText}  />
+                    {/*<ViroText scale={textScale} position={leftTextPosition} width={leftTextWidth} textAlign={'left'} textVerticalAlign={'center'}*/}
+                    {/*          text={(this.state.specialOffer.title)} style={[styles.offerMainText, {fontSize: leftTextFontSize}]}  />*/}
+                    {/*<ViroText scale={textScale} position={rightTextPosition} width={rightTextWidth} text={(this.state.specialOffer.text)} style={styles.offerSubText}  />*/}
                 </ViroNode>
             );
         }
+    }
+
+    getMaximizedOffer() {
+
+        let position = [0, 1.1, 0];
+
+        return (
+            <ViroNode position={position} transformBehaviors={["billboard"]}>
+                <ViroImage  height={1} width={5} source={expandFrame} />
+                <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
+
+                <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.rating} renderingOrder={2} />
+                <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
+
+            </ViroNode>
+        );
     }
 
     getPOI(currentIcon, rate) {
@@ -204,6 +292,20 @@ export default class PointOfInterest extends React.Component {
     }
 }
 
+ViroMaterials.createMaterials({
+    blackPartLeftStart: {
+        diffuseTexture: frameLeftBlackStart,
+    },
+    blackPartLeft: {
+        diffuseTexture: frameLeftBlackBody,
+    },
+    goldenPartRight: {
+        diffuseTexture: frameRightGoldBody,
+    },
+    goldenPartRightEnd: {
+        diffuseTexture: frameRightGoldEnd,
+    }
+});
 
 var styles = StyleSheet.create({
     text: {
@@ -231,20 +333,22 @@ var styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     offerMainText: {
-        fontFamily: 'Poppins, Arial',
+        fontFamily: 'sans-serif',
         fontSize: 50,
         color: '#F2C94C',
         textAlignVertical: 'center',
         textAlign: 'left',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        flex: 1
     },
     offerSubText: {
         fontFamily: 'Poppins, Arial',
-        fontSize: 60,
+        fontSize: 50,
         color: '#000000',
         textAlignVertical: 'center',
-        textAlign: 'left',
-        fontWeight: 'bold'
+        textAlign: 'center',
+        fontWeight: 'bold',
+        flex: 1
     },
 });
 

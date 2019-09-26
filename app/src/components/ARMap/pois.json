@@ -7,9 +7,11 @@
         "latitude": 46.8512408, "longitude": 32.012833, "kind":  "poi", "title": "Skate Park", "rating": 3, "votes": "276", "icon": "coffee",
         "specialOffer":
         {
-            "title": "-70%",
-            "text": "10:23:59:59",
-            "type": "timer"
+            "title": "Sale long text",
+            "text": "-70%",
+            "titleExpanded": "Sale -70%",
+            "textExpanded": "On all items",
+            "type": "fixed"
         }
     }
 ]
