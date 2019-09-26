@@ -19,7 +19,9 @@ class CarouselSmall extends React.Component<Props> {
     }
 
     _renderItem = (item, index) => {
-        const {id, type, image, title} = item;
+        const {id, title} = item;//image, type,
+        const image = item.url;
+        const type = 'cinema';
         return (
             // {/*<View key={item.id} style={s.slide}>*/}
             <TouchableOpacity key={id} onPress = { () => { this.props.onItemClick(id, type); }} activeOpacity={0.75} style={s.slide}>

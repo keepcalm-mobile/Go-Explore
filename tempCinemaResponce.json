@@ -1,0 +1,162 @@
+{
+  "header":[
+    {
+      "id" : "HO00005013",
+      "image" : "https://naxlabel.mobi/products/goexplore/001.jpg",
+      "title" : "Avengers: Endgame",
+      "subTitle" : "Action, PG 13, English | 3h 2m",
+      "rating" : 3.5,
+      "tags" : ["PG 13", "Action", "3 h 2 m"],
+      "url" : "https://youtu.be/TcMBFSGVi1c",
+      "type" : "cinema"
+    },
+    {
+      "id" : "0002",
+      "image" : "https://naxlabel.mobi/products/goexplore/002.jpg",
+      "title" : "CHI,  The SPA",
+      "subTitle" : "CHI, The SPA, the only luxury",
+      "rating" : 5.0,
+      "tags" : ["SPA", "Health", "Luxury"],
+      "url" : "https://youtu.be/TcMBFSGVi1c",
+      "type" : "health"
+    },
+    {
+      "id" : "HO00005029",
+      "image" : "https://naxlabel.mobi/products/goexplore/003.jpg",
+      "title" : "The Lalit Golf & Spa Resort",
+      "subTitle" : "1.1 km from Fatread Beach",
+      "rating" : 1.25,
+      "tags" : ["Resort", "SPA", "City Center"],
+      "url" : "https://youtu.be/TcMBFSGVi1c",
+      "type" : "cinema",
+    }
+  ],
+  "data":[
+    {
+      "type" : "big",
+      "title" : "Trending Now",
+      "data" : [
+        {
+          "id": "HO00005022",
+          "image": "https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/howtotraindragon-250x366.jpg",
+          "title": "How to Train\nYour Dragon:\nThe Hidden World",
+          "subTitle": "1.1 km from Fatread Beach",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "location": "Qatar, Doha",
+          "type": "cinema"
+        },
+        {
+          "id": "HO00005006",
+          "image": "https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/manikarnika-250x366.jpg",
+          "title": "Manikarnika:\nThe Queen of Jhansi",
+          "subTitle": "CHI, The SPA, the only luxury",
+          "rating": 5.0,
+          "date": "4 June 2019",
+          "location": "Qatar, Doha",
+          "type": "cinema"
+        },
+        {
+          "id": "HO00005023",
+          "image": "https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/humming_250x366_1.jpg",
+          "title": "Cold Pursuit",
+          "subTitle": "1.1 km from Fatread Beach",
+          "rating": 1.25,
+          "date": "4 June 2019",
+          "location": "Qatar, Doha",
+          "type": "cinema"
+        }
+      ]
+    },
+    {
+      "type" : "small",
+      "title" : "Things To Do",
+      "data" : [
+        {
+          "id": "HO00005006",
+          "image": "https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/alita-250x366.jpg",
+          "title": "Alita:\nBattle Angel",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "cinema"
+        },
+        {
+          "id": "HO00005022",
+          "image": "https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/glass250x366.jpg",
+          "title": "Glass",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "cinema"
+        },
+        {
+          "id": "HO00005023",
+          "image": "https://cmsapi-uat.novocinemas.com/images/Noimage/Movie/250x366/placeholder.jpg",
+          "title": "Spider-Man:\nFar From Home",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "cinema"
+        }
+      ]
+    },
+    {
+      "type" : "small",
+      "title" : "Newly Added",
+      "data" : [
+        {
+          "id": "HO00005029",
+          "image": "https://cmsapi-uat.novocinemas.com/Files/Movie/250x366/poisonrose250x366.jpg",
+          "title": "The Poison Rose",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "cinema"
+        },
+        {
+          "id": "00002",
+          "image": "https://naxlabel.mobi/img/portfolio/cake.png",
+          "title": "Un Beau Soleil\nInterieur",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "health"
+        },
+        {
+          "id": "00003",
+          "image": "https://naxlabel.mobi/img/portfolio/submarine.png",
+          "title": "Deepwater",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "dining"
+        }
+      ]
+    },
+    {
+      "type" : "small",
+      "title" : "We Explored",
+      "data" : [
+        {
+          "id": "HO00005012",
+          "image": "https://naxlabel.mobi/img/portfolio/cabin.png",
+          "title": "Deepwater",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "cinema"
+        },
+        {
+          "id": "HO00005013",
+          "image": "https://naxlabel.mobi/img/portfolio/cake.png",
+          "title": "Un Beau Soleil\nInterieur",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "cinema"
+        },
+        {
+          "id": "HO00005029",
+          "image": "https://naxlabel.mobi/img/portfolio/submarine.png",
+          "title": "Deepwater",
+          "rating": 3.5,
+          "date": "4 June 2019",
+          "type": "cinema"
+        }
+      ]
+    }
+  ]
+}

@@ -26,7 +26,15 @@ class Header extends React.Component<Props> {
     }
 
     _renderItem = ({item, index}) => {
-        const {id, type, image, title, subTitle, rating} = item;
+        const {id, title} = item;//type, subTitle, rating, image
+        const type = 'cinema';
+        const rating = Math.round(Math.random() * 5 * 10 ) / 10;
+        const image = item.url;
+        let subTitle = '';
+        if(item.hasOwnProperty('rating')) subTitle += item.rating + ' ';
+        if(item.hasOwnProperty('duration')) subTitle += item.duration + ' ';
+        if(item.hasOwnProperty('location')) subTitle += item.location + ' ';
+
         return (
             <View key={id} style={s.slide}>
                 <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />

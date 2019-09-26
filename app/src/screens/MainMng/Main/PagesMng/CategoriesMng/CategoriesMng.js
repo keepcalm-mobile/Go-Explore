@@ -9,7 +9,7 @@ import Shopping from './categories/Shopping';
 import Dining from './categories/Dining';
 import HealthBeauty from './categories/HealthBeauty';
 import BookingTicket from './categories/Cinema/BookingTicket';
-import {colors} from "../../../../../styles";
+import {colors} from '../../../../../styles';
 
 
 const CategoriesNavi = createStackNavigator({

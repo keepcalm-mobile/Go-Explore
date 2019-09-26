@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import s from './style';
 import {colors, indent} from '../../../styles';
 import LinearGradient from 'react-native-linear-gradient';
-import {HorizontalLine} from '../../filters';
-import TextGradient from "../../TextGradient";
 
 class Item extends React.Component<Props> {
     static propTypes = {
