@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import {View, StyleSheet, PermissionsAndroid, ToastAndroid} from 'react-native';
+import {View, Text, Image, StyleSheet, PermissionsAndroid, ToastAndroid} from 'react-native';
 
 import {
   ViroARScene,
@@ -50,7 +50,11 @@ class ARComponent extends React.Component {
     // console.log('ar component render');
 
     return (
-        <View style={{position: 'absolute', width: '100%', height: '100%', left: 0, top: 0}}>{this.getARNavigator()}</View>
+        <View style={{position: 'absolute', width: '100%', height: '100%', left: 0, top: 0}}>
+
+          {this.getARNavigator()}
+
+        </View>
     );
   }
 
@@ -64,10 +68,6 @@ class ARComponent extends React.Component {
         />
     );
   }
-
-  // setHeading(degree) {
-  //   this.setState();
-  // }
 
   onPOIClickHandler(poi) {
     console.log('AR Component CLICKED: ' + poi.title);
@@ -86,7 +86,7 @@ class ARComponent extends React.Component {
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
-    fontFamily: 'Arial',
+    fontFamily: 'Poppins, sans-serif',
     fontSize: 18,
     color: '#222222',
     textAlignVertical: 'center',

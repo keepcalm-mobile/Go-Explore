@@ -42,6 +42,8 @@ class ArgReal extends ScrollablePage {
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
 
+        this.specialOfferData = 'someData';
+
         EventsBridge.arComponent = this;
     }
 
@@ -244,6 +246,49 @@ class ArgReal extends ScrollablePage {
         }
     }
 
+    getSpecialOfferPopup() {
+        if (this.specialOfferData == null) {
+            return null;
+        }
+        else {
+            return (
+                <View style={styles.popupBackground}>
+                    <View style={styles.popup}>
+                        <View style={styles.popupHeader}>
+                            <View style={styles.popupHeaderIcon}></View>
+                            <View style={styles.headerText}>
+                                <Text text={'Sale -70%'} style={styles.text} />
+                            </View>
+                            <View style={styles.headerCloseBtn}></View>
+                        </View>
+                        <View style={styles.popupBody}>
+                            <View style={styles.poster}></View>
+                            <View style={styles.mainText}>
+                                <Text text={'On all items, including instore purchases, Valid till September 21, 2019'} style={styles.text} />
+                            </View>
+                            <View style={styles.subtext}>
+                                <Text text={'1.1km from Fatread Beach'} style={styles.text} />
+                            </View>
+                        </View>
+                        <View style={styles.footer}>
+                            <View style={styles.footerInfo}>
+                                <View style={styles.footerInfoRow}>
+                                    <View style={styles.footerInfoRowIcon}></View>
+                                    <View style={styles.footerText}><Text text={'Mar 20 - Mar 28'} style={styles.text} /></View>
+                                </View>
+                                <View style={styles.footerInfoRow}>
+                                    <View style={styles.footerInfoRowIcon}></View>
+                                    <View style={styles.footerText}><Text text={'Level 7, Conference Center'} style={styles.text} /></View>
+                                </View>
+                            </View>
+                            <View style={styles.navigateBtn}></View>
+                        </View>
+                    </View>
+                </View>
+            );
+        }
+    }
+
     render() {
         return (
             <View style={{flex: 1}}>
@@ -258,14 +303,131 @@ class ArgReal extends ScrollablePage {
 
                 <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
 
-                {this.getTutorial()}
-                {this.getARButton()}
+                    {this.getTutorial()}
+                    {this.getARButton()}
 
                 </View>
+
+                {this.getSpecialOfferPopup()}
 
             </View>
         );
     }
 }
+
+
+var styles = StyleSheet.create({
+    text: {
+        fontFamily: 'Poppins, sans-serif',
+        color: '#ffffff'
+    },
+    //popup
+    popupBackground: {
+        backgroundColor: '#00000066',
+        paddingLeft: 25,
+        paddingRight: 25,
+        //flex: 1,
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // paddingTop: 90
+    },
+    popup: {
+        backgroundColor: '#222',
+        //margin: 0 auto;
+        //width: 290px;
+        //display: flex;
+        width: '100%',
+        flexDirection: 'column',
+        padding: 15,
+        borderRadius: 10,
+        color: '#fff'
+    },
+    popupHeader: {
+        flexDirection: 'row'
+    },
+    popupHeaderIcon: {
+        backgroundColor: '#ffff44',
+        flexBasis: 26
+    },
+
+    headerCloseBtn: {
+        backgroundColor: '#ffff44',
+        flexBasis: 26
+    },
+
+    headerText: {
+        flex: 1,
+        paddingLeft: 12,
+        paddingRight: 12,
+        fontWeight: 'bold',
+        fontSize: 20,
+        fontFamily: 'Poppins, sans-serif'
+    },
+
+    popupBody: {
+        paddingTop: 10,
+        paddingBottom: 17,
+        //display: flex,
+        flexDirection: 'column'
+    },
+
+    poster: {
+        flexBasis: 223,
+        backgroundColor: '#ffee77'
+    },
+
+    mainText: {
+        fontSize: 14,
+        color: '#f2c94c',
+        paddingTop: 10,
+        paddingBottom: 7,
+        fontWeight: 'bold',
+        fontFamily: 'Poppins, sans-serif',
+    },
+
+    subtext : {
+        fontSize: 10,
+        color: '#939393',
+        fontFamily: 'Poppins, sans-serif',
+    },
+
+    footer: {
+        flexDirection: 'row',
+        paddingTop: 17,
+    },
+
+    footerInfo : {
+        flex: 1,
+    },
+
+    footerInfoRow: {
+        flexDirection: 'row',
+        paddingRight: 17,
+    },
+
+    footerPb: {
+        paddingBottom: 12,
+    },
+
+    footerInfoRowIcon : {
+        backgroundColor: '#ffdd44',
+        flexBasis: 16,
+    },
+
+    footerText : {
+        flex: 1,
+        paddingLeft: 18,
+        fontSize: 14,
+        fontFamily: 'Poppins, sans-serif',
+    },
+
+    navigateBtn : {
+        flexBasis: 65,
+        backgroundColor: '#ffdd44',
+    },
+});
 
 export default ArgReal;
