@@ -116,7 +116,7 @@ export default class PointOfInterest extends React.Component {
         }
         else {
 
-            pos = [0, 1.25, 0];
+            pos = [0, 1.0, 0];
             scale = [1,1,1]; //[0.7, 0.7, 0.7];//[0.8, 0.8, 0.8];
 
             let minimized = true;
@@ -130,29 +130,38 @@ export default class PointOfInterest extends React.Component {
             //TODO: Switch by offer type, types: percentage, fixed, timer
             //TODO: adjust fontSize
 
-            const initialSymbolsCount = 8;
-            const initialContainerWidth = 5;//4.96;
-            let currentSymbolsCount = this.state.specialOffer.title.length + this.state.specialOffer.text.length;
+            const initialLeftPartFlexValue = 40;
+            const initialSymbolsCountLeft = 5;
+            let currentSymbolsCountLeft = this.state.specialOffer.title.length;
+            let currentLeftPartFlexValue = this.state.specialOffer.title.length;
+
+            const initialRightPartFlexValue = 25;
+            const initialSymbolsCountRight = 4;
+            let currentSymbolsCountRight = this.state.specialOffer.text.length;
+            let currentRightPartFlexValue = this.state.specialOffer.text.length;
+
+            const fullLengthSymbolsCount = 20;
+            let symbolsTotal = (currentLeftPartFlexValue + currentRightPartFlexValue);
+
+            let restFlexValue = (fullLengthSymbolsCount - symbolsTotal);
+
+            if (symbolsTotal >= fullLengthSymbolsCount)
+                restFlexValue = 0;
+
+            let endingsFlexValue = (symbolsTotal + restFlexValue) * 0.05;
 
             //frame
             let frameImage = offerMinFrame;
             //icon
             let iconPosition = [-2.2,0,0.25];
             let iconImage = iconOffer;
-            let leftPartFlexValue = 67;
-            let rightPartFlexValue = 32;
+            let leftPartFlexValue = 64;
+            let rightPartFlexValue = 30;
 
-            let containerWidth = 5; //initialContainerWidth * (currentSymbolsCount / initialSymbolsCount);
-            // scale[0] *= (containerWidth / initialContainerWidth);
-            //
-            // if (scale[0] >= 1)
-            //     scale[0] = 1;
-            // else if (scale[0] <= 0.7)
-            //     scale[0] = 0.7;
+            let containerWidth = 5;
 
             let pivot = [-2.5, 0, 0];
-
-
+            let height = 0.65;
 
             if (this.state.specialOffer.type === 'timer') {
                 // values for an offer with the timer
@@ -166,7 +175,7 @@ export default class PointOfInterest extends React.Component {
                 <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} >
                     {/*<ViroImage  height={frameHeight} width={frameWidth} source={frameImage} />*/}
 
-                    <ViroFlexView width={5} height={0.5}
+                    <ViroFlexView width={5} height={height}
                     style={{
                         //backgroundColor: '#777777',
                         flexDirection: 'row',
@@ -174,37 +183,37 @@ export default class PointOfInterest extends React.Component {
 
                         <ViroFlexView style={{
                             //backgroundColor: '#b7671b',
-                            flex: 3,
-                        }} height={0.5} materials={["blackPartLeftStart"]}>
+                            flex: endingsFlexValue,
+                        }} height={height} materials={["blackPartLeftStart"]}>
                         </ViroFlexView>
 
                         <ViroFlexView style={{
                             //backgroundColor: '#b7671b',
-                            flex: leftPartFlexValue,
+                            flex: currentLeftPartFlexValue,
                             paddingTop: 0.1,
                             paddingLeft: 0.5,
-                        }} height={0.5} materials={["blackPartLeft"]}>
+                        }} height={height} materials={["blackPartLeft"]}>
                             <ViroText text={(this.state.specialOffer.title)} style={styles.offerMainText} />
                         </ViroFlexView>
 
                         <ViroFlexView style={{
                             //backgroundColor: '#b7671b',
-                            flex: rightPartFlexValue,
+                            flex: currentRightPartFlexValue,
                             paddingTop: 0.1
-                        }} height={0.5} materials={["goldenPartRight"]}>
+                        }} height={height} materials={["goldenPartRight"]}>
                             <ViroText text={(this.state.specialOffer.text)} style={styles.offerSubText}  />
                         </ViroFlexView>
 
                         <ViroFlexView style={{
                             //backgroundColor: '#b7671b',
-                            flex: 3
-                        }} height={0.5} materials={["goldenPartRightEnd"]}>
+                            flex: endingsFlexValue
+                        }} height={height} materials={["goldenPartRightEnd"]}>
                         </ViroFlexView>
 
                         <ViroFlexView style={{
                             // backgroundColor: '#b7671b',
-                            flex: 60,
-                        }} height={0.5}>
+                            flex: restFlexValue,
+                        }} height={height}>
                         </ViroFlexView>
 
                         {/*<ViroImage height={1} width={2.69} source={offerFrameLeftBlack} />*/}
