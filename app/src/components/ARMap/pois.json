@@ -11,6 +11,9 @@
             "text": "-70%",
             "titleExpanded": "Sale -70%",
             "textExpanded": "On all items",
+            "textPopup": "On all items, including instore bla bla bla",
+            "fromTo": "Mar 20 - Mar 29",
+            "location": "Level 7, Conference Center",
             "type": "fixed"
         }
     }

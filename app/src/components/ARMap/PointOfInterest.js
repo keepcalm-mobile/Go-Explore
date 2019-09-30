@@ -11,7 +11,8 @@ import {
     ViroFlexView,
     ViroImage,
     ViroNode,
-    ViroMaterials
+    ViroMaterials,
+    ViroAnimations
 } from 'react-viro';
 
 import frameLeftBlackStart from './res/frameLeftBlackStart.png';
@@ -28,7 +29,7 @@ import expandFrame from './res/expandFrame.png';
 import iconAttraction from '../../../assets/attractionIcon.png';
 
 
-import iconOffer from './res/iconOffer.png';
+import iconOffer from './res/iconDiscount.png';
 import iconCafe from './res/icon_cafe.png';
 import iconShop from './res/icon_shop.png';
 import iconATM from './res/icon_atm.png';
@@ -38,12 +39,16 @@ import  rating2 from './res/rating_2.png';
 import  rating3 from './res/rating_3.png';
 import  rating4 from './res/rating_4.png';
 import  rating5 from './res/rating_5.png';
+import EventsBridge from "../../utils/EventsBridge";
 
 export default class PointOfInterest extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            isMinimized: true,
+            objectAnimation: 'scaleDown',
+            runObjectAnimation: false,
             kind: props.kind ? props.kind : 'poi',
             text: props.text ? props.text : 'some offer text',
             rating: props.rating ? props.rating : 3,
@@ -59,14 +64,18 @@ export default class PointOfInterest extends React.Component {
         };
 
         this.onClickHandler = this.onClickHandler.bind(this);
+        this.onOfferClickHandler = this.onOfferClickHandler.bind(this);
+        this.onOfferAnimationFinished = this.onOfferAnimationFinished.bind(this);
     }
 
     setPosition(position) {
 
-        if (typeof(this.node) === 'undefined') {
-            console.log('this.node = undefined for kind: ' + this.state.kind + '  title: ' + this.state.title);
-            return;
-        }
+        // if (typeof(this.node) === 'undefined') {
+        //     console.log('this.node = undefined for kind: ' + this.state.kind + '  title: ' + this.state.title);
+        //     return;
+        // }
+
+        // console.log(this.state.title + ' pos = ' + this.state.position + ' got pos = ' + position);
 
         this.node.setNativeProps({position: position});
 
@@ -84,10 +93,43 @@ export default class PointOfInterest extends React.Component {
 
     onClickHandler(position, source) {
         console.log('CLICKED: ' + this.state.title);
+
+        if (this.state.isMinimized === true) {
+
+            this.setState({
+                objectAnimation: 'fadeOut',
+                runObjectAnimation: true
+            });
+
+            // this.setState({isMinimized: false});
+            return;
+        }
+
         this.state.onClickHandler({
             title: this.state.title,
             coords: this.state.coords
         });
+    }
+
+    onOfferClickHandler() {
+
+        console.log('Clicked on offer');
+
+        EventsBridge.arComponent.setPopupData({
+            coords: this.state.coords,
+            offer: this.state.specialOffer
+        });
+    }
+
+    onOfferAnimationFinished() {
+
+        if (this.state.objectAnimation === 'fadeOut') {
+            this.setState({
+                objectAnimation: 'fadeIn',
+                runObjectAnimation: true,
+                isMinimized: false
+            });
+        }
     }
 
     getSpecialOffer() {
@@ -95,7 +137,9 @@ export default class PointOfInterest extends React.Component {
             return null;
         }
 
-        let pos = [0, 0.8, 0];
+        let pos = {...this.state.position};
+        pos[1] += 0.8;
+            //[0, 0.8, 0];
         let scale = [1,1,1];
 
         if (this.state.kind === 'offer') {
@@ -103,7 +147,9 @@ export default class PointOfInterest extends React.Component {
             scale = [1,1,1];
 
             return (
-                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
+                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
+                          animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
+                              onFinish: this.onOfferAnimationFinished}}>
                     <ViroImage height={1} width={5} source={frame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} />
 
@@ -119,9 +165,7 @@ export default class PointOfInterest extends React.Component {
             pos = [0, 1.0, 0];
             scale = [1,1,1]; //[0.7, 0.7, 0.7];//[0.8, 0.8, 0.8];
 
-            let minimized = true;
-
-            if (minimized === false) {
+            if (this.state.isMinimized === false) {
                 return (
                     this.getMaximizedOffer()
                 );
@@ -172,7 +216,9 @@ export default class PointOfInterest extends React.Component {
             }
 
             return (
-                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} >
+                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]}
+                          animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
+                          onFinish: this.onOfferAnimationFinished}}>
                     {/*<ViroImage  height={frameHeight} width={frameWidth} source={frameImage} />*/}
 
                     <ViroFlexView width={5} height={height}
@@ -234,8 +280,14 @@ export default class PointOfInterest extends React.Component {
 
         let position = [0, 1.1, 0];
 
+        if (this.state.kind === 'offer') {
+            position = {...this.state.position};
+        }
+
         return (
-            <ViroNode position={position} transformBehaviors={["billboard"]}>
+            <ViroNode position={position} transformBehaviors={["billboard"]} onClick={this.onOfferClickHandler}
+                      animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
+                          onFinish: this.onOfferAnimationFinished}}>
                 <ViroImage  height={1} width={5} source={expandFrame} />
                 <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
@@ -249,8 +301,8 @@ export default class PointOfInterest extends React.Component {
 
     getPOI(currentIcon, rate) {
         return (
-            <ViroNode position={this.state.position} >
-                <ViroNode scale={this.state.scale} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
+            <ViroNode>
+                <ViroNode position={this.state.position} scale={this.state.scale} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
                     <ViroImage  height={1} width={5} source={frame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={currentIcon} />
 
@@ -263,7 +315,7 @@ export default class PointOfInterest extends React.Component {
                     {this.getSpecialOffer()}
                 </ViroNode>
 
-                {this.getSpecialOffer()}
+                {/*{this.getSpecialOffer()}*/}
             </ViroNode>
         );
     }
@@ -311,6 +363,16 @@ ViroMaterials.createMaterials({
     goldenPartRightEnd: {
         diffuseTexture: frameRightGoldEnd,
     }
+});
+
+/*
+ * Register the various animations we require
+ */
+ViroAnimations.registerAnimations({
+    fadeOut:{properties:{opacity:0}, duration:500},
+    fadeIn:{properties:{opacity: 1}, duration:500},
+    scaleDown:{properties:{scaleX: 0, scaleY: 0, scaleZ: 0}, duration:1000},
+    scaleUp:{properties:{scaleX: 1, scaleY: 1, scaleZ: 1}, duration:1000, easing: 'Bounce'},
 });
 
 var styles = StyleSheet.create({

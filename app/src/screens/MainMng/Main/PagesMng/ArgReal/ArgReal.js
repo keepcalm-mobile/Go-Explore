@@ -11,6 +11,7 @@ import {
     AppRegistry,
     Text,
     View,
+    Image,
     StyleSheet,
     TouchableOpacity,
     Dimensions,
@@ -25,6 +26,14 @@ import MapComponent from '../../../../../../src/components/ARMap/MapComponent';
 
 import EventsBridge from '../../../../../utils/EventsBridge';
 
+//icons
+import iconDiscount from '../../../../../components/ARMap/res/iconDiscount.png';
+import iconClock from '../../../../../components/ARMap/res/iconClock.png';
+import iconMarker from '../../../../../components/ARMap/res/iconMarker.png';
+import iconNavigate from '../../../../../components/ARMap/res/iconNavigate.png';
+import iconClose from '../../../../../components/ARMap/res/iconClose.png';
+import offerImage from '../../../../../components/ARMap/res/offerImage.png';
+
 const GPS_TIMEOUT = 30000;
 const GPS_MAXIMUM_AGE = 60000;
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
@@ -38,11 +47,10 @@ class ArgReal extends ScrollablePage {
             heading: 0,
             gpsGranted: false,
             initialPosition: null,
+            specialOfferData: null,
             currentPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
-
-        this.specialOfferData = 'someData';
 
         EventsBridge.arComponent = this;
     }
@@ -203,7 +211,7 @@ class ArgReal extends ScrollablePage {
     }
 
     onPOIClickHandler(poi) {
-        console.log('App CLICKED: ' + poi.title + ' coords: ' + JSON.stringify(poi.coords));
+        // console.log('App CLICKED: ' + poi.title + ' coords: ' + JSON.stringify(poi.coords));
         //console.log('app this.state = ' + this.state);
 
         this.mapComponent.navigateTo(poi.coords);
@@ -246,8 +254,23 @@ class ArgReal extends ScrollablePage {
         }
     }
 
+    setPopupData(data) {
+        this.setState({specialOfferData: data});
+    }
+
+    onPopupCloseHandler() {
+        console.log('closing popup');
+        this.setPopupData(null);
+    }
+
+    onPopupNavigateHandler() {
+        console.log('clicked navigate button');
+        this.mapComponent.navigateTo(this.state.specialOfferData.coords);
+        this.setPopupData(null);
+    }
+
     getSpecialOfferPopup() {
-        if (this.specialOfferData == null) {
+        if (this.state.specialOfferData == null) {
             return null;
         }
         else {
@@ -255,33 +278,43 @@ class ArgReal extends ScrollablePage {
                 <View style={styles.popupBackground}>
                     <View style={styles.popup}>
                         <View style={styles.popupHeader}>
-                            <View style={styles.popupHeaderIcon}></View>
-                            <View style={styles.headerText}>
-                                <Text text={'Sale -70%'} style={styles.text} />
+                            <View style={styles.popupHeaderIcon}><Image source={iconDiscount} style={{width: 26, height: 26}} /></View>
+                            <View style={styles.headerTextContainer}>
+                                <Text style={styles.headerText}>{this.state.specialOfferData.offer.titleExpanded}</Text>
                             </View>
-                            <View style={styles.headerCloseBtn}></View>
+                            <View style={styles.headerCloseBtn}>
+                                <TouchableOpacity onPress={this.onPopupCloseHandler.bind(this)}><Image source={iconClose} style={{width: 26, height: 26}} /></TouchableOpacity>
+                            </View>
                         </View>
                         <View style={styles.popupBody}>
-                            <View style={styles.poster}></View>
-                            <View style={styles.mainText}>
-                                <Text text={'On all items, including instore purchases, Valid till September 21, 2019'} style={styles.text} />
+                            <View style={styles.poster}><Image source={offerImage} style={{width: '100%', height: '100%'}} /></View>
+                            <View style={styles.mainTextContainer}>
+                                <Text style={styles.mainText}>{this.state.specialOfferData.offer.textPopup}</Text>
                             </View>
-                            <View style={styles.subtext}>
-                                <Text text={'1.1km from Fatread Beach'} style={styles.text} />
+                            <View>
+                                <Text style={styles.subtext}>1.1km from Fatread Beach</Text>
                             </View>
+                        </View>
+                        <View style={styles.borderContainer}>
+                            <View style={styles.borderLineBlack}/>
+                            <View style={styles.borderLineGray}/>
                         </View>
                         <View style={styles.footer}>
                             <View style={styles.footerInfo}>
-                                <View style={styles.footerInfoRow}>
-                                    <View style={styles.footerInfoRowIcon}></View>
-                                    <View style={styles.footerText}><Text text={'Mar 20 - Mar 28'} style={styles.text} /></View>
+                                <View style={[styles.footerInfoRow, styles.footerPb]}>
+                                    <View style={styles.footerInfoRowIcon}><Image source={iconClock} style={{width: 16, height: 16}} /></View>
+                                    <View style={styles.footerTextContainer}><Text style={styles.footerText}>{this.state.specialOfferData.offer.fromTo}</Text></View>
                                 </View>
                                 <View style={styles.footerInfoRow}>
-                                    <View style={styles.footerInfoRowIcon}></View>
-                                    <View style={styles.footerText}><Text text={'Level 7, Conference Center'} style={styles.text} /></View>
+                                    <View style={styles.footerInfoRowIcon}><Image source={iconMarker} style={{width: 12, height: 16}} /></View>
+                                    <View style={styles.footerTextContainer}><Text style={styles.footerText}>{this.state.specialOfferData.offer.location}</Text></View>
                                 </View>
                             </View>
-                            <View style={styles.navigateBtn}></View>
+                            <View style={styles.borderContainerVertical}>
+                                <View style={styles.borderLineBlack}/>
+                                <View style={styles.borderLineGray}/>
+                            </View>
+                            <View style={styles.navigateBtn}><TouchableOpacity onPress={this.onPopupNavigateHandler.bind(this)}><Image source={iconNavigate} style={{width: 30, height: 30}} /></TouchableOpacity></View>
                         </View>
                     </View>
                 </View>
@@ -317,9 +350,10 @@ class ArgReal extends ScrollablePage {
 
 
 var styles = StyleSheet.create({
-    text: {
+    popupText: {
         fontFamily: 'Poppins, sans-serif',
-        color: '#ffffff'
+        color: '#ffffff',
+        fontSize: 14
     },
     //popup
     popupBackground: {
@@ -349,41 +383,51 @@ var styles = StyleSheet.create({
         flexDirection: 'row'
     },
     popupHeaderIcon: {
-        backgroundColor: '#ffff44',
-        flexBasis: 26
+        //backgroundColor: '#ffff44',
+        flexBasis: 26,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     headerCloseBtn: {
-        backgroundColor: '#ffff44',
-        flexBasis: 26
+        // backgroundColor: '#ffff44',
+        flexBasis: 26,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
-    headerText: {
+    headerTextContainer: {
         flex: 1,
         paddingLeft: 12,
         paddingRight: 12,
+    },
+
+    headerText: {
         fontWeight: 'bold',
         fontSize: 20,
-        fontFamily: 'Poppins, sans-serif'
+        fontFamily: 'Poppins, sans-serif',
+        color: '#ffffff'
     },
 
     popupBody: {
         paddingTop: 10,
         paddingBottom: 17,
-        //display: flex,
         flexDirection: 'column'
     },
 
     poster: {
-        flexBasis: 223,
+        height: 223,
         backgroundColor: '#ffee77'
+    },
+
+    mainTextContainer: {
+        paddingTop: 10,
+        paddingBottom: 7
     },
 
     mainText: {
         fontSize: 14,
         color: '#f2c94c',
-        paddingTop: 10,
-        paddingBottom: 7,
         fontWeight: 'bold',
         fontFamily: 'Poppins, sans-serif',
     },
@@ -392,6 +436,34 @@ var styles = StyleSheet.create({
         fontSize: 10,
         color: '#939393',
         fontFamily: 'Poppins, sans-serif',
+    },
+
+    borderContainer: {
+        // flexDirection: 'row',
+        marginLeft: -15,
+        marginRight: -15,
+        height: 2
+    },
+
+    borderContainerVertical: {
+        flexDirection: 'row',
+        width: 2,
+        marginTop: -17,
+        marginBottom: -15
+    },
+
+    borderLineGray: {
+        // width: '100%',
+        // height: 1,
+        flex: 1,
+        backgroundColor: '#434343'
+    },
+
+    borderLineBlack: {
+        // width: '100%',
+        // height: 1,
+        flex: 1,
+        backgroundColor: '#0f0f0f'
     },
 
     footer: {
@@ -413,20 +485,29 @@ var styles = StyleSheet.create({
     },
 
     footerInfoRowIcon : {
-        backgroundColor: '#ffdd44',
+        // backgroundColor: '#ffdd44',
         flexBasis: 16,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    footerTextContainer: {
+        paddingLeft: 18,
+        flex: 1
     },
 
     footerText : {
-        flex: 1,
-        paddingLeft: 18,
         fontSize: 14,
         fontFamily: 'Poppins, sans-serif',
+        color: '#ffffff'
     },
 
     navigateBtn : {
-        flexBasis: 65,
-        backgroundColor: '#ffdd44',
+        flexBasis: 67,
+        // backgroundColor: '#ffdd44',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 8
     },
 });
 

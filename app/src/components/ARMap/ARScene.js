@@ -581,13 +581,13 @@ class ARScene extends React.Component {
 
         for (let i = 0; i < PoisData.length; i++, k++) {
             collection.push(PoisData[i]);
-            collection[k].position = [0, 10, 0];
+            collection[k].position = [0, 10, -10];
             collection[k].distance = 0;
         }
 
         for (let i = 0; i < OffersData.length; i++, k++) {
             collection.push(OffersData[i]);
-            collection[k].position = [0, 10, 0];
+            collection[k].position = [0, 10, -10];
             collection[k].distance = 0;
         }
 
