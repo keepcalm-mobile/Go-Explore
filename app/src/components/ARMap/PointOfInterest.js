@@ -50,7 +50,6 @@ export default class PointOfInterest extends React.Component {
             objectAnimation: 'scaleDown',
             runObjectAnimation: false,
             kind: props.kind ? props.kind : 'poi',
-            text: props.text ? props.text : 'some offer text',
             rating: props.rating ? props.rating : 3,
             votes: props.votes ? props.votes : 0,
             title: props.title ? props.title : 'Coffee shop',
@@ -94,7 +93,7 @@ export default class PointOfInterest extends React.Component {
     onClickHandler(position, source) {
         console.log('CLICKED: ' + this.state.title);
 
-        if (this.state.isMinimized === true) {
+        if (this.state.isMinimized === true && this.state.kind !== 'offer') {
 
             this.setState({
                 objectAnimation: 'fadeOut',
@@ -190,6 +189,26 @@ export default class PointOfInterest extends React.Component {
             pos = this.state.position;
             scale = [1,1,1];
 
+            if (this.state.specialOffer.type === 'timer') {
+                // values for an offer with the timer
+                // this.state.specialOffer.expireDate in this case must be set
+
+                let textToShow = this.getTimerTimeLeft();
+
+                return (
+                    <ViroNode position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
+                              animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
+                                  onFinish: this.onOfferAnimationFinished}}>
+                        <ViroImage  height={1} width={5} source={frame} />
+                        <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
+
+                        <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                        <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
+
+                    </ViroNode>
+                );
+            }
+
             return (
                 <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
                           animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
@@ -197,10 +216,9 @@ export default class PointOfInterest extends React.Component {
                     <ViroImage height={1} width={5} source={frame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} />
 
-                    {/*<ViroImage position={[-0.55,-0.1,0.25]} height={0.2} width={1} source={rate} />*/}
-                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
-                    <ViroText position={[-1.15,-0.175,0.25]} width={3} text={this.state.text} style={styles.rating}  />
-                    <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall}  />
+                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                    <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.rating} renderingOrder={2} />
+                    <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
                 </ViroNode>
             );
         }
@@ -331,7 +349,7 @@ export default class PointOfInterest extends React.Component {
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
                     <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                    <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.rating} renderingOrder={2} />
+                    <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
 
                 </ViroNode>
             );
@@ -345,7 +363,7 @@ export default class PointOfInterest extends React.Component {
                 <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
                 <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.timerText} renderingOrder={2} />
+                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.rating} renderingOrder={2} />
                 <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
 
             </ViroNode>
