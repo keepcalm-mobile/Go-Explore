@@ -132,6 +132,50 @@ export default class PointOfInterest extends React.Component {
         }
     }
 
+    getTwoDigitString(num) {
+        let str = "";
+
+        if (num < 10 && num >= 0) {
+            str += "0";
+        }
+
+        str += num + "";
+
+        return str;
+    }
+
+    getTimerTimeLeft() {
+        let textToShow = "";
+
+        let expireDate = new Date(this.state.specialOffer.expireDate);
+        let difference = new Date();
+        let now = new Date();
+        now.setTime(Date.now());
+
+        let totalMilliseconds = expireDate.getTime() - now.getTime();
+        difference.setTime(totalMilliseconds);
+
+        let days = Math.floor(difference / (1000 * 3600 * 24));
+        difference.setTime(totalMilliseconds - (days * 1000 * 3600 * 24));
+        let hours = Math.floor(difference / (1000 * 3600));
+        difference.setTime(totalMilliseconds - ((days * 1000 * 3600 * 24) + (hours * 1000 * 3600)));
+        let minutes = Math.floor(difference / (1000 * 60));
+        difference.setTime(totalMilliseconds - ((days * 1000 * 3600 * 24) + (hours * 1000 * 3600) + (minutes * 1000 * 60)));
+        let seconds = Math.floor(difference / (1000));
+
+        // console.log("Timer::::");
+
+        if (expireDate > now) {
+            //console.log("expire date larger");
+            textToShow += this.getTwoDigitString(days) + ":" + this.getTwoDigitString(hours) + ":" + this.getTwoDigitString(minutes) + ":" + this.getTwoDigitString(seconds);
+        }
+        else {
+            textToShow = "00:00:00:00";
+        }
+
+        return textToShow;
+    }
+
     getSpecialOffer() {
         if (typeof (this.state.specialOffer) === 'undefined') {
             return null;
@@ -163,7 +207,7 @@ export default class PointOfInterest extends React.Component {
         else {
 
             pos = [0, 1.0, 0];
-            scale = [1,1,1]; //[0.7, 0.7, 0.7];//[0.8, 0.8, 0.8];
+            scale = [1,1,1];
 
             if (this.state.isMinimized === false) {
                 return (
@@ -174,15 +218,25 @@ export default class PointOfInterest extends React.Component {
             //TODO: Switch by offer type, types: percentage, fixed, timer
             //TODO: adjust fontSize
 
-            const initialLeftPartFlexValue = 40;
-            const initialSymbolsCountLeft = 5;
-            let currentSymbolsCountLeft = this.state.specialOffer.title.length;
             let currentLeftPartFlexValue = this.state.specialOffer.title.length;
 
-            const initialRightPartFlexValue = 25;
-            const initialSymbolsCountRight = 4;
-            let currentSymbolsCountRight = this.state.specialOffer.text.length;
-            let currentRightPartFlexValue = this.state.specialOffer.text.length;
+            //icon
+            let iconPosition = [-2.2,0,0.25];
+            let iconImage = iconOffer;
+
+            let pivot = [-2.5, 0, 0];
+            let height = 0.65;
+
+            let textToShow = this.state.specialOffer.text;
+
+            if (this.state.specialOffer.type === 'timer') {
+                // values for an offer with the timer
+                // this.state.specialOffer.expireDate in this case must be set
+
+                textToShow = this.getTimerTimeLeft();
+            }
+
+            let currentRightPartFlexValue = textToShow.length;
 
             const fullLengthSymbolsCount = 20;
             let symbolsTotal = (currentLeftPartFlexValue + currentRightPartFlexValue);
@@ -193,27 +247,6 @@ export default class PointOfInterest extends React.Component {
                 restFlexValue = 0;
 
             let endingsFlexValue = (symbolsTotal + restFlexValue) * 0.05;
-
-            //frame
-            let frameImage = offerMinFrame;
-            //icon
-            let iconPosition = [-2.2,0,0.25];
-            let iconImage = iconOffer;
-            let leftPartFlexValue = 64;
-            let rightPartFlexValue = 30;
-
-            let containerWidth = 5;
-
-            let pivot = [-2.5, 0, 0];
-            let height = 0.65;
-
-            if (this.state.specialOffer.type === 'timer') {
-                // values for an offer with the timer
-                // this.state.specialOffer.expireDate in this case must be set
-
-                frameImage = offerTimerFrame;
-                //frameWidth = 6.667;
-            }
 
             return (
                 <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]}
@@ -247,7 +280,7 @@ export default class PointOfInterest extends React.Component {
                             flex: currentRightPartFlexValue,
                             paddingTop: 0.1
                         }} height={height} materials={["goldenPartRight"]}>
-                            <ViroText text={(this.state.specialOffer.text)} style={styles.offerSubText}  />
+                            <ViroText text={textToShow} style={styles.offerSubText}  />
                         </ViroFlexView>
 
                         <ViroFlexView style={{
@@ -284,6 +317,26 @@ export default class PointOfInterest extends React.Component {
             position = {...this.state.position};
         }
 
+        if (this.state.specialOffer.type === 'timer') {
+            // values for an offer with the timer
+            // this.state.specialOffer.expireDate in this case must be set
+
+            let textToShow = this.getTimerTimeLeft();
+
+            return (
+                <ViroNode position={position} transformBehaviors={["billboard"]} onClick={this.onOfferClickHandler}
+                          animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
+                              onFinish: this.onOfferAnimationFinished}}>
+                    <ViroImage  height={1} width={5} source={expandFrame} />
+                    <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
+
+                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                    <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.rating} renderingOrder={2} />
+
+                </ViroNode>
+            );
+        }
+
         return (
             <ViroNode position={position} transformBehaviors={["billboard"]} onClick={this.onOfferClickHandler}
                       animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
@@ -292,7 +345,7 @@ export default class PointOfInterest extends React.Component {
                 <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
                 <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.rating} renderingOrder={2} />
+                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.timerText} renderingOrder={2} />
                 <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
 
             </ViroNode>
@@ -418,6 +471,14 @@ var styles = StyleSheet.create({
         fontWeight: 'bold',
         flex: 1
     },
+    timerText: {
+        color: '#FF9E18',
+        fontFamily: 'Poppins, Arial',
+        fontSize: 24,
+        textAlignVertical: 'center',
+        textAlign: 'left',
+        fontWeight: 'bold'
+    }
 });
 
 module.exports = PointOfInterest;

@@ -14,7 +14,8 @@
             "textPopup": "On all items, including instore bla bla bla",
             "fromTo": "Mar 20 - Mar 29",
             "location": "Level 7, Conference Center",
-            "type": "fixed"
+            "type": "timer",
+            "expireDate": "Tue, 08 Oct 2019 00:00:00 GMT"
         }
     }
 ]
