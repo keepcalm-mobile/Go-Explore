@@ -42,7 +42,7 @@ var updateCounter = 0;
 var POIs = [
 
     // {latitude: 85, longitude: -135.0005567, distance: 0, position: [0,10,0], title: 'NORTH poi', rating: 0, votes: '0', type: 'custom'},
-    {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Loading pois from json', rating: 0, votes: '0', icon: 'custom'},
+    // {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Loading pois from json', rating: 0, votes: '0', icon: 'custom'},
 
     // {latitude: 46.9664069, longitude: 32.001888, distance: 0, position: [0,10,0], title: 'City Center', rating: 5, votes: '900', type: 'shop'},
     // {latitude: 46.9541553, longitude: 31.9935474, distance: 0, position: [0,10,0], title: 'ATM', rating: 3, votes: '817', type: 'atm'},
@@ -145,29 +145,31 @@ class ARScene extends React.Component {
 
         EventsBridge.arScene = this;
 
-        console.log('ar scene props heading = ' + this.props.heading);
-        console.log('initial heading = ' + this.state.initialHeading);
-        console.log('trackingLostCount = ' + this.state.trackingLostCount);
+        // console.log('ar scene props heading = ' + this.props.heading);
+        // console.log('initial heading = ' + this.state.initialHeading);
+        // console.log('trackingLostCount = ' + this.state.trackingLostCount);
     }
 
     componentDidMount() {
 
-        console.log(PoisData);
-        console.log(JSON.stringify(PoisData));
+        // console.log(PoisData);
+        // console.log(JSON.stringify(PoisData));
 
-        console.log('Before json: pois length = ' + POIs.length);
+        // console.log('Before json: pois length = ' + POIs.length);
         POIs  = PoisData;
         //POIs = JSON.parse(PoisData);
 
-        console.log('After json: pois length = ' + POIs.length);
+        // console.log('After json: pois length = ' + POIs.length);
 
         this.trackDeviceHeading();
 
-        setInterval(() => {
+        //TODO: do we need this?
 
-            canUpdateCamera = true;
-
-        }, 400);
+        // setInterval(() => {
+        //
+        //     canUpdateCamera = true;
+        //
+        // }, 400);
 
         this._formARObjectsCollection();
 
@@ -212,7 +214,7 @@ class ARScene extends React.Component {
                         rating={currentPOIs[i].rating}
                         votes={currentPOIs[i].votes}
                         icon={currentPOIs[i].icon}
-                        specialOffer={currentPOIs[i].specialOffer}
+                        offers={currentPOIs[i].offers}
                         kind={currentPOIs[i].kind}
                         ref={(ref) => {
                             this.PoiRefs[i] = ref;
@@ -426,7 +428,7 @@ class ARScene extends React.Component {
             POIs[j].position = this._normalize({latitude: POIs[j].latitude, longitude: POIs[j].longitude});
         }
 
-        let difference = 40;
+        let difference = 70;
         let deg = -360;
         let iterations = 360 / difference * 2;
 
@@ -458,6 +460,10 @@ class ARScene extends React.Component {
         // if (this.state.calibrationOffset === false) {
         //     this.setCalibrationOffset();
         // }
+
+        if (updateCounter < 2) {
+            this.setPointsOfInterest();
+        }
     }
 
     _latLongToMerc(lat_deg, lon_deg) {
@@ -556,8 +562,11 @@ class ARScene extends React.Component {
                 POIs[i].position.y = height;
                 height += inc;
 
-                if (typeof (this.PoiRefs[i]) !== 'undefined' && typeof (this.PoiRefs[i].state) !== 'undefined' && typeof (this.PoiRefs[i].state.specialOffer) !== 'undefined') {
-                    height += 0.8; // TODO: Set offer height somewhere
+                if (typeof (this.PoiRefs[i]) !== 'undefined' && typeof (this.PoiRefs[i].state) !== 'undefined' && typeof (this.PoiRefs[i].state.offers) !== 'undefined' && this.PoiRefs[i].state.offers.length > 0) {
+                    if (this.PoiRefs[i].state.isMinimized === false)
+                        height += 1 * this.PoiRefs[i].state.offers.length; // TODO: Set offer height somewhere
+                    else
+                        height += 1;
                 }
 
                 if (found == 0) {

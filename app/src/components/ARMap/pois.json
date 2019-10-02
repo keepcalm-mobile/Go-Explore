@@ -5,17 +5,29 @@
     {"latitude": 46.9678573, "longitude": 31.9906763, "kind":  "poi", "title": "McDonalds", "rating": 3, "votes": "1.1k", "icon": "coffee"},
     {
         "latitude": 46.8512408, "longitude": 32.012833, "kind":  "poi", "title": "Skate Park", "rating": 3, "votes": "276", "icon": "coffee",
-        "specialOffer":
-        {
-            "title": "Sale",
-            "text": "-70%",
-            "titleExpanded": "Sale -70%",
-            "textExpanded": "On all items",
-            "textPopup": "On all items, including instore bla bla bla",
-            "fromTo": "Mar 20 - Mar 29",
-            "location": "Level 7, Conference Center",
-            "type": "timer",
-            "expireDate": "Tue, 08 Oct 2019 00:00:00 GMT"
-        }
+        "offers": [
+            {
+                "title": "Sale",
+                "text": "-70%",
+                "titleExpanded": "Sale -70%",
+                "textExpanded": "On all items",
+                "textPopup": "On all items, including instore bla bla bla",
+                "fromTo": "Mar 20 - Mar 29",
+                "location": "Level 7, Conference Center",
+                "type": "fixed",
+                "expireDate": "Tue, 08 Oct 2019 00:00:00 GMT"
+            },
+            {
+                "title": "T-shirts",
+                "text": "1+1",
+                "titleExpanded": "T-shirts 1+1",
+                "textExpanded": "On all items",
+                "textPopup": "On all items, including instore bla bla bla",
+                "fromTo": "Mar 20 - Mar 29",
+                "location": "Level 7, Conference Center",
+                "type": "timer",
+                "expireDate": "Tue, 08 Oct 2019 00:00:00 GMT"
+            }
+        ]
     }
 ]

@@ -41,6 +41,8 @@ import  rating4 from './res/rating_4.png';
 import  rating5 from './res/rating_5.png';
 import EventsBridge from "../../utils/EventsBridge";
 
+var ANIMATION_DURATION = 500;
+
 export default class PointOfInterest extends React.Component {
     constructor(props) {
         super(props);
@@ -58,7 +60,7 @@ export default class PointOfInterest extends React.Component {
             coords: props.coords ? props.coords : {latitude: 0, longitude: 0},
             icon: props.icon ? props.icon : 'coffee',
             scale: [1,1,1],
-            specialOffer: props.specialOffer ? props.specialOffer : undefined,
+            offers: props.offers ? props.offers : undefined,
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
 
@@ -110,24 +112,36 @@ export default class PointOfInterest extends React.Component {
         });
     }
 
-    onOfferClickHandler() {
+    onOfferClickHandler(index = 0) {
 
-        console.log('Clicked on offer');
+        let offers = {...this.state.offers};
+
+        console.log('Clicked on an offer');
+        console.log(offers[index]);
 
         EventsBridge.arComponent.setPopupData({
             coords: this.state.coords,
-            offer: this.state.specialOffer
+            offer: offers[index]
         });
     }
 
     onOfferAnimationFinished() {
 
         if (this.state.objectAnimation === 'fadeOut') {
-            this.setState({
-                objectAnimation: 'fadeIn',
-                runObjectAnimation: true,
-                isMinimized: false
-            });
+            if (this.state.isMinimized === true) {
+                this.setState({
+                    objectAnimation: 'fadeOutInstant',
+                    runObjectAnimation: true,
+                    isMinimized: false
+                });
+
+                setTimeout(() => {
+                    this.setState({
+                        objectAnimation: 'fadeIn',
+                        runObjectAnimation: true
+                    });
+                }, 10);
+            }
         }
     }
 
@@ -143,10 +157,14 @@ export default class PointOfInterest extends React.Component {
         return str;
     }
 
-    getTimerTimeLeft() {
+    getTimerTimeLeft(index = 0) {
+
+        let offers = {...this.state.offers};
+        let offer = offers[index];
+
         let textToShow = "";
 
-        let expireDate = new Date(this.state.specialOffer.expireDate);
+        let expireDate = new Date(offer.expireDate);
         let difference = new Date();
         let now = new Date();
         now.setTime(Date.now());
@@ -175,21 +193,120 @@ export default class PointOfInterest extends React.Component {
         return textToShow;
     }
 
+    getOfferByIndex(index = 0, customTitle = null, customText = null) {
+        let pos = [0, 1 + index, 0];
+
+        let offers = {...this.state.offers};
+        let offer = offers[index];
+
+        let offerTitle = customTitle != null ? customTitle : offer.title;
+        let textToShow = customText != null ? customText : offer.text;
+
+        //TODO: Switch by offer type, types: percentage, fixed, timer
+        //TODO: adjust fontSize
+
+        let currentLeftPartFlexValue = offerTitle.length;
+
+        //icon
+        let iconPosition = [-2.2,0,0.25];
+        let iconImage = iconOffer;
+
+        let height = 0.65;
+
+        if (offer.type === 'timer' && customText === null) {
+            // values for an offer with the timer
+            // this.state.specialOffer.expireDate in this case must be set
+
+            textToShow = this.getTimerTimeLeft();
+        }
+
+        let currentRightPartFlexValue = textToShow.length;
+
+        const fullLengthSymbolsCount = 20;
+        let symbolsTotal = (currentLeftPartFlexValue + currentRightPartFlexValue);
+
+        let restFlexValue = (fullLengthSymbolsCount - symbolsTotal);
+
+        if (symbolsTotal >= fullLengthSymbolsCount)
+            restFlexValue = 0;
+
+        let endingsFlexValue = (symbolsTotal + restFlexValue) * 0.05;
+
+        return (
+            <ViroNode key={index} position={pos} transformBehaviors={["billboard"]}
+                      animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
+                          onFinish: this.onOfferAnimationFinished}}>
+                {/*<ViroImage  height={frameHeight} width={frameWidth} source={frameImage} />*/}
+
+                <ViroFlexView width={5} height={height}
+                              style={{
+                                  //backgroundColor: '#777777',
+                                  flexDirection: 'row',
+                              }}>
+
+                    <ViroFlexView style={{
+                        //backgroundColor: '#b7671b',
+                        flex: endingsFlexValue,
+                    }} height={height} materials={["blackPartLeftStart"]}>
+                    </ViroFlexView>
+
+                    <ViroFlexView style={{
+                        //backgroundColor: '#b7671b',
+                        flex: currentLeftPartFlexValue,
+                        paddingTop: 0.1,
+                        paddingLeft: 0.5,
+                    }} height={height} materials={["blackPartLeft"]}>
+                        <ViroText text={offerTitle} style={styles.offerMainText} />
+                    </ViroFlexView>
+
+                    <ViroFlexView style={{
+                        //backgroundColor: '#b7671b',
+                        flex: currentRightPartFlexValue,
+                        paddingTop: 0.1
+                    }} height={height} materials={["goldenPartRight"]}>
+                        <ViroText text={textToShow} style={styles.offerSubText}  />
+                    </ViroFlexView>
+
+                    <ViroFlexView style={{
+                        //backgroundColor: '#b7671b',
+                        flex: endingsFlexValue
+                    }} height={height} materials={["goldenPartRightEnd"]}>
+                    </ViroFlexView>
+
+                    <ViroFlexView style={{
+                        // backgroundColor: '#b7671b',
+                        flex: restFlexValue,
+                    }} height={height}>
+                    </ViroFlexView>
+
+                    {/*<ViroImage height={1} width={2.69} source={offerFrameLeftBlack} />*/}
+                    {/*<ViroImage height={1} width={1.88} source={offerFrameRightGold} />*/}
+                </ViroFlexView>
+
+                <ViroImage position={iconPosition}  height={0.4} width={0.4} source={iconImage} />
+
+                {/*<ViroText scale={textScale} position={leftTextPosition} width={leftTextWidth} textAlign={'left'} textVerticalAlign={'center'}*/}
+                {/*          text={(this.state.specialOffer.title)} style={[styles.offerMainText, {fontSize: leftTextFontSize}]}  />*/}
+                {/*<ViroText scale={textScale} position={rightTextPosition} width={rightTextWidth} text={(this.state.specialOffer.text)} style={styles.offerSubText}  />*/}
+            </ViroNode>
+        );
+    }
+
     getSpecialOffer() {
-        if (typeof (this.state.specialOffer) === 'undefined') {
+        if (typeof (this.state.offers) === 'undefined' || this.state.offers.length === 0) {
             return null;
         }
 
         let pos = {...this.state.position};
         pos[1] += 0.8;
-            //[0, 0.8, 0];
-        let scale = [1,1,1];
 
         if (this.state.kind === 'offer') {
             pos = this.state.position;
-            scale = [1,1,1];
 
-            if (this.state.specialOffer.type === 'timer') {
+            let offers = {...this.state.offers};
+            let offer = offers[0];
+
+            if (offer.type === 'timer') {
                 // values for an offer with the timer
                 // this.state.specialOffer.expireDate in this case must be set
 
@@ -202,7 +319,7 @@ export default class PointOfInterest extends React.Component {
                         <ViroImage  height={1} width={5} source={frame} />
                         <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
-                        <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                        <ViroText position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
                         <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
 
                     </ViroNode>
@@ -210,145 +327,64 @@ export default class PointOfInterest extends React.Component {
             }
 
             return (
-                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
+                <ViroNode position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
                           animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
                               onFinish: this.onOfferAnimationFinished}}>
                     <ViroImage height={1} width={5} source={frame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} />
 
-                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                    <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.rating} renderingOrder={2} />
+                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                    <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(offer.textExpanded)} style={styles.rating} renderingOrder={2} />
                     <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
                 </ViroNode>
             );
         }
         else {
 
-            pos = [0, 1.0, 0];
-            scale = [1,1,1];
+            let offers = [];
 
             if (this.state.isMinimized === false) {
-                return (
-                    this.getMaximizedOffer()
-                );
+                for (let i = 0; i < this.state.offers.length; i++) {
+                    offers.push(this.getMaximizedOffer(i));
+                }
+            }
+            else {
+                if (this.state.offers.length === 1) {
+                    offers.push(this.getOfferByIndex());
+                } else {
+                    //show multiple view
+                    offers.push(this.getOfferByIndex(0, "Offers", this.state.offers.length.toString()));
+                }
             }
 
-            //TODO: Switch by offer type, types: percentage, fixed, timer
-            //TODO: adjust fontSize
-
-            let currentLeftPartFlexValue = this.state.specialOffer.title.length;
-
-            //icon
-            let iconPosition = [-2.2,0,0.25];
-            let iconImage = iconOffer;
-
-            let pivot = [-2.5, 0, 0];
-            let height = 0.65;
-
-            let textToShow = this.state.specialOffer.text;
-
-            if (this.state.specialOffer.type === 'timer') {
-                // values for an offer with the timer
-                // this.state.specialOffer.expireDate in this case must be set
-
-                textToShow = this.getTimerTimeLeft();
-            }
-
-            let currentRightPartFlexValue = textToShow.length;
-
-            const fullLengthSymbolsCount = 20;
-            let symbolsTotal = (currentLeftPartFlexValue + currentRightPartFlexValue);
-
-            let restFlexValue = (fullLengthSymbolsCount - symbolsTotal);
-
-            if (symbolsTotal >= fullLengthSymbolsCount)
-                restFlexValue = 0;
-
-            let endingsFlexValue = (symbolsTotal + restFlexValue) * 0.05;
-
-            return (
-                <ViroNode scale={scale} position={pos} transformBehaviors={["billboard"]}
-                          animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
-                          onFinish: this.onOfferAnimationFinished}}>
-                    {/*<ViroImage  height={frameHeight} width={frameWidth} source={frameImage} />*/}
-
-                    <ViroFlexView width={5} height={height}
-                    style={{
-                        //backgroundColor: '#777777',
-                        flexDirection: 'row',
-                    }}>
-
-                        <ViroFlexView style={{
-                            //backgroundColor: '#b7671b',
-                            flex: endingsFlexValue,
-                        }} height={height} materials={["blackPartLeftStart"]}>
-                        </ViroFlexView>
-
-                        <ViroFlexView style={{
-                            //backgroundColor: '#b7671b',
-                            flex: currentLeftPartFlexValue,
-                            paddingTop: 0.1,
-                            paddingLeft: 0.5,
-                        }} height={height} materials={["blackPartLeft"]}>
-                            <ViroText text={(this.state.specialOffer.title)} style={styles.offerMainText} />
-                        </ViroFlexView>
-
-                        <ViroFlexView style={{
-                            //backgroundColor: '#b7671b',
-                            flex: currentRightPartFlexValue,
-                            paddingTop: 0.1
-                        }} height={height} materials={["goldenPartRight"]}>
-                            <ViroText text={textToShow} style={styles.offerSubText}  />
-                        </ViroFlexView>
-
-                        <ViroFlexView style={{
-                            //backgroundColor: '#b7671b',
-                            flex: endingsFlexValue
-                        }} height={height} materials={["goldenPartRightEnd"]}>
-                        </ViroFlexView>
-
-                        <ViroFlexView style={{
-                            // backgroundColor: '#b7671b',
-                            flex: restFlexValue,
-                        }} height={height}>
-                        </ViroFlexView>
-
-                        {/*<ViroImage height={1} width={2.69} source={offerFrameLeftBlack} />*/}
-                        {/*<ViroImage height={1} width={1.88} source={offerFrameRightGold} />*/}
-                    </ViroFlexView>
-
-                    <ViroImage position={iconPosition}  height={0.4} width={0.4} source={iconImage} />
-
-                    {/*<ViroText scale={textScale} position={leftTextPosition} width={leftTextWidth} textAlign={'left'} textVerticalAlign={'center'}*/}
-                    {/*          text={(this.state.specialOffer.title)} style={[styles.offerMainText, {fontSize: leftTextFontSize}]}  />*/}
-                    {/*<ViroText scale={textScale} position={rightTextPosition} width={rightTextWidth} text={(this.state.specialOffer.text)} style={styles.offerSubText}  />*/}
-                </ViroNode>
-            );
+            return offers;
         }
     }
 
-    getMaximizedOffer() {
+    getMaximizedOffer(index = 0) {
 
-        let position = [0, 1.1, 0];
+        let position = [0, 1.1 + index * 1.1, 0];
+        let offers = {...this.state.offers};
+        let offer = offers[index];
 
         if (this.state.kind === 'offer') {
             position = {...this.state.position};
         }
 
-        if (this.state.specialOffer.type === 'timer') {
+        if (offer.type === 'timer') {
             // values for an offer with the timer
             // this.state.specialOffer.expireDate in this case must be set
 
             let textToShow = this.getTimerTimeLeft();
 
             return (
-                <ViroNode position={position} transformBehaviors={["billboard"]} onClick={this.onOfferClickHandler}
+                <ViroNode key={index} position={position} transformBehaviors={["billboard"]} onClick={() => {this.onOfferClickHandler(index)}}
                           animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
                               onFinish: this.onOfferAnimationFinished}}>
                     <ViroImage  height={1} width={5} source={expandFrame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
-                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
                     <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
 
                 </ViroNode>
@@ -356,14 +392,14 @@ export default class PointOfInterest extends React.Component {
         }
 
         return (
-            <ViroNode position={position} transformBehaviors={["billboard"]} onClick={this.onOfferClickHandler}
+            <ViroNode key={index} position={position} transformBehaviors={["billboard"]} onClick={() => {this.onOfferClickHandler(index)}}
                       animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
                           onFinish: this.onOfferAnimationFinished}}>
                 <ViroImage  height={1} width={5} source={expandFrame} />
                 <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
-                <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.specialOffer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(this.state.specialOffer.textExpanded)} style={styles.rating} renderingOrder={2} />
+                <ViroText position={[0.1,0.1,0.25]} width={3} text={offer.titleExpanded} style={styles.text} renderingOrder={3} />
+                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={offer.textExpanded} style={styles.rating} renderingOrder={2} />
                 <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
 
             </ViroNode>
@@ -440,8 +476,10 @@ ViroMaterials.createMaterials({
  * Register the various animations we require
  */
 ViroAnimations.registerAnimations({
-    fadeOut:{properties:{opacity:0}, duration:500},
-    fadeIn:{properties:{opacity: 1}, duration:500},
+    fadeOut:{properties:{opacity:0}, duration: 500},
+    fadeIn:{properties:{opacity: 1}, duration: 500},
+    fadeOutInstant:{properties:{opacity:0}, duration: 0},
+    fadeInInstant:{properties:{opacity: 1}, duration: 0},
     scaleDown:{properties:{scaleX: 0, scaleY: 0, scaleZ: 0}, duration:1000},
     scaleUp:{properties:{scaleX: 1, scaleY: 1, scaleZ: 1}, duration:1000, easing: 'Bounce'},
 });

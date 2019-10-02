@@ -1,17 +1,18 @@
 [
   {
     "latitude": 46.8512408, "longitude": 32.012833, "kind":  "offer", "title": "Amazing offer",
-    "specialOffer":
-    {
-      "title": "Mega offer",
-      "text": "-90%",
-      "titleExpanded": "Mega offer -90%",
-      "textExpanded": "On all items",
-      "textPopup": "On all items, including instore bla bla bla",
-      "fromTo": "Mar 20 - Mar 29",
-      "location": "Level 7, Conference Center",
-      "type": "timer",
-      "expireDate": "Tue, 08 Oct 2019 00:00:00 GMT"
-    }
+    "offers": [
+      {
+        "title": "Mega offer",
+        "text": "-90%",
+        "titleExpanded": "Mega offer -90%",
+        "textExpanded": "On all items",
+        "textPopup": "On all items, including instore bla bla bla",
+        "fromTo": "Mar 20 - Mar 29",
+        "location": "Level 7, Conference Center",
+        "type": "timer",
+        "expireDate": "Tue, 08 Oct 2019 00:00:00 GMT"
+      }
+    ]
   }
 ]
