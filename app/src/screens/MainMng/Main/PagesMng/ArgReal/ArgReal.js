@@ -132,6 +132,8 @@ class ArgReal extends ScrollablePage {
             currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude}
         });
 
+        this.mapComponent.setLocation(this.state.currentPosition);
+
         if (this.state.initialPosition === null) {
             this.setState({initialPosition: this.state.currentPosition});
             // this.setPointsOfInterest();

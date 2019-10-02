@@ -34,6 +34,7 @@ import iconCafe from './res/icon_cafe.png';
 import iconShop from './res/icon_shop.png';
 import iconATM from './res/icon_atm.png';
 
+import  rating0 from './res/rating_0.png';
 import  rating1 from './res/rating_1.png';
 import  rating2 from './res/rating_2.png';
 import  rating3 from './res/rating_3.png';
@@ -52,7 +53,7 @@ export default class PointOfInterest extends React.Component {
             objectAnimation: 'scaleDown',
             runObjectAnimation: false,
             kind: props.kind ? props.kind : 'poi',
-            rating: props.rating ? props.rating : 3,
+            rating: props.rating ? props.rating : 0,
             votes: props.votes ? props.votes : 0,
             title: props.title ? props.title : 'Coffee shop',
             distance: props.distance ? props.distance : 47,
@@ -95,7 +96,7 @@ export default class PointOfInterest extends React.Component {
     onClickHandler(position, source) {
         console.log('CLICKED: ' + this.state.title);
 
-        if (this.state.isMinimized === true && this.state.kind !== 'offer') {
+        if (this.state.isMinimized === true && this.state.kind !== 'offer' && typeof(this.state.offers) !== 'undefined' && this.state.offers.length > 0) {
 
             this.setState({
                 objectAnimation: 'fadeOut',
@@ -172,6 +173,8 @@ export default class PointOfInterest extends React.Component {
         let totalMilliseconds = expireDate.getTime() - now.getTime();
         difference.setTime(totalMilliseconds);
 
+        // console.log("difference = " + totalMilliseconds);
+
         let days = Math.floor(difference / (1000 * 3600 * 24));
         difference.setTime(totalMilliseconds - (days * 1000 * 3600 * 24));
         let hours = Math.floor(difference / (1000 * 3600));
@@ -182,7 +185,7 @@ export default class PointOfInterest extends React.Component {
 
         // console.log("Timer::::");
 
-        if (expireDate > now) {
+        if (expireDate.getTime() > now.getTime()) {
             //console.log("expire date larger");
             textToShow += this.getTwoDigitString(days) + ":" + this.getTwoDigitString(hours) + ":" + this.getTwoDigitString(minutes) + ":" + this.getTwoDigitString(seconds);
         }
@@ -221,6 +224,14 @@ export default class PointOfInterest extends React.Component {
         }
 
         let currentRightPartFlexValue = textToShow.length;
+
+        if (currentRightPartFlexValue < 3) {
+            currentRightPartFlexValue = 2;
+        }
+
+        if (currentLeftPartFlexValue < 3) {
+            currentLeftPartFlexValue = 2;
+        }
 
         const fullLengthSymbolsCount = 20;
         let symbolsTotal = (currentLeftPartFlexValue + currentRightPartFlexValue);
@@ -427,22 +438,28 @@ export default class PointOfInterest extends React.Component {
         );
     }
 
+    getRatingImage() {
+        let rate = rating0;
+
+        if (this.state.rating === 5) {
+            rate = rating5;
+        } else if (this.state.rating === 4) {
+            rate = rating4;
+        } else if (this.state.rating === 3) {
+            rate = rating3;
+        } else if (this.state.rating === 2) {
+            rate = rating2;
+        } else if (this.state.rating === 1) {
+            rate = rating1;
+        }
+
+        return rate;
+    }
+
     render() {
 
         let currentIcon = iconAttraction;
-        //let currentPosition = [0,0.5, -9];
-        let rate = rating5;
-
-        if (this.state.icon === 'shop') {
-            //currentIcon = iconShop;
-            //rate = rating5;
-            //currentPosition = [-6,0, -11];
-        }
-        else if (this.state.icon === 'atm') {
-            //currentIcon = iconATM;
-            //rate = rating3;
-            //currentPosition = [4.5, 0, -7];
-        }
+        let rate = this.getRatingImage();
 
         if (this.state.kind === 'poi') {
             return (

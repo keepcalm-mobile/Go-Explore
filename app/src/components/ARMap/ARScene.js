@@ -428,7 +428,7 @@ class ARScene extends React.Component {
             POIs[j].position = this._normalize({latitude: POIs[j].latitude, longitude: POIs[j].longitude});
         }
 
-        let difference = 70;
+        let difference = 90;
         let deg = -360;
         let iterations = 360 / difference * 2;
 
