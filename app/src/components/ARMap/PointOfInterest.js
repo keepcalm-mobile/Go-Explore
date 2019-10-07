@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ToastAndroid} from 'react-native';
 
 import {
     ViroARScene,
@@ -20,19 +20,10 @@ import frameLeftBlackBody from './res/frameLeftBlackBody.png';
 import frameRightGoldBody from './res/frameRightGoldBody.png';
 import frameRightGoldEnd from './res/frameRightGoldEnd.png';
 
-import offerFrameLeftBlack from './res/frameLeftBlack.png';
-import offerFrameRightGold from './res/frameRightGold.png';
-import offerMinFrame from './res/offerMinFrame.png';
-import offerTimerFrame from './res/offerTimerFrame.png';
 import frame from './res/poiFrame.png';
 import expandFrame from './res/expandFrame.png';
 import iconAttraction from '../../../assets/attractionIcon.png';
-
-
 import iconOffer from './res/iconDiscount.png';
-import iconCafe from './res/icon_cafe.png';
-import iconShop from './res/icon_shop.png';
-import iconATM from './res/icon_atm.png';
 
 import  rating0 from './res/rating_0.png';
 import  rating1 from './res/rating_1.png';
@@ -41,8 +32,6 @@ import  rating3 from './res/rating_3.png';
 import  rating4 from './res/rating_4.png';
 import  rating5 from './res/rating_5.png';
 import EventsBridge from "../../utils/EventsBridge";
-
-var ANIMATION_DURATION = 500;
 
 export default class PointOfInterest extends React.Component {
     constructor(props) {
@@ -68,6 +57,8 @@ export default class PointOfInterest extends React.Component {
         this.onClickHandler = this.onClickHandler.bind(this);
         this.onOfferClickHandler = this.onOfferClickHandler.bind(this);
         this.onOfferAnimationFinished = this.onOfferAnimationFinished.bind(this);
+
+        this.showTest = true;
     }
 
     setPosition(position) {
@@ -131,17 +122,17 @@ export default class PointOfInterest extends React.Component {
         if (this.state.objectAnimation === 'fadeOut') {
             if (this.state.isMinimized === true) {
                 this.setState({
-                    objectAnimation: 'fadeOutInstant',
+                    objectAnimation: 'fadeIn', //fadeOutInstant
                     runObjectAnimation: true,
                     isMinimized: false
                 });
 
-                setTimeout(() => {
-                    this.setState({
-                        objectAnimation: 'fadeIn',
-                        runObjectAnimation: true
-                    });
-                }, 10);
+                // setTimeout(() => {
+                //     this.setState({
+                //         objectAnimation: 'fadeIn',
+                //         runObjectAnimation: true
+                //     });
+                // }, 10);
             }
         }
     }
@@ -165,25 +156,50 @@ export default class PointOfInterest extends React.Component {
 
         let textToShow = "";
 
-        let expireDate = new Date(offer.expireDate);
+        // let expDateYear = parseInt(offer.expireDate.substring(0,4));
+        // let expDateMonth = parseInt(offer.expireDate.substring(5,2));
+        // let expDateDay = parseInt(offer.expireDate.substring(8,2));
+        // let expDateHours = parseInt(offer.expireDate.substring(11,2));
+        // let expDateMinutes = parseInt(offer.expireDate.substring(14,2));
+
+        let expireDate = new Date();
+        expireDate.setFullYear(2019, 10, 25);
+        expireDate.setHours(15, 0, 0);
+        // expireDate.setFullYear(expDateYear, expDateMonth, expDateDay);
+        // expireDate.setHours(expDateHours, expDateMinutes);
+
+
         let difference = new Date();
         let now = new Date();
-        now.setTime(Date.now());
+        //now.setTime(Date.now());
 
         let totalMilliseconds = expireDate.getTime() - now.getTime();
         difference.setTime(totalMilliseconds);
 
         // console.log("difference = " + totalMilliseconds);
 
-        let days = Math.floor(difference / (1000 * 3600 * 24));
-        difference.setTime(totalMilliseconds - (days * 1000 * 3600 * 24));
-        let hours = Math.floor(difference / (1000 * 3600));
-        difference.setTime(totalMilliseconds - ((days * 1000 * 3600 * 24) + (hours * 1000 * 3600)));
-        let minutes = Math.floor(difference / (1000 * 60));
-        difference.setTime(totalMilliseconds - ((days * 1000 * 3600 * 24) + (hours * 1000 * 3600) + (minutes * 1000 * 60)));
-        let seconds = Math.floor(difference / (1000));
+        // let days = Math.floor(difference / (1000 * 3600 * 24));
+        // difference.setTime(totalMilliseconds - (days * 1000 * 3600 * 24));
+        // let hours = Math.floor(difference / (1000 * 3600));
+        // difference.setTime(totalMilliseconds - ((days * 1000 * 3600 * 24) + (hours * 1000 * 3600)));
+        // let minutes = Math.floor(difference / (1000 * 60));
+        // difference.setTime(totalMilliseconds - ((days * 1000 * 3600 * 24) + (hours * 1000 * 3600) + (minutes * 1000 * 60)));
+        // let seconds = Math.floor(difference / (1000));
 
-        // console.log("Timer::::");
+        let until = totalMilliseconds / 1000;
+        let timeLeft = {
+            seconds: parseInt(until % 60),
+            minutes: parseInt(until / 60, 10) % 60,
+            hours: parseInt(until / (60 * 60), 10) % 24,
+            days: parseInt(until / (60 * 60 * 24), 10),
+        };
+
+        let days = timeLeft.days;
+        let hours = timeLeft.hours;
+        let minutes = timeLeft.minutes;
+        let seconds = timeLeft.seconds;
+
+        // console.log("Timer:::: until = " + until);
 
         if (expireDate.getTime() > now.getTime()) {
             //console.log("expire date larger");
@@ -191,7 +207,17 @@ export default class PointOfInterest extends React.Component {
         }
         else {
             textToShow = "00:00:00:00";
+
+            // console.log(expireDate.getTime() + "  vs  " + now.getTime());
         }
+
+        // if (this.showTest === true) {
+        //     this.showTest = false;
+        //
+        //     ToastAndroid.showWithGravity("expireDate = " + expireDate + "  now = " + now + "  first = " + expireDate.getTime() + "  2nd = " + now.getTime(), ToastAndroid.LONG, ToastAndroid.CENTER);
+        //
+        //     setTimeout(() => { this.showTest = true; }, 5000);
+        // }
 
         return textToShow;
     }

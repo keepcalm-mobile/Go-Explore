@@ -426,16 +426,11 @@ class ARScene extends React.Component {
 
         for (let j = 0; j < POIs.length; j++) {
             POIs[j].position = this._normalize({latitude: POIs[j].latitude, longitude: POIs[j].longitude});
+
+            // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
         }
 
-        let difference = 90;
-        let deg = -360;
-        let iterations = 360 / difference * 2;
-
-        for (let i=0;i<iterations;i++) {
-            this._groupPOIs(deg, deg+difference);
-            deg += difference;
-        }
+        this._groupPOIs();
 
         this.setState({pois: POIs, poisReady: true});
 
@@ -450,6 +445,8 @@ class ARScene extends React.Component {
 
                     this.PoiRefs[j].setPosition([finalX, finalY, finalZ]);
                 }
+
+                // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees + "  Y = " + POIs[j].position.y);
             }
 
             // console.log('pois repositioned');
@@ -508,7 +505,7 @@ class ARScene extends React.Component {
     _normalize(pos) {
         //return (val - min) / (max - min);
 
-        let distanceToPoint = getDistanceBetweenCoordinates(pos.latitude, pos.longitude, CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1]);
+        // let distanceToPoint = getDistanceBetweenCoordinates(pos.latitude, pos.longitude, CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1]);
         let curPos = this._transformPointToAR(pos.latitude, pos.longitude);
 
         //TEST
@@ -518,8 +515,8 @@ class ARScene extends React.Component {
 
         let polar = cartesianToPolar(curPos.x, curPos.z);
 
-        if (polar.distance < 6)
-            polar.distance = 6;
+        if (polar.distance < 8)
+            polar.distance = 8;
         if (polar.distance > 10)
             polar.distance = 10;
 
@@ -537,7 +534,7 @@ class ARScene extends React.Component {
         return value;
     }
 
-    _groupPOIs(degreeMin, degreeMax) {
+    _groupPOIs() {
 
         // let arr = [...POIs];
         //
@@ -548,17 +545,28 @@ class ARScene extends React.Component {
         // //sort(POIs).asc(x => cartesianToPolar(x.position.x, x.position.z).degrees);
         //
 
-        let height = 0;
+        let difference = 70;
+
+        let height = 0.05;
         let inc = 0.85;
         let found = 0;
-        let res = degreeMin;
+        let res = 0;
         let firstIndex = 0;
+
+        let checked = [];
 
         for(let i=0;i<POIs.length;i++) {
             res = cartesianToPolar(POIs[i].position.x, POIs[i].position.z).degrees;
-            if (res >= degreeMin && res <= degreeMax) {
 
-                //ToastAndroid.showWithGravity('degree = '+res, ToastAndroid.LONG, ToastAndroid.CENTER);
+            if (res < 0)
+                res = 360 + res;
+
+            if (checked.includes(i) === false) {
+
+                checked.push(i);
+
+                // if Y > 0 it will be rescaled
+                height = 0.05;
                 POIs[i].position.y = height;
                 height += inc;
 
@@ -569,19 +577,32 @@ class ARScene extends React.Component {
                         height += 1;
                 }
 
-                if (found == 0) {
-                    firstIndex = i;
-                }
+                for (let k = 0; k < POIs.length; k++) {
+                    if (k !== i) {
+                        let degrees = cartesianToPolar(POIs[k].position.x, POIs[k].position.z).degrees;
 
-                found++;
+                        if (degrees < 0)
+                            degrees = 360 + degrees;
+
+                        let dif = Math.abs(res - degrees);
+
+                        if (dif <= difference) {
+                            checked.push(k);
+
+                            POIs[k].position.y = height;
+                            height += inc;
+
+                            if (typeof (this.PoiRefs[k]) !== 'undefined' && typeof (this.PoiRefs[k].state) !== 'undefined' && typeof (this.PoiRefs[k].state.offers) !== 'undefined' && this.PoiRefs[k].state.offers.length > 0) {
+                                if (this.PoiRefs[k].state.isMinimized === false)
+                                    height += 1 * this.PoiRefs[k].state.offers.length; // TODO: Set offer height somewhere
+                                else
+                                    height += 1;
+                            }
+                        }
+                    }
+                }
             }
         }
-
-        if (found > 1) {
-            POIs[firstIndex].position.y = 0.05; // if Y > 0 it will be rescaled
-        }
-
-        //ToastAndroid.showWithGravity('found = '+found + '  degrees = ' + res, ToastAndroid.LONG, ToastAndroid.CENTER);
     }
 
     _formARObjectsCollection() {

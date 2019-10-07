@@ -117,7 +117,7 @@ class ArgReal extends ScrollablePage {
             if (EventsBridge.arScene !== null) {
                 EventsBridge.arScene.setHeading(this.state.heading);
             }
-            console.log('updating heading to ' + this.state.heading);
+            // console.log('updating heading to ' + this.state.heading);
         }, 1000);
     }
 
