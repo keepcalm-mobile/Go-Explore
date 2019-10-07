@@ -98,6 +98,8 @@ export default class PointOfInterest extends React.Component {
             return;
         }
 
+        //TODO: pass the whole POI, so it can be added to the list to other pois
+
         this.state.onClickHandler({
             title: this.state.title,
             coords: this.state.coords

@@ -23,7 +23,7 @@ import Geolocation from 'react-native-geolocation-service';
 
 import ARComponent from '../../../../../../src/components/ARMap/ARComponent';
 import MapComponent from '../../../../../../src/components/ARMap/MapComponent';
-
+import Utils from '../../../../../../src/components/ARMap/Utils';
 import EventsBridge from '../../../../../utils/EventsBridge';
 
 //icons
@@ -49,6 +49,8 @@ class ArgReal extends ScrollablePage {
             initialPosition: null,
             specialOfferData: null,
             currentPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
+            prevPosition: false,
+            poisUpdateDifference: 200, // distance in meters
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
 
@@ -59,8 +61,8 @@ class ArgReal extends ScrollablePage {
         clearInterval(this._interval);
         this._interval = null;
         RNSimpleCompass.stop();
-      this.exitNavigation();
-      this.setState({heading: 0, readyForAR: false, arRunning: true});
+        this.exitNavigation();
+        this.setState({heading: 0, readyForAR: false, arRunning: true});
     };
 
     exitNavigation() {
@@ -128,9 +130,19 @@ class ArgReal extends ScrollablePage {
             return;
         }
 
+        let curPos = {...this.state.currentPosition};
+
         this.setState({
-            currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude}
+            currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude},
+            prevPosition: this.state.prevPosition !== false ? curPos : {latitude: position.coords.latitude, longitude: position.coords.longitude}
         });
+
+        let dif = Utils.getDistanceBetweenCoordinates(this.state.currentPosition.latitude, this.state.currentPosition.longitude, this.state.prevPosition.latitude, this.state.prevPosition.longitude);
+
+        if (dif >= this.state.poisUpdateDifference) {
+            //TODO: send a request to receive the list of new POIs, save current poi active in navigation and add it to the received list
+            console.log("Sending a request to receive new POIs...");
+        }
 
         this.mapComponent.setLocation(this.state.currentPosition);
 
