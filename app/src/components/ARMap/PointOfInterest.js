@@ -104,6 +104,18 @@ export default class PointOfInterest extends React.Component {
             title: this.state.title,
             coords: this.state.coords
         });
+
+        // {latitude: 85, longitude: -135.0005567, distance: 0, position: [0,10,0], title: 'NORTH poi', rating: 0, votes: '0', type: 'custom'},
+        EventsBridge.arSceneCurrentNavigationItem = {
+            latitude: this.state.coords.latitude,
+            longitude: this.state.coords.longitude,
+            distance: 0,
+            position: this.state.position,
+            title: this.state.title,
+            rating: this.state.rating,
+            votes: this.state.votes,
+            kind: this.state.kind
+        };
     }
 
     onOfferClickHandler(index = 0) {

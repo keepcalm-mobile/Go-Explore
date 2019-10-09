@@ -38,6 +38,8 @@ const GPS_TIMEOUT = 30000;
 const GPS_MAXIMUM_AGE = 60000;
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
 
+var POIs = [];
+
 class ArgReal extends ScrollablePage {
     constructor(props) {
         super(props);
@@ -51,9 +53,11 @@ class ArgReal extends ScrollablePage {
             currentPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
             prevPosition: false,
             poisUpdateDifference: 200, // distance in meters
+            poisData: [],
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
 
+        this.fetchedPOIs = false;
         EventsBridge.arComponent = this;
     }
 
@@ -139,9 +143,36 @@ class ArgReal extends ScrollablePage {
 
         let dif = Utils.getDistanceBetweenCoordinates(this.state.currentPosition.latitude, this.state.currentPosition.longitude, this.state.prevPosition.latitude, this.state.prevPosition.longitude);
 
-        if (dif >= this.state.poisUpdateDifference) {
+        console.log("GPS difference = " + dif);
+
+        if (dif >= this.state.poisUpdateDifference || (!this.fetchedPOIs)) {
             //TODO: send a request to receive the list of new POIs, save current poi active in navigation and add it to the received list
             console.log("Sending a request to receive new POIs...");
+
+            let GMAPS_KEY = "AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA";
+
+            let requestQuery = "https://goexploreapi.azure-api.net/testmobile/getnearme?cat=attractions&latitude=25.3846118&longitude=51.5228745&subscription-key=bbc34cdbc2df4e09b177542c6da3fb35";
+            let geocodingQuery = "https://maps.googleapis.com/maps/api/geocode/json?key="+GMAPS_KEY+"&address=";
+
+            fetch(requestQuery)
+              .then((response) => response.json())
+              .then((responseJson) => {
+                    // return responseJson.movies;
+                  // console.log(responseJson);
+
+                  POIs = responseJson;
+                  //this.setState({poisData: responseJson});
+
+                  for (let i=0; i<POIs.length && i<10; i++) {
+                    // geocoding
+                      let formattedLocation = POIs[i].location.replace(/ /g, "+");
+                      console.log(formattedLocation);
+
+                      fetch(geocodingQuery+formattedLocation).then((resp) => resp.json()).then((respJson) => {
+                          console.log(respJson);
+                      });
+                  }
+            });
         }
 
         this.mapComponent.setLocation(this.state.currentPosition);
@@ -217,6 +248,7 @@ class ArgReal extends ScrollablePage {
             <ARComponent
                 location={this.state.initialPosition}
                 heading={this.state.heading}
+                poisData={this.state.poisData}
                 onClickHandler={this.onPOIClickHandler.bind(this)}
                 onTrackingLost={this.onTrackingLostHandler.bind(this)}
                 ref={ref => this.arComponent = ref}

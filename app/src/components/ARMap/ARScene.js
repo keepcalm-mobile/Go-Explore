@@ -17,7 +17,7 @@ import {
 import PointOfInterest from './PointOfInterest';
 import EventsBridge from '../../utils/EventsBridge';
 import PoisData from './pois.json';
-import OffersData from './offers.json';
+// import OffersData from './offers.json';
 
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
@@ -117,7 +117,7 @@ class ARScene extends React.Component {
             normalizationMaximumPoint: null,
             initialHeading: this.props.heading,
             //heading: this.props.heading,
-            pois: [],
+            pois: [],//this.props.poisData,
             poisReady: false,
             northPosition: [0,0, -7],
             calibrationOffset: false,
@@ -127,6 +127,7 @@ class ARScene extends React.Component {
         };
 
         // bind 'this' to functions
+        this._groupPOIs = this._groupPOIs.bind(this);
         this._onInitialized = this._onInitialized.bind(this);
         this._latLongToMerc = this._latLongToMerc.bind(this);
         this._transformPointToAR = this._transformPointToAR.bind(this);
@@ -139,7 +140,10 @@ class ARScene extends React.Component {
         this.PoiRefs = [];
         this.updateTimer = null;
 
-        for(let i=0;i<POIs.length;i++) {
+        this.testPois = true;
+
+        // temp value here
+        for(let i=0;i<200;i++) {
             this.PoiRefs.push(React.createRef());
         }
 
@@ -157,11 +161,16 @@ class ARScene extends React.Component {
 
         // console.log('Before json: pois length = ' + POIs.length);
         POIs  = PoisData;
-        //POIs = JSON.parse(PoisData);
 
         // console.log('After json: pois length = ' + POIs.length);
 
         this.trackDeviceHeading();
+
+        // if (this.testPois === true) {
+        //     console.log("GOT POIS:");
+        //     console.log(this.state.pois);
+        //     this.testPois = false;
+        // }
 
         //TODO: do we need this?
 
@@ -171,7 +180,7 @@ class ARScene extends React.Component {
         //
         // }, 400);
 
-        this._formARObjectsCollection();
+        // this._formARObjectsCollection();
 
         // setInterval(() => {
         //
@@ -201,6 +210,9 @@ class ARScene extends React.Component {
         let pointsOfInterest = [];
         let currentPOIs = [...this.state.pois];
 
+        // console.log("type == "+typeof(currentPOIs));
+        // console.log(currentPOIs);
+
         if (this.state.poisReady) {
             for (let i = 0; i < currentPOIs.length; i++) {
                 pointsOfInterest.push(
@@ -210,6 +222,7 @@ class ARScene extends React.Component {
                         position={[currentPOIs[i].position.x, currentPOIs[i].position.y, -currentPOIs[i].position.z]}
                         coords={{latitude: currentPOIs[i].latitude, longitude: currentPOIs[i].longitude}}
                         title={currentPOIs[i].title}
+                        subtitle={currentPOIs[i].subtitle}
                         distance={getDistanceBetweenCoordinates(currentPOIs[i].latitude, currentPOIs[i].longitude, this.state.currentPosition.latitude, this.state.currentPosition.longitude)}
                         rating={currentPOIs[i].rating}
                         votes={currentPOIs[i].votes}
@@ -351,9 +364,7 @@ class ARScene extends React.Component {
             this.setState({poisReady: false, trackingLostCount: trackingLostCount});
 
             if (trackingLostCount >= 2) {
-
                 this.reset();
-
                 this.state.onTrackingLost();
             }
         }
@@ -397,7 +408,10 @@ class ARScene extends React.Component {
     setPointsOfInterest() {
         updateCounter++;
 
+        //// no more need in this
         this._formARObjectsCollection(); // Merge Offers and POIs into a single array
+
+        POIs = {...this.state.pois};
 
         for (let i = 0; i<POIs.length; i++){
             POIs[i].distance = getDistanceBetweenCoordinates(this.state.initialPosition.latitude, this.state.initialPosition.longitude, POIs[i].latitude, POIs[i].longitude);
@@ -411,9 +425,13 @@ class ARScene extends React.Component {
             // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
         }
 
+        console.log('before grouping');
+
         this._groupPOIs();
 
-        this.setState({pois: POIs, poisReady: true});
+        console.log('after grouping');
+
+        return;
 
         if (this.state.poisReady === true) {
             // problem with NaN persists
@@ -584,6 +602,8 @@ class ARScene extends React.Component {
                 }
             }
         }
+
+        this.setState({pois: POIs, poisReady: true});
     }
 
     _formARObjectsCollection() {
@@ -596,11 +616,15 @@ class ARScene extends React.Component {
             collection[k].distance = 0;
         }
 
-        for (let i = 0; i < OffersData.length; i++, k++) {
-            collection.push(OffersData[i]);
-            collection[k].position = [0, 10, -10];
-            collection[k].distance = 0;
-        }
+        // for (let i = 0; i < OffersData.length; i++, k++) {
+        //     collection.push(OffersData[i]);
+        //     collection[k].position = [0, 10, -10];
+        //     collection[k].distance = 0;
+        // }
+        //
+        // if (EventsBridge.arSceneCurrentNavigationItem !== null) {
+        //     collection.push(EventsBridge.arSceneCurrentNavigationItem);
+        // }
 
         POIs = collection;
 
