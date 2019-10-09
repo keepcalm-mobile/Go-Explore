@@ -427,7 +427,7 @@ class ARScene extends React.Component {
 
         console.log('before grouping');
 
-        this._groupPOIs();
+        // this._groupPOIs();
 
         console.log('after grouping');
 
