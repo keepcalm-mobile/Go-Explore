@@ -66,7 +66,7 @@ class ArgReal extends ScrollablePage {
         this._interval = null;
         RNSimpleCompass.stop();
         this.exitNavigation();
-        this.setState({heading: 0, readyForAR: false, arRunning: true});
+        this.setState({heading: 0, readyForAR: false, arRunning: false});
     };
 
     exitNavigation() {
@@ -158,20 +158,23 @@ class ArgReal extends ScrollablePage {
               .then((response) => response.json())
               .then((responseJson) => {
                     // return responseJson.movies;
-                  // console.log(responseJson);
+                  console.log(responseJson.places);
 
-                  POIs = responseJson;
+                  POIs = responseJson.places;
+
+
+                  this.startAR();
                   //this.setState({poisData: responseJson});
 
-                  for (let i=0; i<POIs.length && i<10; i++) {
-                    // geocoding
-                      let formattedLocation = POIs[i].location.replace(/ /g, "+");
-                      console.log(formattedLocation);
-
-                      fetch(geocodingQuery+formattedLocation).then((resp) => resp.json()).then((respJson) => {
-                          console.log(respJson);
-                      });
-                  }
+                  // for (let i=0; i<POIs.length && i<10; i++) {
+                  //   // geocoding
+                  //     let formattedLocation = POIs[i].location.replace(/ /g, "+");
+                  //     console.log(formattedLocation);
+                  //
+                  //     fetch(geocodingQuery+formattedLocation).then((resp) => resp.json()).then((respJson) => {
+                  //         console.log(respJson);
+                  //     });
+                  // }
             });
         }
 
@@ -248,7 +251,7 @@ class ArgReal extends ScrollablePage {
             <ARComponent
                 location={this.state.initialPosition}
                 heading={this.state.heading}
-                poisData={this.state.poisData}
+                poisData={POIs}
                 onClickHandler={this.onPOIClickHandler.bind(this)}
                 onTrackingLost={this.onTrackingLostHandler.bind(this)}
                 ref={ref => this.arComponent = ref}

@@ -42,7 +42,7 @@ export default class PointOfInterest extends React.Component {
             objectAnimation: 'scaleDown',
             runObjectAnimation: false,
             kind: props.kind ? props.kind : 'poi',
-            rating: props.rating ? props.rating : 0,
+            rating: props.rating ? props.rating : "0",
             votes: props.votes ? props.votes : 0,
             title: props.title ? props.title : 'Coffee shop',
             distance: props.distance ? props.distance : 47,
@@ -466,7 +466,7 @@ export default class PointOfInterest extends React.Component {
 
                     <ViroImage position={[-0.55,-0.1,0.25]} height={0.2} width={1} source={rate} />
                     <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
-                    <ViroText position={[-1.15,-0.175,0.25]} width={0.5} text={(''+this.state.rating.toFixed(1))} style={styles.rating}  />
+                    <ViroText position={[-1.15,-0.175,0.25]} width={0.5} text={(''+this.state.rating)} style={styles.rating}  />
                     <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall}  />
                     {/*<ViroText position={[1.55,-0.15,0.25]} width={1} text={(this.state.distance / 1000 / 5 * 60).toFixed(2) + ' min'} style={styles.textSmall}  />*/}
 
