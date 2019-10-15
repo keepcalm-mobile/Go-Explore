@@ -50,6 +50,8 @@ var POIs = [
     // {latitude: 46.8512408, longitude: 32.012833, distance: 0, position: [0,10,0], title: 'Skate Park', rating: 3, votes: '276', type: 'coffee'},
 ];
 
+var OFFERS = [];
+
 // [
 //     {"latitude": 46.9591975, "longitude": 31.9945625, "distance": 0, "position": [0,10,0], "title": "Near north poi", "rating": 0, "votes": "0", "type": "custom"},
 //     {"latitude": 46.9664069, "longitude": 32.001888, "distance": 0, "position": [0,10,0], "title": "City Center", "rating": 5, "votes": "900", "type": "shop"},
@@ -118,6 +120,7 @@ class ARScene extends React.Component {
             initialHeading: this.props.heading,
             //heading: this.props.heading,
             pois: this.props.poisData,
+            offers: this.props.offersData,
             poisReady: false,
             northPosition: [0,0, -7],
             calibrationOffset: false,
@@ -320,6 +323,11 @@ class ARScene extends React.Component {
 
     }
 
+    // if there is no place with this placeId, the offer will remain independent
+    getOfferByPlaceId(placeId) {
+
+    }
+
     onPOIClickedHandler(poi) {
 
         console.log('AR Scene CLICKED: ' + poi.title);
@@ -428,7 +436,7 @@ class ARScene extends React.Component {
         //POIs = [...this.state.pois];
         let allPois = [...this.state.pois];
         POIs = [];
-        for (let m = 0; m < 5; m++) {
+        for (let m = 0; m < allPois.length && m < 10; m++) {
             POIs.push(allPois[m]);
         }
 

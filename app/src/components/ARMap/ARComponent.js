@@ -32,6 +32,7 @@ class ARComponent extends React.Component {
     // Set initial state here
     this.state = {
       sharedProps: sharedProps,
+      offersData: this.props.offersData,
       poisData: this.props.poisData,
       heading: this.props.heading,
       currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
@@ -65,7 +66,8 @@ class ARComponent extends React.Component {
         <ViroARSceneNavigator
             {...this.state.sharedProps}
             initialScene={{scene:InitialARScene,
-            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), onTrackingLost: this.onTrackingLostHandler.bind(this), location: this.state.currentPosition, heading: this.state.heading, poisData: this.state.poisData}}}
+            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), onTrackingLost: this.onTrackingLostHandler.bind(this),
+              location: this.state.currentPosition, heading: this.state.heading, poisData: this.state.poisData, offersData: this.state.offersData}}}
         />
     );
   }

@@ -370,8 +370,8 @@ export default class PointOfInterest extends React.Component {
                         <ViroImage  height={1} width={5} source={frame} />
                         <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
-                        <ViroText position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                        <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
+                        <ViroText textClipMode={'ClipToBounds'} position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                        <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
 
                     </ViroNode>
                 );
@@ -384,9 +384,9 @@ export default class PointOfInterest extends React.Component {
                     <ViroImage height={1} width={5} source={frame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} />
 
-                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                    <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(offer.textExpanded)} style={styles.rating} renderingOrder={2} />
-                    <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={(offer.textExpanded)} style={styles.rating} renderingOrder={2} />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
                 </ViroNode>
             );
         }
@@ -435,8 +435,8 @@ export default class PointOfInterest extends React.Component {
                     <ViroImage  height={1} width={5} source={expandFrame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
-                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
-                    <ViroText position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,0.1,0.25]} width={3} text={(offer.titleExpanded)} style={styles.text} renderingOrder={3} />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.275,0.25]} width={3} textAlign={'left'} text={textToShow} style={styles.timerText} renderingOrder={2} />
 
                 </ViroNode>
             );
@@ -449,9 +449,9 @@ export default class PointOfInterest extends React.Component {
                 <ViroImage  height={1} width={5} source={expandFrame} />
                 <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={iconOffer} renderingOrder={4} />
 
-                <ViroText position={[0.1,0.1,0.25]} width={3} text={offer.titleExpanded} style={styles.text} renderingOrder={3} />
-                <ViroText position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={offer.textExpanded} style={styles.rating} renderingOrder={2} />
-                <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
+                <ViroText textClipMode={'ClipToBounds'} position={[0.1,0.1,0.25]} width={3} text={offer.titleExpanded} style={styles.text} renderingOrder={3} />
+                <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.175,0.25]} width={3} textAlign={'left'} text={offer.textExpanded} style={styles.rating} renderingOrder={2} />
+                <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall} renderingOrder={1} />
 
             </ViroNode>
         );
@@ -465,9 +465,9 @@ export default class PointOfInterest extends React.Component {
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={currentIcon} />
 
                     <ViroImage position={[-0.55,-0.1,0.25]} height={0.2} width={1} source={rate} />
-                    <ViroText position={[0.1,0.1,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
-                    <ViroText position={[-1.15,-0.175,0.25]} width={0.5} text={(''+this.state.rating)} style={styles.rating}  />
-                    <ViroText position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall}  />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,0.1,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
+                    <ViroText textClipMode={'ClipToBounds'} position={[-1.15,-0.175,0.25]} width={0.5} text={(''+this.state.rating)} style={styles.rating}  />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall}  />
                     {/*<ViroText position={[1.55,-0.15,0.25]} width={1} text={(this.state.distance / 1000 / 5 * 60).toFixed(2) + ' min'} style={styles.textSmall}  />*/}
 
                     {this.getSpecialOffer()}

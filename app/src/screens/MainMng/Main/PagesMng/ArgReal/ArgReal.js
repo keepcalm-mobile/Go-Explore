@@ -39,6 +39,7 @@ const GPS_MAXIMUM_AGE = 60000;
 const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
 
 var POIs = [];
+var OFFERS = [];
 
 class ArgReal extends ScrollablePage {
     constructor(props) {
@@ -158,10 +159,10 @@ class ArgReal extends ScrollablePage {
               .then((response) => response.json())
               .then((responseJson) => {
                     // return responseJson.movies;
-                  console.log(responseJson.places);
+                  console.log(responseJson);
 
                   POIs = responseJson.places;
-
+                  OFFERS = responseJson.offers;
 
                   this.startAR();
                   //this.setState({poisData: responseJson});
@@ -252,6 +253,7 @@ class ArgReal extends ScrollablePage {
                 location={this.state.initialPosition}
                 heading={this.state.heading}
                 poisData={POIs}
+                offersData={OFFERS}
                 onClickHandler={this.onPOIClickHandler.bind(this)}
                 onTrackingLost={this.onTrackingLostHandler.bind(this)}
                 ref={ref => this.arComponent = ref}
