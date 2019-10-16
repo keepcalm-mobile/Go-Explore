@@ -16,7 +16,7 @@ import {
 
 import PointOfInterest from './PointOfInterest';
 import EventsBridge from '../../utils/EventsBridge';
-import PoisData from './pois.json';
+// import PoisData from './pois.json';
 // import OffersData from './offers.json';
 
 const NORMALIZATION_MAXIMUM = 10;
@@ -150,7 +150,20 @@ class ARScene extends React.Component {
             this.PoiRefs.push(React.createRef());
         }
 
-        POIs = {...this.state.pois};
+        // POIs = {...this.state.pois};
+        // OFFERS = {...this.state.offers};
+
+        let allPois = [...this.state.pois];
+        POIs = [];
+        for (let m = 0; m < allPois.length && m < 10; m++) {
+            POIs.push(allPois[m]);
+        }
+
+        let allOffers = [...this.state.offers];
+        OFFERS = [];
+        for (let m = 0; m < allOffers.length && m < 10; m++) {
+            OFFERS.push(allOffers[m]);
+        }
 
         EventsBridge.arScene = this;
 
@@ -159,6 +172,8 @@ class ARScene extends React.Component {
         // console.log('ar scene props heading = ' + this.props.heading);
         // console.log('initial heading = ' + this.state.initialHeading);
         // console.log('trackingLostCount = ' + this.state.trackingLostCount);
+
+        this._formARObjectsCollection();
     }
 
     componentDidMount() {
@@ -324,8 +339,16 @@ class ARScene extends React.Component {
     }
 
     // if there is no place with this placeId, the offer will remain independent
-    getOfferByPlaceId(placeId) {
+    setOfferForPlace(offer) {
+        for (let i=0;i<POIs.length;i++) {
+            if (POIs[i].id === offer.placeId) {
+                POIs[i].offers.push(offer);
+                return null;
+                break;
+            }
+        }
 
+        return offer;
     }
 
     onPOIClickedHandler(poi) {
@@ -434,11 +457,11 @@ class ARScene extends React.Component {
         // this._formARObjectsCollection(); // Merge Offers and POIs into a single array
 
         //POIs = [...this.state.pois];
-        let allPois = [...this.state.pois];
-        POIs = [];
-        for (let m = 0; m < allPois.length && m < 10; m++) {
-            POIs.push(allPois[m]);
-        }
+        // let allPois = [...this.state.pois];
+        // POIs = [];
+        // for (let m = 0; m < allPois.length && m < 10; m++) {
+        //     POIs.push(allPois[m]);
+        // }
 
         // console.log("POIS = " + POIs);
 
@@ -637,13 +660,47 @@ class ARScene extends React.Component {
 
     _formARObjectsCollection() {
         let collection = [];
+        let independentOffers = [];
         let k = 0;
 
-        for (let i = 0; i < PoisData.length; i++, k++) {
-            collection.push(PoisData[i]);
-            collection[k].position = [0, 10, -10];
-            collection[k].distance = 0;
+        for (let i=0;i<POIs.length;i++) {
+            POIs[i].offers = [];
+            POIs[i].kind = "poi";
         }
+
+        for (let i=0;i<OFFERS.length;i++) {
+            let iOffer = this.setOfferForPlace(OFFERS[i]);
+
+            if (iOffer !== null) {
+                independentOffers.push(iOffer);
+            }
+        }
+
+        collection = [...POIs];
+
+        // for (let i=0;i<independentOffers.length;i++) {
+        //     independentOffers[i].kind = "offer";
+        //     independentOffers[i].offers = [];
+        //     independentOffers[i].offers.push({
+        //         "title": independentOffers[i].title.substring(0, 5),
+        //         "text": independentOffers[i].subTitle.substring(0, 3),
+        //         "titleExpanded": independentOffers[i].title,
+        //         "textExpanded": independentOffers[i].subTitle,
+        //         "textPopup": independentOffers[i].subTitle,
+        //         "location": independentOffers[i].location,
+        //         "type": "timer",
+        //         "expireDate": independentOffers[i].offerEndDate.substring(6, 13)
+        //     });
+        //     collection.push(independentOffers[i]);
+        // }
+
+        POIs = collection;
+
+        // for (let i = 0; i < PoisData.length; i++, k++) {
+        //     collection.push(PoisData[i]);
+        //     collection[k].position = [0, 10, -10];
+        //     collection[k].distance = 0;
+        // }
 
         // for (let i = 0; i < OffersData.length; i++, k++) {
         //     collection.push(OffersData[i]);
@@ -655,9 +712,9 @@ class ARScene extends React.Component {
         //     collection.push(EventsBridge.arSceneCurrentNavigationItem);
         // }
 
-        POIs = collection;
+        // POIs = collection;
 
-        // console.log("Formed collection:");
+        console.log("Formed collection:");
         // console.log(JSON.stringify(collection));
     }
 }
