@@ -157,12 +157,14 @@ class ARScene extends React.Component {
         POIs = [];
         for (let m = 0; m < allPois.length && m < 10; m++) {
             POIs.push(allPois[m]);
+            POIs[m].kind = 'poi';
         }
 
         let allOffers = [...this.state.offers];
         OFFERS = [];
         for (let m = 0; m < allOffers.length && m < 10; m++) {
             OFFERS.push(allOffers[m]);
+            OFFERS[m].kind = 'offer';
         }
 
         EventsBridge.arScene = this;
@@ -256,7 +258,7 @@ class ARScene extends React.Component {
                         // votes={currentPOIs[i].votes}
                         // icon={currentPOIs[i].icon}
                         offers={currentPOIs[i].offers}
-                        // kind={currentPOIs[i].kind}
+                        kind={currentPOIs[i].kind}
                         ref={(ref) => {
                             this.PoiRefs[i] = ref;
                         }}
@@ -678,21 +680,21 @@ class ARScene extends React.Component {
 
         collection = [...POIs];
 
-        // for (let i=0;i<independentOffers.length;i++) {
-        //     independentOffers[i].kind = "offer";
-        //     independentOffers[i].offers = [];
-        //     independentOffers[i].offers.push({
-        //         "title": independentOffers[i].title.substring(0, 5),
-        //         "text": independentOffers[i].subTitle.substring(0, 3),
-        //         "titleExpanded": independentOffers[i].title,
-        //         "textExpanded": independentOffers[i].subTitle,
-        //         "textPopup": independentOffers[i].subTitle,
-        //         "location": independentOffers[i].location,
-        //         "type": "timer",
-        //         "expireDate": independentOffers[i].offerEndDate.substring(6, 13)
-        //     });
-        //     collection.push(independentOffers[i]);
-        // }
+        for (let i=0;i<independentOffers.length;i++) {
+            independentOffers[i].kind = "offer";
+            // independentOffers[i].offers = [];
+            // independentOffers[i].offers.push({
+            //     "title": independentOffers[i].title.substring(0, 5),
+            //     "text": independentOffers[i].subTitle.substring(0, 3),
+            //     "titleExpanded": independentOffers[i].title,
+            //     "textExpanded": independentOffers[i].subTitle,
+            //     "textPopup": independentOffers[i].subTitle,
+            //     "location": independentOffers[i].location,
+            //     "type": "timer",
+            //     "expireDate": independentOffers[i].offerEndDate.substring(6, 13)
+            // });
+            collection.push(independentOffers[i]);
+        }
 
         POIs = collection;
 
@@ -715,6 +717,11 @@ class ARScene extends React.Component {
         // POIs = collection;
 
         console.log("Formed collection:");
+
+        // for(let i=0;i<POIs.length;i++) {
+        //     console.log(POIs[i].kind);
+        // }
+
         // console.log(JSON.stringify(collection));
     }
 }

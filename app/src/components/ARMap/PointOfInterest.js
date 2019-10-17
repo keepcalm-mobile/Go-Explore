@@ -59,6 +59,8 @@ export default class PointOfInterest extends React.Component {
         this.onOfferAnimationFinished = this.onOfferAnimationFinished.bind(this);
 
         this.showTest = true;
+
+        // console.log(this.state.title + "  ----  " + this.state.kind);
     }
 
     setPosition(position) {
@@ -69,6 +71,11 @@ export default class PointOfInterest extends React.Component {
         // }
 
         // console.log(this.state.title + ' pos = ' + this.state.position + ' got pos = ' + position);
+
+        // TODO: WHY???
+        if (!this.node) {
+            return;
+        }
 
         this.node.setNativeProps({position: position});
 
@@ -355,13 +362,19 @@ export default class PointOfInterest extends React.Component {
             pos = this.state.position;
 
             let offers = {...this.state.offers};
-            let offer = offers[0];
+            // let offer = offers[0];
+            let offer = {
+                type: "timer",
+                titleExpanded: "timer offer",
+                textExpanded: "offer text"
+            };
 
             if (offer.type === 'timer') {
                 // values for an offer with the timer
                 // this.state.specialOffer.expireDate in this case must be set
 
-                let textToShow = this.getTimerTimeLeft();
+                // let textToShow = this.getTimerTimeLeft();
+                let textToShow = "countdown";
 
                 return (
                     <ViroNode position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
