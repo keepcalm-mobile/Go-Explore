@@ -37,6 +37,8 @@ var canUpdateCamera = true;
 //near north
 //46.9591975,31.9945625
 
+const MAX_AR_OBJECTS = 6; // Limit for places and offers, so the phone will not be running out of memory and stop the app
+
 var updateCounter = 0;
 
 var POIs = [
@@ -155,22 +157,22 @@ class ARScene extends React.Component {
 
         let allPois = [...this.state.pois];
         POIs = [];
-        for (let m = 0; m < allPois.length && m < 10; m++) {
+        for (let m = 0; m < allPois.length && m < MAX_AR_OBJECTS; m++) {
             POIs.push(allPois[m]);
             POIs[m].kind = 'poi';
         }
 
         let allOffers = [...this.state.offers];
         OFFERS = [];
-        for (let m = 0; m < allOffers.length && m < 10; m++) {
+        for (let m = 0; m < allOffers.length && m < MAX_AR_OBJECTS; m++) {
             OFFERS.push(allOffers[m]);
             OFFERS[m].kind = 'offer';
         }
 
         EventsBridge.arScene = this;
 
-        console.log("GOT POIS:");
-        console.log(this.state.pois);
+        // console.log("GOT POIS:");
+        // console.log(this.state.pois);
         // console.log('ar scene props heading = ' + this.props.heading);
         // console.log('initial heading = ' + this.state.initialHeading);
         // console.log('trackingLostCount = ' + this.state.trackingLostCount);
@@ -257,6 +259,7 @@ class ARScene extends React.Component {
                         rating={currentPOIs[i].rating}
                         // votes={currentPOIs[i].votes}
                         // icon={currentPOIs[i].icon}
+                        offerEndDate={currentPOIs[i].offerEndDate}
                         offers={currentPOIs[i].offers}
                         kind={currentPOIs[i].kind}
                         ref={(ref) => {
@@ -379,9 +382,9 @@ class ARScene extends React.Component {
                     this.initialHeading = this.heading;
 
                     this.setPointsOfInterest();
-                    setTimeout(() => {
-                        this.setPointsOfInterest();
-                    }, 1000);
+                    // setTimeout(() => {
+                    //     this.setPointsOfInterest();
+                    // }, 1000);
 
                     console.log('>>Initial heading = ' + this.initialHeading);
                 }
@@ -716,7 +719,7 @@ class ARScene extends React.Component {
 
         // POIs = collection;
 
-        console.log("Formed collection:");
+        // console.log("Formed collection:");
 
         // for(let i=0;i<POIs.length;i++) {
         //     console.log(POIs[i].kind);

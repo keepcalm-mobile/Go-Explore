@@ -38,6 +38,7 @@ export default class PointOfInterest extends React.Component {
         super(props);
 
         this.state = {
+            offerEndDate: props.offerEndDate,
             isMinimized: true,
             objectAnimation: 'scaleDown',
             runObjectAnimation: false,
@@ -60,7 +61,7 @@ export default class PointOfInterest extends React.Component {
 
         this.showTest = true;
 
-        // console.log(this.state.title + "  ----  " + this.state.kind);
+        console.log(this.state.title + "  ----  " + this.state.kind);
     }
 
     setPosition(position) {
@@ -82,7 +83,7 @@ export default class PointOfInterest extends React.Component {
         //this.setState({title: 'y = ' + position[1]});
 
         // if there are multiple POIs in the same direction, they are ordered by Y and it will be > 0
-        if (position[1] > 0) {
+        if (position[1] > 0 || this.state.kind != 'poi') {
             this.setState({scale: [0.75,0.75,0.75]});
         }
     }
@@ -170,7 +171,7 @@ export default class PointOfInterest extends React.Component {
         return str;
     }
 
-    getTimerTimeLeft(index = 0) {
+    getTimerTimeLeft(index = 0, ticks) {
 
         let offers = {...this.state.offers};
         let offer = offers[index];
@@ -184,8 +185,9 @@ export default class PointOfInterest extends React.Component {
         // let expDateMinutes = parseInt(offer.expireDate.substring(14,2));
 
         let expireDate = new Date();
-        expireDate.setFullYear(2019, 10, 25);
-        expireDate.setHours(15, 0, 0);
+        expireDate.setTime(ticks);
+        // expireDate.setFullYear(2019, 10, 25);
+        // expireDate.setHours(15, 0, 0);
         // expireDate.setFullYear(expDateYear, expDateMonth, expDateDay);
         // expireDate.setHours(expDateHours, expDateMinutes);
 
@@ -351,21 +353,27 @@ export default class PointOfInterest extends React.Component {
     }
 
     getSpecialOffer() {
-        if (typeof (this.state.offers) === 'undefined' || this.state.offers.length === 0) {
+
+        // return null;
+
+        if (this.state.kind !== 'offer' && (typeof (this.state.offers) === 'undefined' || this.state.offers.length === 0)) {
             return null;
         }
 
-        let pos = {...this.state.position};
+        let pos = [...this.state.position];
         pos[1] += 0.8;
 
-        if (this.state.kind === 'offer') {
-            pos = this.state.position;
+        // console.log(this.state.title + " -- " + this.state.kind);
 
-            let offers = {...this.state.offers};
+        if (this.state.kind === 'offer') {
+            pos = [...this.state.position];
+            pos[1] += 0.1;
+
+            // let offers = [...this.state.offers];
             // let offer = offers[0];
             let offer = {
                 type: "timer",
-                titleExpanded: "timer offer",
+                titleExpanded: this.state.title.substring(0, 13),
                 textExpanded: "offer text"
             };
 
@@ -373,8 +381,9 @@ export default class PointOfInterest extends React.Component {
                 // values for an offer with the timer
                 // this.state.specialOffer.expireDate in this case must be set
 
-                // let textToShow = this.getTimerTimeLeft();
-                let textToShow = "countdown";
+                let ticks = parseInt(this.state.offerEndDate.substring(6, 19));
+                let textToShow = this.getTimerTimeLeft(0, ticks);
+                // let textToShow = this.state.offerEndDate.substring(6, 19);
 
                 return (
                     <ViroNode position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
@@ -471,6 +480,9 @@ export default class PointOfInterest extends React.Component {
     }
 
     getPOI(currentIcon, rate) {
+
+        let textToShow = this.state.title.substring(0, 13);
+
         return (
             <ViroNode>
                 <ViroNode position={this.state.position} scale={this.state.scale} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
@@ -478,7 +490,7 @@ export default class PointOfInterest extends React.Component {
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={currentIcon} />
 
                     <ViroImage position={[-0.55,-0.1,0.25]} height={0.2} width={1} source={rate} />
-                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,0.1,0.25]} width={3} text={(this.state.title)} style={styles.text}  />
+                    <ViroText textClipMode={'ClipToBounds'} position={[0.1,0.1,0.25]} width={3} text={(textToShow)} style={styles.text}  />
                     <ViroText textClipMode={'ClipToBounds'} position={[-1.15,-0.175,0.25]} width={0.5} text={(''+this.state.rating)} style={styles.rating}  />
                     <ViroText textClipMode={'ClipToBounds'} position={[0.1,-0.375,0.25]} width={3} text={'1.2km from Fatread Beach'} style={styles.textSmall}  />
                     {/*<ViroText position={[1.55,-0.15,0.25]} width={1} text={(this.state.distance / 1000 / 5 * 60).toFixed(2) + ' min'} style={styles.textSmall}  />*/}
