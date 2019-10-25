@@ -16,8 +16,8 @@ import {
 
 import PointOfInterest from './PointOfInterest';
 import EventsBridge from '../../utils/EventsBridge';
-import PoisData from './pois.json';
-import OffersData from './offers.json';
+// import PoisData from './pois.json';
+// import OffersData from './offers.json';
 
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
@@ -37,18 +37,22 @@ var canUpdateCamera = true;
 //near north
 //46.9591975,31.9945625
 
+const MAX_AR_OBJECTS = 6; // Limit for places and offers, so the phone will not be running out of memory and stop the app
+
 var updateCounter = 0;
 
 var POIs = [
 
     // {latitude: 85, longitude: -135.0005567, distance: 0, position: [0,10,0], title: 'NORTH poi', rating: 0, votes: '0', type: 'custom'},
-    {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Loading pois from json', rating: 0, votes: '0', icon: 'custom'},
+    // {latitude: 46.9591975, longitude: 31.9945625, distance: 0, position: [0,10,0], title: 'Loading pois from json', rating: 0, votes: '0', icon: 'custom'},
 
     // {latitude: 46.9664069, longitude: 32.001888, distance: 0, position: [0,10,0], title: 'City Center', rating: 5, votes: '900', type: 'shop'},
     // {latitude: 46.9541553, longitude: 31.9935474, distance: 0, position: [0,10,0], title: 'ATM', rating: 3, votes: '817', type: 'atm'},
     // {latitude: 46.9678573, longitude: 31.9906763, distance: 0, position: [0,10,0], title: 'McDonalds', rating: 3, votes: '1.1k', type: 'coffee'},
     // {latitude: 46.8512408, longitude: 32.012833, distance: 0, position: [0,10,0], title: 'Skate Park', rating: 3, votes: '276', type: 'coffee'},
 ];
+
+var OFFERS = [];
 
 // [
 //     {"latitude": 46.9591975, "longitude": 31.9945625, "distance": 0, "position": [0,10,0], "title": "Near north poi", "rating": 0, "votes": "0", "type": "custom"},
@@ -117,7 +121,8 @@ class ARScene extends React.Component {
             normalizationMaximumPoint: null,
             initialHeading: this.props.heading,
             //heading: this.props.heading,
-            pois: [],
+            pois: this.props.poisData,
+            offers: this.props.offersData,
             poisReady: false,
             northPosition: [0,0, -7],
             calibrationOffset: false,
@@ -127,6 +132,7 @@ class ARScene extends React.Component {
         };
 
         // bind 'this' to functions
+        this._groupPOIs = this._groupPOIs.bind(this);
         this._onInitialized = this._onInitialized.bind(this);
         this._latLongToMerc = this._latLongToMerc.bind(this);
         this._transformPointToAR = this._transformPointToAR.bind(this);
@@ -139,37 +145,68 @@ class ARScene extends React.Component {
         this.PoiRefs = [];
         this.updateTimer = null;
 
-        for(let i=0;i<POIs.length;i++) {
+        this.testPois = true;
+
+        // temp value here
+        for(let i=0;i<this.state.pois.length;i++) {
             this.PoiRefs.push(React.createRef());
+        }
+
+        // POIs = {...this.state.pois};
+        // OFFERS = {...this.state.offers};
+
+        let allPois = [...this.state.pois];
+        POIs = [];
+        for (let m = 0; m < allPois.length && m < MAX_AR_OBJECTS; m++) {
+            POIs.push(allPois[m]);
+            POIs[m].kind = 'poi';
+        }
+
+        let allOffers = [...this.state.offers];
+        OFFERS = [];
+        for (let m = 0; m < allOffers.length && m < MAX_AR_OBJECTS; m++) {
+            OFFERS.push(allOffers[m]);
+            OFFERS[m].kind = 'offer';
         }
 
         EventsBridge.arScene = this;
 
-        console.log('ar scene props heading = ' + this.props.heading);
-        console.log('initial heading = ' + this.state.initialHeading);
-        console.log('trackingLostCount = ' + this.state.trackingLostCount);
+        // console.log("GOT POIS:");
+        // console.log(this.state.pois);
+        // console.log('ar scene props heading = ' + this.props.heading);
+        // console.log('initial heading = ' + this.state.initialHeading);
+        // console.log('trackingLostCount = ' + this.state.trackingLostCount);
+
+        this._formARObjectsCollection();
     }
 
     componentDidMount() {
 
-        console.log(PoisData);
-        console.log(JSON.stringify(PoisData));
+        // console.log(PoisData);
+        // console.log(JSON.stringify(PoisData));
 
-        console.log('Before json: pois length = ' + POIs.length);
-        POIs  = PoisData;
-        //POIs = JSON.parse(PoisData);
+        // console.log('Before json: pois length = ' + POIs.length);
+        // POIs  = PoisData;
 
-        console.log('After json: pois length = ' + POIs.length);
+        // console.log('After json: pois length = ' + POIs.length);
 
         this.trackDeviceHeading();
 
-        setInterval(() => {
+        // if (this.testPois === true) {
+        //     console.log("GOT POIS:");
+        //     console.log(this.state.pois);
+        //     this.testPois = false;
+        // }
 
-            canUpdateCamera = true;
+        //TODO: do we need this?
 
-        }, 400);
+        // setInterval(() => {
+        //
+        //     canUpdateCamera = true;
+        //
+        // }, 400);
 
-        this._formARObjectsCollection();
+        // this._formARObjectsCollection();
 
         // setInterval(() => {
         //
@@ -196,8 +233,17 @@ class ARScene extends React.Component {
 
         // console.log('AR scene render');
 
+        // return null;
+
+        if (!POIs || POIs.length < 1) {
+            return null;
+        }
+
         let pointsOfInterest = [];
-        let currentPOIs = [...this.state.pois];
+        let currentPOIs = POIs;
+
+        // console.log("type == "+typeof(currentPOIs));
+        // console.log(currentPOIs);
 
         if (this.state.poisReady) {
             for (let i = 0; i < currentPOIs.length; i++) {
@@ -208,11 +254,13 @@ class ARScene extends React.Component {
                         position={[currentPOIs[i].position.x, currentPOIs[i].position.y, -currentPOIs[i].position.z]}
                         coords={{latitude: currentPOIs[i].latitude, longitude: currentPOIs[i].longitude}}
                         title={currentPOIs[i].title}
+                        subtitle={currentPOIs[i].subTitle}
                         distance={getDistanceBetweenCoordinates(currentPOIs[i].latitude, currentPOIs[i].longitude, this.state.currentPosition.latitude, this.state.currentPosition.longitude)}
                         rating={currentPOIs[i].rating}
-                        votes={currentPOIs[i].votes}
-                        icon={currentPOIs[i].icon}
-                        specialOffer={currentPOIs[i].specialOffer}
+                        // votes={currentPOIs[i].votes}
+                        // icon={currentPOIs[i].icon}
+                        offerEndDate={currentPOIs[i].offerEndDate}
+                        offers={currentPOIs[i].offers}
                         kind={currentPOIs[i].kind}
                         ref={(ref) => {
                             this.PoiRefs[i] = ref;
@@ -225,25 +273,6 @@ class ARScene extends React.Component {
         return (
             <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this.onCameraTransformUpdateHandler}>
                 {/*<ViroText text={this.state.text2} scale={[.5, .5, .5]} position={[0, 0, -5]} style={styles.helloWorldTextStyle} ref={(ref) => { this.refText = ref }} />*/}
-
-                {/*<ViroFlexView position={[0,0, -8]} width={5} height={1} style={{*/}
-                {/*    backgroundColor: '#66aa77',*/}
-                {/*    flexDirection: 'row',*/}
-                {/*}}>*/}
-                {/*    <ViroFlexView style={{*/}
-                {/*        backgroundColor: '#4a5dff',*/}
-                {/*        paddingLeft: 0.8,*/}
-                {/*        flex: 3*/}
-                {/*    }}>*/}
-                {/*        <ViroText text={'Sale'} style={{flex: 1, textAlignVertical: 'center', textAlign: 'left'}} />*/}
-                {/*    </ViroFlexView>*/}
-                {/*    <ViroFlexView style={{*/}
-                {/*        backgroundColor: '#ffe543',*/}
-                {/*        flex: 2*/}
-                {/*    }}>*/}
-
-                {/*    </ViroFlexView>*/}
-                {/*</ViroFlexView>*/}
 
                 {/*{this.getTestPOI()}*/}
 
@@ -314,6 +343,19 @@ class ARScene extends React.Component {
 
     }
 
+    // if there is no place with this placeId, the offer will remain independent
+    setOfferForPlace(offer) {
+        for (let i=0;i<POIs.length;i++) {
+            if (POIs[i].id === offer.placeId) {
+                POIs[i].offers.push(offer);
+                return null;
+                break;
+            }
+        }
+
+        return offer;
+    }
+
     onPOIClickedHandler(poi) {
 
         console.log('AR Scene CLICKED: ' + poi.title);
@@ -340,9 +382,9 @@ class ARScene extends React.Component {
                     this.initialHeading = this.heading;
 
                     this.setPointsOfInterest();
-                    setTimeout(() => {
-                        this.setPointsOfInterest();
-                    }, 1000);
+                    // setTimeout(() => {
+                    //     this.setPointsOfInterest();
+                    // }, 1000);
 
                     console.log('>>Initial heading = ' + this.initialHeading);
                 }
@@ -368,9 +410,7 @@ class ARScene extends React.Component {
             this.setState({poisReady: false, trackingLostCount: trackingLostCount});
 
             if (trackingLostCount >= 2) {
-
                 this.reset();
-
                 this.state.onTrackingLost();
             }
         }
@@ -414,7 +454,21 @@ class ARScene extends React.Component {
     setPointsOfInterest() {
         updateCounter++;
 
-        this._formARObjectsCollection(); // Merge Offers and POIs into a single array
+        if (!this.state.pois || this.state.pois.length < 1) {
+            return null;
+        }
+
+        //// no more need in this
+        // this._formARObjectsCollection(); // Merge Offers and POIs into a single array
+
+        //POIs = [...this.state.pois];
+        // let allPois = [...this.state.pois];
+        // POIs = [];
+        // for (let m = 0; m < allPois.length && m < 10; m++) {
+        //     POIs.push(allPois[m]);
+        // }
+
+        // console.log("POIS = " + POIs);
 
         for (let i = 0; i<POIs.length; i++){
             POIs[i].distance = getDistanceBetweenCoordinates(this.state.initialPosition.latitude, this.state.initialPosition.longitude, POIs[i].latitude, POIs[i].longitude);
@@ -424,18 +478,17 @@ class ARScene extends React.Component {
 
         for (let j = 0; j < POIs.length; j++) {
             POIs[j].position = this._normalize({latitude: POIs[j].latitude, longitude: POIs[j].longitude});
+
+            // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
         }
 
-        let difference = 40;
-        let deg = -360;
-        let iterations = 360 / difference * 2;
+        // console.log('before grouping');
 
-        for (let i=0;i<iterations;i++) {
-            this._groupPOIs(deg, deg+difference);
-            deg += difference;
-        }
+        this._groupPOIs();
 
-        this.setState({pois: POIs, poisReady: true});
+        // console.log('after grouping');
+
+        // return;
 
         if (this.state.poisReady === true) {
             // problem with NaN persists
@@ -448,9 +501,11 @@ class ARScene extends React.Component {
 
                     this.PoiRefs[j].setPosition([finalX, finalY, finalZ]);
                 }
+
+                // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees + "  Y = " + POIs[j].position.y);
             }
 
-            // console.log('pois repositioned');
+            console.log('pois repositioned: ' + POIs.length);
         }
 
         //console.log('Skate park: ' + JSON.stringify(POIs[3].position) + '  ih = ' + this.state.initialHeading);
@@ -458,6 +513,10 @@ class ARScene extends React.Component {
         // if (this.state.calibrationOffset === false) {
         //     this.setCalibrationOffset();
         // }
+
+        if (updateCounter < 2) {
+            this.setPointsOfInterest();
+        }
     }
 
     _latLongToMerc(lat_deg, lon_deg) {
@@ -502,7 +561,7 @@ class ARScene extends React.Component {
     _normalize(pos) {
         //return (val - min) / (max - min);
 
-        let distanceToPoint = getDistanceBetweenCoordinates(pos.latitude, pos.longitude, CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1]);
+        // let distanceToPoint = getDistanceBetweenCoordinates(pos.latitude, pos.longitude, CURRENT_TEST_LOCATION[0], CURRENT_TEST_LOCATION[1]);
         let curPos = this._transformPointToAR(pos.latitude, pos.longitude);
 
         //TEST
@@ -512,8 +571,8 @@ class ARScene extends React.Component {
 
         let polar = cartesianToPolar(curPos.x, curPos.z);
 
-        if (polar.distance < 6)
-            polar.distance = 6;
+        if (polar.distance < 8)
+            polar.distance = 8;
         if (polar.distance > 10)
             polar.distance = 10;
 
@@ -531,7 +590,7 @@ class ARScene extends React.Component {
         return value;
     }
 
-    _groupPOIs(degreeMin, degreeMax) {
+    _groupPOIs() {
 
         // let arr = [...POIs];
         //
@@ -542,58 +601,130 @@ class ARScene extends React.Component {
         // //sort(POIs).asc(x => cartesianToPolar(x.position.x, x.position.z).degrees);
         //
 
-        let height = 0;
+        let difference = 70;
+
+        let height = 0.05;
         let inc = 0.85;
-        let found = 0;
-        let res = degreeMin;
-        let firstIndex = 0;
+        //let found = 0;
+        let res = 0;
+        //let firstIndex = 0;
+
+        let checked = [];
 
         for(let i=0;i<POIs.length;i++) {
             res = cartesianToPolar(POIs[i].position.x, POIs[i].position.z).degrees;
-            if (res >= degreeMin && res <= degreeMax) {
 
-                //ToastAndroid.showWithGravity('degree = '+res, ToastAndroid.LONG, ToastAndroid.CENTER);
+            if (res < 0)
+                res = 360 + res;
+
+            if (checked.includes(i) === false) {
+
+                checked.push(i);
+
+                // if Y > 0 it will be rescaled
+                height = 0.05;
                 POIs[i].position.y = height;
                 height += inc;
 
-                if (typeof (this.PoiRefs[i]) !== 'undefined' && typeof (this.PoiRefs[i].state) !== 'undefined' && typeof (this.PoiRefs[i].state.specialOffer) !== 'undefined') {
-                    height += 0.8; // TODO: Set offer height somewhere
+                if (typeof (this.PoiRefs[i]) !== 'undefined' && typeof (this.PoiRefs[i].state) !== 'undefined' && typeof (this.PoiRefs[i].state.offers) !== 'undefined' && this.PoiRefs[i].state.offers.length > 0) {
+                    if (this.PoiRefs[i].state.isMinimized === false)
+                        height += 1 * this.PoiRefs[i].state.offers.length; // TODO: Set offer height somewhere
+                    else
+                        height += 1;
                 }
 
-                if (found == 0) {
-                    firstIndex = i;
-                }
+                for (let k = 0; k < POIs.length; k++) {
+                    if (k !== i) {
+                        let degrees = cartesianToPolar(POIs[k].position.x, POIs[k].position.z).degrees;
 
-                found++;
+                        if (degrees < 0)
+                            degrees = 360 + degrees;
+
+                        let dif = Math.abs(res - degrees);
+
+                        if (dif <= difference) {
+                            checked.push(k);
+
+                            POIs[k].position.y = height;
+                            height += inc;
+
+                            if (typeof (this.PoiRefs[k]) !== 'undefined' && typeof (this.PoiRefs[k].state) !== 'undefined' && typeof (this.PoiRefs[k].state.offers) !== 'undefined' && this.PoiRefs[k].state.offers.length > 0) {
+                                if (this.PoiRefs[k].state.isMinimized === false)
+                                    height += 1 * this.PoiRefs[k].state.offers.length; // TODO: Set offer height somewhere
+                                else
+                                    height += 1;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        if (found > 1) {
-            POIs[firstIndex].position.y = 0.05; // if Y > 0 it will be rescaled
-        }
-
-        //ToastAndroid.showWithGravity('found = '+found + '  degrees = ' + res, ToastAndroid.LONG, ToastAndroid.CENTER);
+        this.setState({poisReady: true});
     }
 
     _formARObjectsCollection() {
         let collection = [];
+        let independentOffers = [];
         let k = 0;
 
-        for (let i = 0; i < PoisData.length; i++, k++) {
-            collection.push(PoisData[i]);
-            collection[k].position = [0, 10, 0];
-            collection[k].distance = 0;
+        for (let i=0;i<POIs.length;i++) {
+            POIs[i].offers = [];
+            POIs[i].kind = "poi";
         }
 
-        for (let i = 0; i < OffersData.length; i++, k++) {
-            collection.push(OffersData[i]);
-            collection[k].position = [0, 10, 0];
-            collection[k].distance = 0;
+        for (let i=0;i<OFFERS.length;i++) {
+            let iOffer = this.setOfferForPlace(OFFERS[i]);
+
+            if (iOffer !== null) {
+                independentOffers.push(iOffer);
+            }
+        }
+
+        collection = [...POIs];
+
+        for (let i=0;i<independentOffers.length;i++) {
+            independentOffers[i].kind = "offer";
+            // independentOffers[i].offers = [];
+            // independentOffers[i].offers.push({
+            //     "title": independentOffers[i].title.substring(0, 5),
+            //     "text": independentOffers[i].subTitle.substring(0, 3),
+            //     "titleExpanded": independentOffers[i].title,
+            //     "textExpanded": independentOffers[i].subTitle,
+            //     "textPopup": independentOffers[i].subTitle,
+            //     "location": independentOffers[i].location,
+            //     "type": "timer",
+            //     "expireDate": independentOffers[i].offerEndDate.substring(6, 13)
+            // });
+            collection.push(independentOffers[i]);
         }
 
         POIs = collection;
 
+        // for (let i = 0; i < PoisData.length; i++, k++) {
+        //     collection.push(PoisData[i]);
+        //     collection[k].position = [0, 10, -10];
+        //     collection[k].distance = 0;
+        // }
+
+        // for (let i = 0; i < OffersData.length; i++, k++) {
+        //     collection.push(OffersData[i]);
+        //     collection[k].position = [0, 10, -10];
+        //     collection[k].distance = 0;
+        // }
+        //
+        // if (EventsBridge.arSceneCurrentNavigationItem !== null) {
+        //     collection.push(EventsBridge.arSceneCurrentNavigationItem);
+        // }
+
+        // POIs = collection;
+
         // console.log("Formed collection:");
+
+        // for(let i=0;i<POIs.length;i++) {
+        //     console.log(POIs[i].kind);
+        // }
+
         // console.log(JSON.stringify(collection));
     }
 }

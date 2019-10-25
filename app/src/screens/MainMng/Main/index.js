@@ -18,6 +18,7 @@ const stateToProps = (state) => {
     console.log('<><><><><><><><> : STATE LOADING : ' + state.isLoading);
     return {
         isLoading: state.isLoading,
+        //isLoading: false // TODO: Enable loading after testing // ne pomogaet blt
     };
 };
 

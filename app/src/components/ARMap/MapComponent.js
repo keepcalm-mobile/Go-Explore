@@ -162,7 +162,6 @@ export default class MapComponent extends Component {
         this.refNavigation.updateBearing(heading);
       }
       else {
-
         this.isPositionSet = true;
 
         this.refNavigation.setPosition({
@@ -170,8 +169,6 @@ export default class MapComponent extends Component {
           heading: heading,
         });
       }
-
-
 
       //
       // this.refNavigation.allowUpdate(false); // TODO: add ability to update the map?

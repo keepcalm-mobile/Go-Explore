@@ -40,6 +40,8 @@ class PagesMng extends React.Component<Props> {
     render() {
         const { navigation } = this.props;
 
+        //TODO: enable other screens, was: navigation
+
         return (
             <TabsNavi navigation={navigation} style={s.container}/>
         );

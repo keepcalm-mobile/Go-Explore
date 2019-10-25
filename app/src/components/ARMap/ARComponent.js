@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 
-import {View, StyleSheet, PermissionsAndroid, ToastAndroid} from 'react-native';
+import {View, Text, Image, StyleSheet, PermissionsAndroid, ToastAndroid} from 'react-native';
 
 import {
   ViroARScene,
@@ -32,6 +32,8 @@ class ARComponent extends React.Component {
     // Set initial state here
     this.state = {
       sharedProps: sharedProps,
+      offersData: this.props.offersData,
+      poisData: this.props.poisData,
       heading: this.props.heading,
       currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
       onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {},
@@ -50,7 +52,11 @@ class ARComponent extends React.Component {
     // console.log('ar component render');
 
     return (
-        <View style={{position: 'absolute', width: '100%', height: '100%', left: 0, top: 0}}>{this.getARNavigator()}</View>
+        <View style={{position: 'absolute', width: '100%', height: '100%', left: 0, top: 0}}>
+
+          {this.getARNavigator()}
+
+        </View>
     );
   }
 
@@ -60,14 +66,11 @@ class ARComponent extends React.Component {
         <ViroARSceneNavigator
             {...this.state.sharedProps}
             initialScene={{scene:InitialARScene,
-            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), onTrackingLost: this.onTrackingLostHandler.bind(this), location: this.state.currentPosition, heading: this.state.heading}}}
+            passProps:{onClickHandler: this.onPOIClickHandler.bind(this), onTrackingLost: this.onTrackingLostHandler.bind(this),
+              location: this.state.currentPosition, heading: this.state.heading, poisData: this.state.poisData, offersData: this.state.offersData}}}
         />
     );
   }
-
-  // setHeading(degree) {
-  //   this.setState();
-  // }
 
   onPOIClickHandler(poi) {
     console.log('AR Component CLICKED: ' + poi.title);
@@ -86,7 +89,7 @@ class ARComponent extends React.Component {
 
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
-    fontFamily: 'Arial',
+    fontFamily: 'Poppins, sans-serif',
     fontSize: 18,
     color: '#222222',
     textAlignVertical: 'center',
