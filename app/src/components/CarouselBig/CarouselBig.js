@@ -5,6 +5,7 @@ import Carousel from 'react-native-snap-carousel';
 import s, {itemH, itemW} from './style';
 import type {Props} from 'react-native/Libraries/Components/View/View';
 import {scale} from '../../utils/resize';
+import {MEDIA_PREF} from "../../constants";
 
 
 class CarouselBig extends React.Component<Props> {
@@ -21,16 +22,13 @@ class CarouselBig extends React.Component<Props> {
     }
 
     _renderItem = (item, index) => {
-        const {id, title} = item;//image, type,
-        const image = item.url;
-        const type = 'cinema';
+        const {id, title, type} = item;//image, type,
+        const image = item.image ? {uri:(MEDIA_PREF + item.image)} : require('../../../assets/placeholder.jpg');
         return (
-            //{/*<View key={item.id} style={s.slide}>*/}
             <TouchableOpacity key={id} onPress = { () => { this.props.onItemClick(id, type); }} activeOpacity={0.75} style={s.slide}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />
+                <Image resizeMode={'cover'} style={s.image} source={image} defaultSource={require('../../../assets/placeholder.jpg')} progressiveRenderingEnabled={true}/>
                 <Text style={s.itemTitle}>{title}</Text>
             </TouchableOpacity>
-            // </View>
         );
     };
 

@@ -12,8 +12,10 @@ import IconsEllipse from '../../../../../assets/categoriesIcons/iconEllipse.svg'
 const button = (Icon, onPress, iId, iTitle) => {
     return (
         <TouchableOpacity onPress = {() => onPress(iId)} activeOpacity={0.5} style={s.btn}>
-            <Icon width={iconSize} height={iconSize}/>
-            <IconsEllipse width={ellipseSize} height={ellipseSize} style={s.btnEllipse} />
+            <View style={s.iconsCnt}>
+                <Icon width={iconSize} height={iconSize} style={s.btnIcon}/>
+                <IconsEllipse width={ellipseSize} height={ellipseSize} style={s.btnEllipse} />
+            </View>
             <Text style={s.btnTitle}>{iTitle}</Text>
         </TouchableOpacity>
     );

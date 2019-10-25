@@ -9,6 +9,7 @@ import  Rating from '../Rating';
 import {windowW, colors, headerH} from '../../styles';
 import {scale} from '../../utils/resize';
 import ButtonBlack from '../ButtonBlack';
+import {MEDIA_PREF} from '../../constants';
 
 
 
@@ -26,21 +27,16 @@ class Header extends React.Component<Props> {
     }
 
     _renderItem = ({item, index}) => {
-        const {id, title} = item;//type, subTitle, rating, image
-        const type = 'cinema';
-        const rating = Math.round(Math.random() * 5 * 10 ) / 10;
-        const image = item.url;
-        let subTitle = '';
-        if(item.hasOwnProperty('rating')) subTitle += item.rating + ' ';
-        if(item.hasOwnProperty('duration')) subTitle += item.duration + ' ';
-        if(item.hasOwnProperty('location')) subTitle += item.location + ' ';
+        const {id, title, type, subTitle} = item;//type, subTitle, rating, image
+        const image = item.image ? {uri:(MEDIA_PREF + item.image)} : require('../../../assets/placeholder.jpg');
+        const rating = item.rating !== 'N/A' ? item.rating.split('/')[0] / 2 : 0;
 
         return (
             <View key={id} style={s.slide}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />
+                <Image resizeMode={'cover'} style={s.image} source={image} defaultSource={require('../../../assets/placeholder.jpg')} progressiveRenderingEnabled={true}/>
                 <LinearGradient colors={['#00000000', '#000000CC', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={s.linearGradient} />
                 <Text style={s.title}>{title}</Text>
-                <Text style={s.subTitle}>{subTitle}</Text>
+                <Text style={s.subTitle} numberOfLines={2}>{subTitle}</Text>
                 <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:scale(7)}}>
                     <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
                     <ButtonBlack onPress = { () => { this.props.onItemClick(id, type); }} title={'View detail'}/>

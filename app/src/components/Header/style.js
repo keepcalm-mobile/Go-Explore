@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         width: windowW,
         height: scale(390),
         position: 'absolute',
+        backgroundColor: colors.bgApp,
     },
     title: {
         fontFamily: fontNames.bold,
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginLeft: indent,
         color: colors.white,
+        width: '80%',
         // marginTop: verticalScale(19),
         // marginBottom: verticalScale(13),
         // lineHeight: scale(56),
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginLeft: indent,
         color: colors.white,
+        width: '80%',
     },
     linearGradient: {
         width:'100%',

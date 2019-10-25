@@ -4530,6 +4530,7 @@ const dispatchToProps = (dispatch) => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const _itemId = ownProps.navigation.state.params.itemId;
+
     let sorted = [];
     if (stateProps.data.times) {
         for (let i = 0; i < stateProps.data.times.length; i++){
@@ -4552,7 +4553,8 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
             sorted.push(cinema);
         }
     }
-    return Object.assign({}, ownProps, {data: sorted, header: stateProps.items[_itemId].header, ticketTypes:ticketTypes}, dispatchProps);
+    //stateProps.items[_itemId].header
+    return Object.assign({}, ownProps, {data: sorted, header: ownProps.navigation.state.params.tempHeader, ticketTypes:ticketTypes}, dispatchProps);
 };
 
 

@@ -8,6 +8,7 @@ import Rating from '../../../../../../../../components/Rating';
 import IconFilter from '../../../../../../../../../assets/serviceIcons/playIcon.svg';
 import ScrollablePage from '../../../../ScrollablePage';
 import {HorizontalLine, Location, ExperienceSelector, CinemaDate, CinemaTime, CinemaTicketType} from '../../../../../../../../components';
+import {windowH} from "../../../../../../../../styles";
 
 class BookingTicket extends ScrollablePage {
     constructor(props) {
@@ -23,6 +24,7 @@ class BookingTicket extends ScrollablePage {
             dateIndex:-1,
             sessionId:-1,
         };
+        this._filterSet = [];
     }
 
     onPlayBtnPress = () => {
@@ -68,13 +70,20 @@ class BookingTicket extends ScrollablePage {
             for (let prop in sortExperiences) possExperiences.push(prop);
         }
 
+        for (let i = 0; i < this._filterSet.length; i++) {
+            if (!possExperiences.includes(this._filterSet[i])) {
+                this._filterSet = [];
+            }
+        }
         this.setState({cinemaIndex:iCinema, dateIndex:dateIndex, possibleExperience:possExperiences, sessionId : -1});
+        if (this._time) this._time.filter = this._filterSet;
     };
 
     onExperienceChoose = (iValue) => {
         if (this._time) {
             this._time.filter = iValue;
         }
+        this._filterSet = iValue;
     };
 
     onTimeSelect = (iValue) => {
@@ -122,12 +131,18 @@ class BookingTicket extends ScrollablePage {
         );
     };
 
+    onTimeLayout = (e) => {
+        if (this._scrollOffset <= 10) {
+            this._cnt.scrollToEnd({animated: true});
+        }
+    };
+
     sessionsRender = () => {
         if (this.state.dateIndex !== -1){
             return (
                 <>
                     <ExperienceSelector type={'experience'} data={this.state.possibleExperience} onChange={this.onExperienceChoose}/>
-                    <CinemaTime data={this.props.data[this.state.cinemaIndex].times[this.state.dateIndex].items} onSelect={this.onTimeSelect} ref={c => this._time = c}/>
+                    <CinemaTime data={this.props.data[this.state.cinemaIndex].times[this.state.dateIndex].items} filter={this._filterSet} onSelect={this.onTimeSelect} onLayout={this.onTimeLayout} ref={c => this._time = c}/>
                 </>
             );
         } else {
@@ -135,10 +150,17 @@ class BookingTicket extends ScrollablePage {
         }
     };
 
+
+    onTicketTypeLayout = (e) => {
+        if(e.nativeEvent.layout.y - windowH/2 > this._scrollOffset){
+            this._cnt.scrollTo({y: e.nativeEvent.layout.y - windowH/2, animated: true});
+        }
+    };
+
     ticketTypeRender = () => {
         if (this.state.sessionId !== -1 && this.props.ticketTypes) {
             return (
-                <CinemaTicketType data={this.props.ticketTypes} onConfirmPress={this.onConfirmTicketPress}/>
+                <CinemaTicketType data={this.props.ticketTypes} onConfirmPress={this.onConfirmTicketPress} onLayout={this.onTicketTypeLayout}/>
             );
         } else {
             return null;
@@ -149,7 +171,7 @@ class BookingTicket extends ScrollablePage {
         const { header, data } = this.props;
 
         return (
-            <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
+            <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll} ref={c => this._cnt = c}>
                 {this.header('Cinema', header)}
                 {data.length ?
                     <>

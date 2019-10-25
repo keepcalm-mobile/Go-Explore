@@ -2,9 +2,12 @@ import screens from './screens';
 export { default as screens } from './screens';
 
 
+export const MEDIA_PREF = 'https://testgoexplorecity.azurewebsites.net';
 
 const KEY = '?subscription-key=bbc34cdbc2df4e09b177542c6da3fb35';
-const API_URL = 'https://goexploreapi.azure-api.net/mobile/';
+// const API_URL = 'https://goexploreapi.azure-api.net/mobile/';
+const API_URL = 'https://goexploreapi.azure-api.net/testmobile/';
+
 export const CATEGORY_API = {
     [screens.HotPicks] : API_URL + 'HotPicks' + KEY,
     [screens.Attraction] : API_URL + 'Attractions' + KEY,
@@ -14,6 +17,7 @@ export const CATEGORY_API = {
     [screens.Shopping] : API_URL + 'Shoppings' + KEY,
     [screens.Travel] : API_URL + 'Travels' + KEY,
 };
+
 
 const apiUrl = 'https://naxlabel.mobi/games/starCrashRecord.php';//'https://goexploreapi.azurewebsites.net/api/goexplore';
 export default apiUrl;

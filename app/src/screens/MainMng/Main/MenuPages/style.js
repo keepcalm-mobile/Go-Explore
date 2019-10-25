@@ -2,12 +2,12 @@ import {StyleSheet} from 'react-native';
 import s, {bottomIndent, colors, indent} from '../../../../styles';
 import {scale} from '../../../../utils/resize';
 
-const sizeBtn = scale(35);
+const sizeBtn = scale(45);
 
 const styles = StyleSheet.create({
     container: {
         width:'100%',
-        height:scale(45) + bottomIndent,
+        height:sizeBtn + bottomIndent,
         backgroundColor:colors.menuBg,
     },
     shadow:{
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     },
     btn:{
         width: sizeBtn,
-        height: sizeBtn,
+        height: '100%',
         alignItems:'center',
         justifyContent:'center',
         marginBottom:bottomIndent,

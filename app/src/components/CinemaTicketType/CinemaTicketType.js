@@ -11,6 +11,7 @@ class CinemaTicketType extends React.Component<Props> {
     static propTypes = {
         data: PropTypes.object.isRequired,
         onConfirmPress: PropTypes.func.isRequired,
+        onLayout: PropTypes.func,
     };
 
     static defaultProps = {
@@ -70,9 +71,15 @@ class CinemaTicketType extends React.Component<Props> {
         return items;
     }
 
+    onLayout = (e) => {
+        if (this.props.onLayout) {
+            this.props.onLayout(e);
+        }
+    };
+
     render() {
         return (
-            <View style={s.container}>
+            <View style={s.container} onLayout={this.onLayout}>
                 {this.itemsRender}
                 <Text style={s.footerText}>AMOUNT</Text>
                 <Text style={[s.footerText, s.footerMargin]}>{'QAR ' + this.state.amount / 100}</Text>

@@ -54,17 +54,26 @@ const styles = StyleSheet.create({
         width: btnSize,
         height: btnSize,
         alignItems:'center',
-        justifyContent:'center',
+        justifyContent:'space-between',
     },
     btnTitle:{
         fontFamily: fontNames.regular,
         fontSize: fontSizes.small,
         textAlign: 'center',
         color: colors.white,
-        marginTop: 5,
+        top: 5,
+    },
+    iconsCnt:{
+        marginTop: ellipseSize/2,
+        alignItems:'center',
+        justifyContent:'center',
+    },
+    btnIcon:{
+        position: 'absolute',
     },
     btnEllipse:{
-        marginTop:-(iconSize + ellipseSize) * 0.5,
+        position: 'absolute',
+        // top:0,//-(iconSize + ellipseSize) * 0.5,
     },
 });
 export default styles;

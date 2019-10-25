@@ -44,7 +44,8 @@ class Cinema extends ScrollablePage {
 
     onBookTicketPress = () => {
         // this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:'HO00005022'}, key:screens.BookingTickets + '0003' + 'Key'});
-        this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:this.state.curId}, key:screens.BookingTickets + this.state.curId + 'Key'});
+        const movie_ID = this.props.data.movie_ID ? this.props.data.movie_ID : this.state.curId;
+        this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:movie_ID, tempHeader:this.props.data.header}, key:screens.BookingTickets + this.state.curId + 'Key'});
     };
 
 
@@ -97,12 +98,12 @@ class Cinema extends ScrollablePage {
             return ( <View style={s.containerEmpty} /> );
         }
 
-        const { type, header } = this.props.data;
+        const { type, header, movie_ID} = this.props.data;
 
         return (
             <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
                 {this.header(type, header)}
-                <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/>
+                {movie_ID ? <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/> : null}
                 <TabView
                     navigationState={this.state}
                     renderScene={this.renderScene}

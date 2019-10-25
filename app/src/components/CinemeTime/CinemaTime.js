@@ -10,6 +10,7 @@ class CinemaTime extends React.Component<Props> {
         data: PropTypes.array.isRequired,
         onSelect: PropTypes.func.isRequired,
         filter: PropTypes.array,
+        onLayout: PropTypes.func,
     };
 
     static defaultProps = {
@@ -47,16 +48,22 @@ class CinemaTime extends React.Component<Props> {
         for (let key = 0; key < this.props.data.length; key++) {
             let item = this.props.data[key];
             if (!filter.length || filter.indexOf(item.experience) !== -1) {
-                items.push( <Item key={key + 'Key'} id={key} data={item} style={(idx % 3 !== 2 ? s.separator : null)} onPress={this.onItemClick}/> );
+                items.push( <Item key={item.sessionId + 'Key'} id={key} data={item} style={(idx % 3 !== 2 ? s.separator : null)} onPress={this.onItemClick}/> );
                 idx++;
             }
         }
         return items;
     }
 
+    onLayout = (e) => {
+        if (this.props.onLayout) {
+            this.props.onLayout(e);
+        }
+    };
+
     render() {
         return (
-            <View style={s.container}>
+            <View style={s.container} onLayout={this.onLayout}>
                 {this.itemsRender}
             </View>
         );

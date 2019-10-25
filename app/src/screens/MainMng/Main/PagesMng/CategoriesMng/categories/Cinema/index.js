@@ -95,6 +95,18 @@ const dispatchToProps = (dispatch) => {
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const _itemId = ownProps.navigation.state.params.itemId;
 
+    if(stateProps.data[_itemId]){
+        const tmpData = ownProps.navigation.state.params.tempData;
+        if(tmpData.galleryImages && tmpData.galleryImages[0]) stateProps.data[_itemId].header.image = tmpData.galleryImages[0].url;
+        if(tmpData.trailer) stateProps.data[_itemId].header.url = tmpData.trailer;
+        stateProps.data[_itemId].header.title = tmpData.title;
+        stateProps.data[_itemId].overview.description = tmpData.description ? tmpData.description : tmpData.movieSynopsis;
+        if(tmpData.movie_ID) {
+            stateProps.data[_itemId].movie_ID = tmpData.movie_ID;
+            stateProps.data[_itemId].header.tags = [tmpData.rating, tmpData.duration];
+        }
+    }
+
     return Object.assign({}, ownProps, {data: stateProps.data[_itemId]}, dispatchProps);
 };
 

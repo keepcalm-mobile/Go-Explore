@@ -7,11 +7,12 @@ import s from './style';
 import {scale} from '../../../../utils/resize';
 import {screens} from '../../../../constants';
 
+export const sizeIcon = scale(26);
 
 const button = (Icon, onPress, iId) => {
     return (
         <TouchableOpacity onPress = {() => onPress(iId)} activeOpacity={0.5} style={s.btn}>
-            <Icon height={scale(26)}/>
+            <Icon height={sizeIcon} width={sizeIcon}/>
         </TouchableOpacity>
     );
 };

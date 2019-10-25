@@ -36,27 +36,27 @@ const dispatchToProps = (dispatch) => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
     const _curCat = ownProps.navigation.state.params.categoryId;
-    let _obj = null;
+    // let _obj = null;
+    //
+    // if (stateProps.data[_curCat]) {
+    //     _obj = {header : stateProps.data[_curCat].banners.data, data:[]};
+    //     for (let prop in stateProps.data[_curCat]) {
+    //         if (prop !== 'banners') {
+    //             stateProps.data[_curCat][prop].type = prop === 'newlyAdded' ? 'big' : 'small';
+    //             _obj.data.push(stateProps.data[_curCat][prop]);
+    //         }
+    //     }
+    // }
+    //
+    // let prop = {
+    //     // isLoading:stateProps.isLoading,
+    //     // curCategory:_curCat,
+    //     data: _obj,//stateProps.data[_curCat],
+    //     filters: stateProps.filters[_curCat],
+    //     presets: stateProps.presets[_curCat],
+    // };
 
-    if (stateProps.data[_curCat]) {
-        _obj = {header : stateProps.data[_curCat].banners.data, data:[]};
-        for (let prop in stateProps.data[_curCat]) {
-            if (prop !== 'banners') {
-                stateProps.data[_curCat][prop].type = prop === 'newlyAdded' ? 'big' : 'small';
-                _obj.data.push(stateProps.data[_curCat][prop]);
-            }
-        }
-    }
-
-    let prop = {
-        // isLoading:stateProps.isLoading,
-        // curCategory:_curCat,
-        data: _obj,//stateProps.data[_curCat],
-        filters: stateProps.filters[_curCat],
-        presets: stateProps.presets[_curCat],
-    };
-
-    return Object.assign({}, ownProps, prop, dispatchProps);
+    return Object.assign({}, ownProps, {data:stateProps.data[_curCat], filters: stateProps.filters[_curCat], presets: stateProps.presets[_curCat]}, dispatchProps);
 };
 
 const Connected = connect(stateToProps, dispatchToProps, mergeProps, { forwardRef: true })(HomeCategories);

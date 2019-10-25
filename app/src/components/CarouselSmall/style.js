@@ -41,11 +41,13 @@ const styles = StyleSheet.create({
         height: itemH,
         borderRadius: 10,
         marginBottom: indent/2,
+        backgroundColor: colors.bgApp,
     },
     itemTitle: {
         fontFamily: fontNames.regular,
         fontSize: fontSizes.small,
         lineHeight: scale(18),
+        width: itemW,
         textAlign: 'center',
         // margin: indent,
         color: colors.white,

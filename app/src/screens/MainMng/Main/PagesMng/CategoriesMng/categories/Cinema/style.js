@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         marginLeft: indent,
         color: colors.white,
+        width: '80%',
     },
     rightBtn: {
         width: scale(40),

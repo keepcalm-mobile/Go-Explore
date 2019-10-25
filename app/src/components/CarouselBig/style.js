@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         marginLeft: indent,
         borderRadius: 10,
+        backgroundColor: colors.bgApp,
     },
     title: {
         fontFamily: fontNames.bold,

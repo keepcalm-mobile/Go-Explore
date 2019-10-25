@@ -91,7 +91,25 @@ class HomeCategories extends ScrollablePage {
 
     /***    ITEMS   ***/
     onItemClick = (iId, iType) => {
-        this.props.navigation.navigate({ routeName: iType, params:{itemId:iId}, key:screens.DataPages + iType + iId + 'Key'});
+        this.props.navigation.navigate({ routeName: iType, params:{itemId:iId, tempData:this._tempGetItemDataById(iId)}, key:screens.DataPages + iType + iId + 'Key'});
+    };
+
+    _tempGetItemDataById = (iId) => {
+        const header = this.props.data.header;
+        for (let i = 0; i < header.length; i++){
+            if(header[i].id === iId){
+                return header[i];
+            }
+        }
+        const data = this.props.data.data;
+        for(let i = 0; i < data.length; i++){
+            console.log(' > > > > > DATA : ' + i);
+            for(let ii = 0; ii < data[i].data.length; ii++) {
+                console.log(' > > > > > DATA ii : ' + ii + ' _ ' + data[i].data[ii].id);
+                if (data[i].data[ii].id === iId)
+                    return data[i].data[ii];
+            }
+        }
     };
 
     generateContent = (iData, iId) => {
