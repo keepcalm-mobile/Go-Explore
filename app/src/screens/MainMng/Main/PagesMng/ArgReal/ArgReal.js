@@ -36,7 +36,7 @@ import offerImage from '../../../../../components/ARMap/res/offerImage.png';
 
 const GPS_TIMEOUT = 30000;
 const GPS_MAXIMUM_AGE = 60000;
-const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
+const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
 
 var POIs = [];
 var OFFERS = [];
@@ -165,6 +165,14 @@ class ArgReal extends ScrollablePage {
                   OFFERS = responseJson.offers;
 
                   this.startAR();
+
+                  // if (EventsBridge.arScene !== null) {
+                  //     EventsBridge.arScene.setData(POIs, OFFERS);
+                  // } else {
+                  //     this.startAR();
+                  // }
+
+                  // this.startAR();
                   //this.setState({poisData: responseJson});
 
                   // for (let i=0; i<POIs.length && i<10; i++) {

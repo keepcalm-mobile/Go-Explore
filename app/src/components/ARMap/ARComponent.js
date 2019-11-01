@@ -15,7 +15,7 @@ import {
 } from 'react-viro';
 
 const InitialARScene = require('./ARScene');
-const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
+const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
 
 /*
  TODO: Insert your API key below
