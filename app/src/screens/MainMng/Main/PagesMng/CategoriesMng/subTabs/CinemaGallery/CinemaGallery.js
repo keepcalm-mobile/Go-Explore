@@ -15,7 +15,7 @@ class CinemaGallery extends React.Component<Props> {
     }
 
     _cinemaItem = (item, index) => {
-        const {image} = item;
+        const image = 'https://testgoexplorecity.azurewebsites.net/' + item.split('//')[1];
         return (
             <View key={index} style={s.cinemaSlide}>
                 <Image resizeMode={'cover'} style={s.cinemaItemImage} source={{uri: image}} progressiveRenderingEnabled={true}/>

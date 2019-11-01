@@ -104,7 +104,9 @@ class BookingTicket extends ScrollablePage {
 
 
     header = (iType, iData) => {
-        const {image, title, rating, tags, url} = iData;
+        const {image, title, tags, url} = iData;
+        const rating = iData.rating[0] ? iData.rating[0].split('/')[0] / 2 : 0;
+        const reviews = iData.rating[1] ? iData.rating[1].split(',')[0] : 0;
         return (
             <View key={iType + 'HeaderKey'} style={s.header}>
                 <Image resizeMode={'cover'} style={s.image} source={{uri: image}} progressiveRenderingEnabled={true}/>
@@ -117,8 +119,8 @@ class BookingTicket extends ScrollablePage {
                     </TouchableOpacity>
                 </View>
                 <View style={s.ratingCnt}>
-                    <Rating editable={false} max={5} rating={rating.value} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
-                    <Text style={s.ratingInfo}>{rating.count.toString() + ' Reviews'}</Text>
+                    <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
+                    <Text style={s.ratingInfo}>{reviews.toString() + ' Reviews'}</Text>
                 </View>
                 <View style={s.tagsCnt}>
                     {tags.map( (item, key) => { return (

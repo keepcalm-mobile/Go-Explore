@@ -62,7 +62,7 @@ const AuthTabs = createStackNavigator({
     cardShadowEnabled: false,
     transitionConfig: () => ({
         containerStyle: {
-            backgroundColor: 'transparent',
+            backgroundColor: '#00000000',
         },
         transitionSpec: {
             duration: 500,

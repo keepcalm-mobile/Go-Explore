@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Image, Text, ScrollView, TouchableOpacity} from 'react-native';
 import s, {itemH, itemW} from './style';
 import type {Props} from 'react-native/Libraries/Components/View/View';
+import {MEDIA_PREF} from "../../constants";
 
 
 class CarouselPersons extends React.Component<Props> {
@@ -18,12 +19,13 @@ class CarouselPersons extends React.Component<Props> {
     }
 
     _renderItem = (item, index) => {
-        const {image, title, subTitle} = item;
+        const {name, character, job} = item;
+        const image = item.profile_path !== 'N/A' ? {uri:(MEDIA_PREF + item.profile_path)} : require('../../../assets/placeholder.jpg');
         return (
             <View key={index} style={s.slide}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} />
-                <Text style={s.itemTitle}>{title}</Text>
-                <Text style={s.itemSubtitle}>{subTitle}</Text>
+                <Image resizeMode={'cover'} style={s.image} source={image} />
+                <Text style={s.itemTitle} numberOfLines={2}>{name}</Text>
+                <Text style={s.itemSubtitle} numberOfLines={2}>{character ? character : job}</Text>
             </View>
         );
     };

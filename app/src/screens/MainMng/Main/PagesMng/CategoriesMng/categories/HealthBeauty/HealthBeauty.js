@@ -17,11 +17,10 @@ class HealthBeauty extends ScrollablePage {
         return (
             <View style={s.container}>
                 <Text style={s.welcome}>Health Beauty coming soon</Text>
-                <ButtonOrange onPress={this._logOut} title={'LOGOUT'}/>
             </View>
         );
     }
-
+// <ButtonOrange onPress={this._logOut} title={'LOGOUT'}/>
     _logOut = async () => {
         const resp = await logOut();
         if (Auth.AUTH_LOGOUT === resp) {

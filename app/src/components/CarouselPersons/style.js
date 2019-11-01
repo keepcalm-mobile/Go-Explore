@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
         marginBottom: indent/2,
     },
     itemTitle: {
+        width: itemW,
         fontFamily: fontNames.regular,
         fontSize: fontSizes.personName,
         lineHeight: scale(18),
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
         color: colors.white,
     },
     itemSubtitle: {
+        width: itemW,
         fontFamily: fontNames.regular,
         fontSize: fontSizes.personName,
         lineHeight: scale(13),

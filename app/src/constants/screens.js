@@ -73,7 +73,7 @@ export default class {
         [this.VirtualReality]:{title:'AR'},
         [this.Bookmarks]:{title:'Bookmarks'},
         [this.SubMenu]:{title:'Categories'},
-        [this.Settings]:{icon:IconSettings, title:'Settings'},
+        [this.Settings]:{icon:IconSettings, title:'Logout'},//Settings
     };
 
     static Filters = {

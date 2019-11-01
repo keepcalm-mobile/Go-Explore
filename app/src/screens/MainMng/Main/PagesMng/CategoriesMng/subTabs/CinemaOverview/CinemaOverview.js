@@ -17,12 +17,15 @@ class CinemaOverview extends React.Component<Props> {
 
     _infoCnt = (iData) => (
         <View style={s.overviewInfoCnt}>
-            {iData.map( (item, key) => { return (
-                <View key={key} style={s.overviewInfoItem}>
-                    <Text style={s.overviewInfoTitle}> {iData[key].value.toString()} </Text>
-                    <Text style={s.overviewInfoSubtitle}> {iData[key].title.toString()} </Text>
-                </View>
-            );})}
+            {iData.map( (item, key) => {
+                const {title, value, source, review} = item;
+                return(
+                    <View key={key} style={s.overviewInfoItem}>
+                        <Text style={s.overviewInfoTitle}> {title ? title : review} </Text>
+                        <Text style={s.overviewInfoSubtitle}> {value ? value : source} </Text>
+                    </View>
+                );
+            })}
         </View>
     );
 
@@ -34,7 +37,7 @@ class CinemaOverview extends React.Component<Props> {
                 {this._infoCnt(data.info)}
                 <CarouselPersons items={data.cast} title="CAST"/>
                 <CarouselPersons items={data.crew} title="CREW"/>
-                {this._infoCnt(data.rating)}
+                {this._infoCnt(data.review)}
             </View>
         );
     }

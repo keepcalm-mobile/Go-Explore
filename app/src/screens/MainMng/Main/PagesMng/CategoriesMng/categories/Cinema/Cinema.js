@@ -16,7 +16,7 @@ import {screens} from '../../../../../../../constants';
 class Cinema extends ScrollablePage {
     constructor(props) {
         const itemId = props.navigation.state.params.itemId;
-        props.getItem(itemId);
+        props.getItem(itemId, screens.Cinema);
 
         super(props);
 
@@ -33,24 +33,26 @@ class Cinema extends ScrollablePage {
     }
 
     onPlayBtnPress = () => {
-        Linking.canOpenURL(this.props.data.header.url).then(supported => {
+        Linking.canOpenURL(this.props.data.header.videoUrl).then(supported => {
             if (supported) {
-                Linking.openURL(this.props.data.header.url);
+                Linking.openURL(this.props.data.header.videoUrl);
             } else {
-                console.log("Don't know how to open URI: " + this.props.data.header.url);
+                console.log("Don't know how to open URI: " + this.props.data.header.videoUrl);
             }
         });
     };
 
     onBookTicketPress = () => {
         // this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:'HO00005022'}, key:screens.BookingTickets + '0003' + 'Key'});
-        const movie_ID = this.props.data.movie_ID ? this.props.data.movie_ID : this.state.curId;
+        const movie_ID = this.props.data.movieId ? this.props.data.movieId : this.state.curId;
         this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:movie_ID, tempHeader:this.props.data.header}, key:screens.BookingTickets + this.state.curId + 'Key'});
     };
 
 
     header = (iType, iData) => {
-        const {image, title, rating, tags, url} = iData;
+        const {image, title, tags, url} = iData;
+        const rating = iData.rating[0] ? iData.rating[0].split('/')[0] / 2 : 0;
+        const reviews = iData.rating[1] ? iData.rating[1].split(',')[0] : 0;
         return (
             <View key={iType + 'HeaderKey'} style={s.header}>
                 <Image resizeMode={'cover'} style={s.image} source={{uri: image}} progressiveRenderingEnabled={true}/>
@@ -63,8 +65,8 @@ class Cinema extends ScrollablePage {
                     </TouchableOpacity>
                 </View>
                 <View style={s.ratingCnt}>
-                    <Rating editable={false} max={5} rating={rating.value} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
-                    <Text style={s.ratingInfo}>{rating.count.toString() + ' Reviews'}</Text>
+                    <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
+                    <Text style={s.ratingInfo}>{reviews.toString() + ' Reviews'}</Text>
                 </View>
                 <View style={s.tagsCnt}>
                     {tags.map( (item, key) => { return (
@@ -83,7 +85,7 @@ class Cinema extends ScrollablePage {
             case 'overview':
                 return <CinemaOverview data={this.props.data.overview}/>;
             case 'cinema':
-                return <CinemaGallery data={this.props.data.cinema}/>;
+                return <CinemaGallery data={this.props.data.cinema.image}/>;
             case 'comments':
                 return <Comments data={this.props.data.comments}/>;
             case 'explore':
@@ -98,12 +100,12 @@ class Cinema extends ScrollablePage {
             return ( <View style={s.containerEmpty} /> );
         }
 
-        const { type, header, movie_ID} = this.props.data;
+        const { type, header, movieId} = this.props.data;
 
         return (
             <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
                 {this.header(type, header)}
-                {movie_ID ? <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/> : null}
+                {movieId ? <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/> : null}
                 <TabView
                     navigationState={this.state}
                     renderScene={this.renderScene}

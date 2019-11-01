@@ -83,7 +83,7 @@ class CinemaTicketType extends React.Component<Props> {
                 {this.itemsRender}
                 <Text style={s.footerText}>AMOUNT</Text>
                 <Text style={[s.footerText, s.footerMargin]}>{'QAR ' + this.state.amount / 100}</Text>
-                <ButtonOrange onPress={this.onConfirmPress} title={'CONFIRM TICKET'} style={s.confirmBtn}/>
+                <ButtonOrange onPress={this.onConfirmPress} title={'COMING SOON (CONFIRM TICKET)'} style={s.confirmBtn}/>
                 <Text style={s.warningText}>{'Maximum of ' + this.props.data.maxTickets + ' tickets per transaction'}</Text>
             </View>
         );

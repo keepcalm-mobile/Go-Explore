@@ -60,7 +60,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>used for AR</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Bold.ttf</string>
