@@ -22,7 +22,7 @@ import EventsBridge from '../../utils/EventsBridge';
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
 
-const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
+const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
 const CORRECTION_ANGLE = 0; // poi image starts drawing from the left, so it compensates it
 
 var canUpdateCamera = true;
@@ -190,7 +190,7 @@ class ARScene extends React.Component {
 
         // console.log('After json: pois length = ' + POIs.length);
 
-        this.trackDeviceHeading();
+        this.trackDeviceHeading(); // UNCOMMENT AFTER TEST
 
         // if (this.testPois === true) {
         //     console.log("GOT POIS:");
@@ -223,6 +223,12 @@ class ARScene extends React.Component {
     }
 
     render() {
+
+        //delete after test
+        // return (
+        //     <ViroARScene onTrackingUpdated={(state, reason) => {}}>
+        //     </ViroARScene>
+        // );
 
         return (
             this.getARScene()
@@ -295,6 +301,24 @@ class ARScene extends React.Component {
         else {
             return null;
         }
+    }
+
+    setData(places, offers) {
+        let allPois = places;
+        POIs = [];
+        for (let m = 0; m < allPois.length && m < MAX_AR_OBJECTS; m++) {
+            POIs.push(allPois[m]);
+            POIs[m].kind = 'poi';
+        }
+
+        let allOffers = offers;
+        OFFERS = [];
+        for (let m = 0; m < allOffers.length && m < MAX_AR_OBJECTS; m++) {
+            OFFERS.push(allOffers[m]);
+            OFFERS[m].kind = 'offer';
+        }
+
+        this._formARObjectsCollection();
     }
 
     setHeading(degree) {

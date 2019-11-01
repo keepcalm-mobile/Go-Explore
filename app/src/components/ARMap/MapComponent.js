@@ -33,7 +33,7 @@ const tripleWidth = windowW * 3;
 const maskOffset = windowH - 400;
 
 import mapStyles from './mapStyles.json';
-const CURRENT_TEST_LOCATION = [46.95364, 31.99375];
+const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
 const GOOGLE_MAPS_APIKEY = 'AIzaSyA7rncWjnX4Ugd5OoCnMNNT2D3KfDlgp6Y'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
 const LATITUDE = CURRENT_TEST_LOCATION[0];
@@ -176,7 +176,18 @@ export default class MapComponent extends Component {
   }
 
   setLocation(location) {
+
+    console.log("Setting location = " + JSON.stringify(location));
+
     this.setState({currentPosition: location});
+
+    this.refMap.animateCamera({
+      center: {latitude: location.latitude, longitude: location.longitude},
+      //         pitch: 5,
+      //         heading: 0,
+      //         altitude: 30, // for ios only
+      //         zoom: this.props.navigationZoomLevel // gmaps only
+    }, 1000);
   }
 
   navigateTo(target) {

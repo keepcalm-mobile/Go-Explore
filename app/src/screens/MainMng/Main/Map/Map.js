@@ -168,6 +168,14 @@ class Map extends React.Component<Props> {
             initialPosition: ('\nlongitude = ' + position.coords.longitude + '\nlatitude = ' + position.coords.latitude),
             currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude},
         });
+
+        this._map.animateCamera({
+            center: {latitude: position.coords.latitude, longitude: position.coords.longitude},
+            //         pitch: 5,
+            //         heading: 0,
+            //         altitude: 30, // for ios only
+                    zoom: 16 // gmaps only
+        }, 1000);
     }
 
     setTargetPosition(position) {
@@ -239,9 +247,6 @@ class Map extends React.Component<Props> {
         if (this._lastGeolocation) {
             let position = JSON.parse(this._lastGeolocation);
             this.setPosition(position);
-
-            if (this._map)
-            {this._map.animateToCoordinate(position.coords, 300);} // deprecated, but works
         }
 
         if (Platform.OS !== 'android' || PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
