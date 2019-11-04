@@ -856,7 +856,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1167,7 +1167,7 @@
 			baseConfigurationReference = A9FC82E311990CEB312B0537 /* Pods-goExploreApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = YYJ9R9AM94;
 				ENABLE_BITCODE = NO;
@@ -1183,7 +1183,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = city.goexplore.mobile;
-				PRODUCT_NAME = goExploreApp;
+				PRODUCT_NAME = GoExplore;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1193,7 +1193,7 @@
 			baseConfigurationReference = 5022D9235E8F30D138473046 /* Pods-goExploreApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = YYJ9R9AM94;
 				ENABLE_BITCODE = NO;
@@ -1209,7 +1209,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = city.goexplore.mobile;
-				PRODUCT_NAME = goExploreApp;
+				PRODUCT_NAME = GoExplore;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
