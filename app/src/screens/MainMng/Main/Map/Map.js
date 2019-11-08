@@ -17,8 +17,8 @@ const mapTopY = -Math.round(windowH * 0.8);
 
 const GOOGLE_MAPS_APIKEY = 'AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
+const LATITUDE = 25.2864106;
+const LONGITUDE = 51.5271888;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
 
@@ -169,13 +169,17 @@ class Map extends React.Component<Props> {
             currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude},
         });
 
-        this._map.animateCamera({
-            center: {latitude: position.coords.latitude, longitude: position.coords.longitude},
-            //         pitch: 5,
-            //         heading: 0,
-            //         altitude: 30, // for ios only
-                    zoom: 16 // gmaps only
-        }, 1000);
+        if (this._map && this._map !== null)
+        {
+            this._map.animateCamera({
+                center: {latitude: position.coords.latitude, longitude: position.coords.longitude},
+                //         pitch: 5,
+                //         heading: 0,
+                //         altitude: 30, // for ios only
+                zoom: 16 // gmaps only
+            }, 1000);
+        }
+
     }
 
     setTargetPosition(position) {
@@ -185,7 +189,11 @@ class Map extends React.Component<Props> {
     getCurrentPosition() {
         if (Platform.OS === 'android' && PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
             this.setState({ gpsGranted: 'true' });
-        } else {
+        }
+        else if (Platform.OS === 'ios'){
+            this.setState({ gpsGranted: 'true' });
+        }
+        else {
             return;
         }
 

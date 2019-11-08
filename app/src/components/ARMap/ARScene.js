@@ -22,7 +22,7 @@ import EventsBridge from '../../utils/EventsBridge';
 const NORMALIZATION_MAXIMUM = 10;
 const NORMALIZATION_MINIMUM = 7;
 
-const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
+const CURRENT_TEST_LOCATION = [25.2864106,51.5271888];
 const CORRECTION_ANGLE = 0; // poi image starts drawing from the left, so it compensates it
 
 var canUpdateCamera = true;
@@ -123,6 +123,7 @@ class ARScene extends React.Component {
             //heading: this.props.heading,
             pois: this.props.poisData,
             offers: this.props.offersData,
+            // placesOffersCollection: [],
             poisReady: false,
             northPosition: [0,0, -7],
             calibrationOffset: false,
@@ -169,7 +170,7 @@ class ARScene extends React.Component {
             OFFERS[m].kind = 'offer';
         }
 
-        EventsBridge.arScene = this;
+
 
         // console.log("GOT POIS:");
         // console.log(this.state.pois);
@@ -178,6 +179,8 @@ class ARScene extends React.Component {
         // console.log('trackingLostCount = ' + this.state.trackingLostCount);
 
         this._formARObjectsCollection();
+
+        EventsBridge.arScene = this;
     }
 
     componentDidMount() {
@@ -241,9 +244,9 @@ class ARScene extends React.Component {
 
         // return null;
 
-        if (!POIs || POIs.length < 1) {
-            return null;
-        }
+        // if (!this.placesOffersCollection || this.placesOffersCollection.length < 1) {
+        //     return null;
+        // }
 
         let pointsOfInterest = [];
         let currentPOIs = POIs;
@@ -267,6 +270,7 @@ class ARScene extends React.Component {
                         // icon={currentPOIs[i].icon}
                         offerEndDate={currentPOIs[i].offerEndDate}
                         offers={currentPOIs[i].offers}
+                        image={currentPOIs[i].image}
                         kind={currentPOIs[i].kind}
                         ref={(ref) => {
                             this.PoiRefs[i] = ref;
@@ -317,6 +321,8 @@ class ARScene extends React.Component {
             OFFERS.push(allOffers[m]);
             OFFERS[m].kind = 'offer';
         }
+
+        console.log("PLACES length = " + POIs.length);
 
         this._formARObjectsCollection();
     }
@@ -538,9 +544,13 @@ class ARScene extends React.Component {
         //     this.setCalibrationOffset();
         // }
 
-        if (updateCounter < 2) {
-            this.setPointsOfInterest();
-        }
+        // if (updateCounter < 2) {
+        //     this.setPointsOfInterest();
+        // }
+
+        //update state
+        // let collection = [...POIs];
+        // this.setState({placesOffersCollection: collection});
     }
 
     _latLongToMerc(lat_deg, lon_deg) {
@@ -724,6 +734,12 @@ class ARScene extends React.Component {
         }
 
         POIs = collection;
+
+        console.log("Formed collection length = " + POIs.length);
+
+        // if (EventsBridge.arScene != null) {
+        //     this.setState({placesOffersCollection: POIs});
+        // }
 
         // for (let i = 0; i < PoisData.length; i++, k++) {
         //     collection.push(PoisData[i]);

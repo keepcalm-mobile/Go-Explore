@@ -11,6 +11,13 @@ import {ForgotScreen, LoginScreen, TermsScreen, OtpScreen, SignupScreen} from '.
 import {screens} from '../../constants';
 
 async function requestPermission() {
+
+    // if ios
+    if (Platform.OS === "ios") {
+        console.log("PLATFORM === IOS");
+        return;
+    }
+
     try {
         const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
