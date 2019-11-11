@@ -39,6 +39,7 @@ export default class PointOfInterest extends React.Component {
 
         this.state = {
             offerEndDate: props.offerEndDate,
+            image: props.image,
             isMinimized: true,
             objectAnimation: 'scaleDown',
             runObjectAnimation: false,
@@ -83,9 +84,9 @@ export default class PointOfInterest extends React.Component {
         //this.setState({title: 'y = ' + position[1]});
 
         // if there are multiple POIs in the same direction, they are ordered by Y and it will be > 0
-        if (position[1] > 0 || this.state.kind != 'poi') {
+        // if (position[1] > 0 || this.state.kind != 'poi') {
             this.setState({scale: [0.75,0.75,0.75]});
-        }
+        // }
     }
 
     setAngle(angle) {
@@ -94,6 +95,14 @@ export default class PointOfInterest extends React.Component {
 
     onClickHandler(position, source) {
         console.log('CLICKED: ' + this.state.title);
+
+
+        //test
+
+        if (this.state.kind !== "poi") {
+            this.onOfferClickHandler();
+            return;
+        }
 
         if (this.state.isMinimized === true && this.state.kind !== 'offer' && typeof(this.state.offers) !== 'undefined' && this.state.offers.length > 0) {
 
@@ -130,12 +139,20 @@ export default class PointOfInterest extends React.Component {
 
         let offers = {...this.state.offers};
 
+        let off = {
+            titleExpanded: this.state.title,
+            textPopup: "On all items, including instore purchases ...",
+            fromTo: "Mar 20 - Mar 29",
+            location: "Level 7, Conference Center"
+        };
+
         console.log('Clicked on an offer');
         console.log(offers[index]);
 
         EventsBridge.arComponent.setPopupData({
             coords: this.state.coords,
-            offer: offers[index]
+            offer: off,
+            image: this.state.image //"https://cdn.mos.cms.futurecdn.net/deaceNXy23NF8VsCrwZPgn-970-80.jpg"
         });
     }
 
@@ -292,6 +309,8 @@ export default class PointOfInterest extends React.Component {
 
         let endingsFlexValue = (symbolsTotal + restFlexValue) * 0.05;
 
+        let scale = [0.75,0.75,0.75]; //this.state.kind === "poi" ? [1,1,1] : this.state.scale;
+
         return (
             <ViroNode key={index} position={pos} transformBehaviors={["billboard"]}
                       animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
@@ -440,6 +459,8 @@ export default class PointOfInterest extends React.Component {
         let offers = {...this.state.offers};
         let offer = offers[index];
 
+        let scale = [0.75,0.75,0.75]; //this.state.kind === "poi" ? [1,1,1] : this.state.scale;
+
         if (this.state.kind === 'offer') {
             position = {...this.state.position};
         }
@@ -451,7 +472,7 @@ export default class PointOfInterest extends React.Component {
             let textToShow = this.getTimerTimeLeft();
 
             return (
-                <ViroNode key={index} position={position} transformBehaviors={["billboard"]} onClick={() => {this.onOfferClickHandler(index)}}
+                <ViroNode key={index} position={position} transformBehaviors={["billboard"]} onClick={() => {this.onOfferClickHandler(index)}} scale={scale}
                           animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
                               onFinish: this.onOfferAnimationFinished}}>
                     <ViroImage  height={1} width={5} source={expandFrame} />

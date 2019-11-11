@@ -14,6 +14,7 @@ import {
     Image,
     StyleSheet,
     TouchableOpacity,
+    Platform,
     Dimensions,
     ToastAndroid, PermissionsAndroid,
 } from 'react-native';
@@ -36,10 +37,11 @@ import offerImage from '../../../../../components/ARMap/res/offerImage.png';
 
 const GPS_TIMEOUT = 30000;
 const GPS_MAXIMUM_AGE = 60000;
-const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
+const CURRENT_TEST_LOCATION = [25.2864106,51.5271888];
 
 var POIs = [];
 var OFFERS = [];
+var launchAR = false;
 
 class ArgReal extends ScrollablePage {
     constructor(props) {
@@ -84,11 +86,17 @@ class ArgReal extends ScrollablePage {
         super.componentDidMount();
         this.trackDeviceHeading();
 
-        if (this.state.gpsGranted === false) {
+        console.log('AR mounted');
+
+        if (this.state.gpsGranted === false && Platform.OS !== "ios") {
             this.requestPermission();
         }
-        else {
+        else if (Platform.OS !== "ios") {
             this.getCurrentPosition();
+        }
+        else {
+            // this.getCurrentPosition();
+            this.fetchData();
         }
 
         // console.log('Map ref = ' + EventsBridge.mapRef);
@@ -120,7 +128,10 @@ class ArgReal extends ScrollablePage {
         });
 
         this._interval = setInterval(() => {
-            this.mapComponent.setHeading(this.state.heading);
+            if (this.mapComponent && this.mapComponent !== null) {
+                this.mapComponent.setHeading(this.state.heading);
+            }
+            
             if (EventsBridge.arScene !== null) {
                 EventsBridge.arScene.setHeading(this.state.heading);
             }
@@ -147,10 +158,26 @@ class ArgReal extends ScrollablePage {
         console.log("GPS difference = " + dif);
 
         if (dif >= this.state.poisUpdateDifference || (!this.fetchedPOIs)) {
-            //TODO: send a request to receive the list of new POIs, save current poi active in navigation and add it to the received list
-            console.log("Sending a request to receive new POIs...");
+            
+            fetchData();
+            
+        }
 
-            let GMAPS_KEY = "AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA";
+        this.mapComponent.setLocation(this.state.currentPosition);
+
+        if (this.state.initialPosition === null) {
+            this.setState({initialPosition: this.state.currentPosition});
+            // this.setPointsOfInterest();
+        }
+
+        console.log('GPS updated: ' + JSON.stringify(position));
+    }
+
+    fetchData() {
+
+        //TODO: send a request to receive the list of new POIs, save current poi active in navigation and add it to the received list
+        console.log("Sending a request to receive new POIs...");
+        let GMAPS_KEY = "AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA";
 
             let requestQuery = "https://goexploreapi.azure-api.net/testmobile/getnearme?cat=attractions&latitude=25.3846118&longitude=51.5228745&subscription-key=bbc34cdbc2df4e09b177542c6da3fb35";
             let geocodingQuery = "https://maps.googleapis.com/maps/api/geocode/json?key="+GMAPS_KEY+"&address=";
@@ -163,14 +190,20 @@ class ArgReal extends ScrollablePage {
 
                   POIs = responseJson.places;
                   OFFERS = responseJson.offers;
+                  launchAR = true;
+                  // this.startAR();
 
-                  this.startAR();
+                  console.log("Loaded places, arScene = " + EventsBridge.arScene);
 
-                  // if (EventsBridge.arScene !== null) {
-                  //     EventsBridge.arScene.setData(POIs, OFFERS);
-                  // } else {
-                  //     this.startAR();
-                  // }
+                  // setTimeout(() => {
+                  //     if (EventsBridge.arScene !== null) {
+                  //         console.log("arScene not null, setting data ");
+                  //         EventsBridge.arScene.setData(POIs, OFFERS);
+                  //     }
+                  //     //else {
+                  //     //     this.startAR();
+                  //     // }
+                  // }, 2000);
 
                   // this.startAR();
                   //this.setState({poisData: responseJson});
@@ -185,22 +218,14 @@ class ArgReal extends ScrollablePage {
                   //     });
                   // }
             });
-        }
-
-        this.mapComponent.setLocation(this.state.currentPosition);
-
-        if (this.state.initialPosition === null) {
-            this.setState({initialPosition: this.state.currentPosition});
-            // this.setPointsOfInterest();
-        }
-
-        console.log('GPS updated: ' + JSON.stringify(position));
     }
 
     getCurrentPosition() {
 
         // if(this.state.gpsGranted === false)
         //   return;
+
+        console.log('AR: getting current position');
 
         Geolocation.getCurrentPosition(
             position => {
@@ -252,6 +277,10 @@ class ArgReal extends ScrollablePage {
     }
 
     getARComponent() {
+        if (launchAR === false){
+            return null;
+        }
+
         if (this.state.readyForAR === false){
             return null;
         }
@@ -284,6 +313,18 @@ class ArgReal extends ScrollablePage {
     }
 
     async requestPermission() {
+
+        // if ios
+        if (Platform.OS === "ios") {
+
+            console.log("PLATFORM === IOS");
+            this.setState({
+                gpsGranted: true
+            });
+
+            return;
+        }
+
         try {
             const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -346,7 +387,9 @@ class ArgReal extends ScrollablePage {
                             </View>
                         </View>
                         <View style={styles.popupBody}>
-                            <View style={styles.poster}><Image source={offerImage} style={{width: '100%', height: '100%'}} /></View>
+                            <View style={styles.poster}>
+                                <Image placeholderSource={offerImage} source={{uri:this.state.specialOfferData.image}} style={{width: '100%', height: '100%'}} />
+                            </View>
                             <View style={styles.mainTextContainer}>
                                 <Text style={styles.mainText}>{this.state.specialOfferData.offer.textPopup}</Text>
                             </View>
