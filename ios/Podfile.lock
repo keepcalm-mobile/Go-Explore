@@ -17,6 +17,7 @@ PODS:
     - FBSDKShareKit/Share (= 5.6.0)
   - FBSDKShareKit/Share (5.6.0):
     - FBSDKCoreKit (~> 5.0)
+  - FLAnimatedImage (1.0.12)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -48,6 +49,19 @@ PODS:
   - GoogleMaps/Base (3.1.0)
   - GoogleMaps/Maps (3.1.0):
     - GoogleMaps/Base
+  - MerryPhotoViewer (3.1.0):
+    - NYTPhotoViewer
+    - React
+  - NYTPhotoViewer (2.0.0):
+    - NYTPhotoViewer/AnimatedGifSupport (= 2.0.0)
+    - NYTPhotoViewer/Core (= 2.0.0)
+  - NYTPhotoViewer/AnimatedGifSupport (2.0.0):
+    - FLAnimatedImage (~> 1.0.12)
+    - NYTPhotoViewer/Core
+  - NYTPhotoViewer/Core (2.0.0)
+  - RCTYouTube (2.0.0):
+    - React
+    - YoutubePlayer-in-WKWebView (~> 0.3.1)
   - React (0.60.5):
     - React-Core (= 0.60.5)
     - React-DevSupport (= 0.60.5)
@@ -152,7 +166,9 @@ PODS:
     - React
   - ViroKit_static_lib (1.0)
   - ViroReact (1.0)
+  - XCDYouTubeKit (2.8.1)
   - yoga (0.60.5.React)
+  - YoutubePlayer-in-WKWebView (0.3.3)
 
 DEPENDENCIES:
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
@@ -161,6 +177,8 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - "MerryPhotoViewer (from `../node_modules/@merryjs/photo-viewer`)"
+  - RCTYouTube (from `../node_modules/react-native-youtube`)
   - React (from `../node_modules/react-native/`)
   - React-Core (from `../node_modules/react-native/React`)
   - React-cxxreact (from `../node_modules/react-native/ReactCommon/cxxreact`)
@@ -190,16 +208,21 @@ DEPENDENCIES:
   - RNSVG (from `../node_modules/react-native-svg`)
   - ViroKit_static_lib (from `../node_modules/react-viro/ios/dist/ViroRenderer/static_lib`)
   - ViroReact (from `../node_modules/react-viro/ios/`)
+  - XCDYouTubeKit (~> 2.8)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - boost-for-react-native
     - FBSDKCoreKit
     - FBSDKLoginKit
     - FBSDKShareKit
+    - FLAnimatedImage
     - Google-Maps-iOS-Utils
     - GoogleMaps
+    - NYTPhotoViewer
+    - XCDYouTubeKit
+    - YoutubePlayer-in-WKWebView
 
 EXTERNAL SOURCES:
   BVLinearGradient:
@@ -210,6 +233,10 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  MerryPhotoViewer:
+    :path: "../node_modules/@merryjs/photo-viewer"
+  RCTYouTube:
+    :path: "../node_modules/react-native-youtube"
   React:
     :path: "../node_modules/react-native/"
   React-Core:
@@ -278,10 +305,14 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: d6655a343868d4bb5c29a60859bab07c3be14a0b
   FBSDKLoginKit: c5a623de88a6b0cda35b35582921f6cec2efcc36
   FBSDKShareKit: 0d8c4cfd5c1f185d5f9c26d79758b141086e1251
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
+  MerryPhotoViewer: 54c4078c45b3c05a14b3eee68da3efbc1563f78f
+  NYTPhotoViewer: 34b8bd6bcc297466adec1668f9a01249d73c90e6
+  RCTYouTube: 5e94bfa005371c41d307f3f93c51b3e8eabfb0c8
   React: 53c53c4d99097af47cf60594b8706b4e3321e722
   React-Core: ba421f6b4f4cbe2fb17c0b6fc675f87622e78a64
   React-cxxreact: 8384287780c4999351ad9b6e7a149d9ed10a2395
@@ -311,8 +342,10 @@ SPEC CHECKSUMS:
   RNSVG: a78b4c581e33a1bb72968997d167afabf72b05dc
   ViroKit_static_lib: ae9c112ac4b128f8d4466fc581c7b07a0264754d
   ViroReact: 7ec32276dcd1883662b4587eaedfff67f7fc3625
+  XCDYouTubeKit: 4ca4e3322fa556ec1c32932d378365c15ce1386e
   yoga: 312528f5bbbba37b4dcea5ef00e8b4033fdd9411
+  YoutubePlayer-in-WKWebView: 7694e858c5c3472ed067d6fe34eb9b944845e63c
 
-PODFILE CHECKSUM: 188d74931f5c7a42692b129447012986e13d94c6
+PODFILE CHECKSUM: 543eb5d772ec0b5c5eed6088e153b46f865da3b3
 
 COCOAPODS: 1.8.4

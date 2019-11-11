@@ -1,5 +1,5 @@
 import t from './types';
-import api from '../../constants';
+import api, {API_USER} from '../../constants';
 import {writeUserData} from '../auth';
 import md5 from 'md5';
 import modMap from '../map';
@@ -113,15 +113,15 @@ export function registration(iData) {
     return (dispatch) => {
         dispatch(loginIsLoading(true));
 
-        // fetch(api + '/users', {
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(iData),
-        // })
-        fetch(api + '?users')
+        fetch(API_USER + 'RegisterUser', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(iData),
+        })
+        // fetch(api + '?users')
         .then((response) => {
             if (!response.ok) {
                 throw Error(response.statusText);
@@ -130,7 +130,8 @@ export function registration(iData) {
         })
         .then((response) => response.json())
         .then((data) => {
-            data = {key:'qw543wer4g16f', uid:'00001', name:'David'};
+            // data = {key:'qw543wer4g16f', uid:'00001', name:'David'};
+            console.log('R E G I S T R A T I O N  : ' + JSON.stringify(data));
             dispatch(registrationSuccess(true));
             dispatch(loginIsLoading(false));
             dispatch(writeUserData(data));

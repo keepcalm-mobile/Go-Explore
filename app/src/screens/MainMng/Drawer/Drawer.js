@@ -168,7 +168,7 @@ class Drawer extends React.Component<Props> {
                     {button(screens.Drawer[screens.VirtualReality].title, this._onPageClick, screens.VirtualReality, this.state.parentPage)}
                     {button(screens.Drawer[screens.Bookmarks].title, this._onPageClick, screens.Bookmarks, this.state.parentPage)}
                     {button(screens.Drawer[screens.SubMenu].title, this._onPageClick, screens.SubMenu, '')}
-                    {button(screens.Drawer[screens.Settings].title, this._onPageClick, screens.Settings, this.state.parentPage, screens.Drawer[screens.Settings].icon)}
+                    {/*{button(screens.Drawer[screens.Settings].title, this._onPageClick, screens.Settings, this.state.parentPage, screens.Drawer[screens.Settings].icon)}*/}
                 </View>
                 {this._subMenuArea()}
             </View>

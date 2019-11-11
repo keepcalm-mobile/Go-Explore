@@ -1,33 +1,78 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import s from './style';
-import ButtonOrange from '../../../../../../../components/ButtonOrange';
-import {Auth, logOut} from '../../../../../../../api/Auth';
 import ScrollablePage from '../../../ScrollablePage';
-
+import {screens} from '../../../../../../../constants';
+import ItemHeader from '../../subTabs/ItemHeader';
+import {indent, windowW} from '../../../../../../../styles';
+import {TabBar, TabView} from 'react-native-tab-view';
+import colors from '../../../../../../../styles/colors';
+import {CinemaGallery, SimilarItems, StandardOverview} from '../../subTabs';
 
 class Dining extends ScrollablePage {
     constructor(props) {
+        const itemId = props.navigation.state.params.itemId;
+        props.getItem(itemId, screens.Dining);
+
         super(props);
+
         this.state = {
+            curId: itemId,
+            index: 0,
+            routes: [
+                {key: 'overview', title: 'OVERVIEW'},
+                {key: 'gallery', title: 'GALLERY'},
+            ],
         };
     }
 
+    onDirectionPress = () => {
+        this.props.setMapTarget(parseFloat(this.props.data.location[0]), parseFloat(this.props.data.location[1]), true);
+    };
+
+    onItemClick = (iId, iType = screens.Dining) => {
+        this.props.navigation.navigate({ routeName: iType, params:{itemId:iId}, key:screens.DataPages + iType + iId + 'Key'});
+    };
+
+    renderScene = ({ route }) => {
+        switch (route.key) {
+            case 'overview':
+                return <StandardOverview data={this.props.data.overview} onDirectionPress={this.onDirectionPress}/>;
+            case 'gallery':
+                return <CinemaGallery data={this.props.data.gallery.image} showTitle={false}/>;
+            default:
+                return null;
+        }
+    };
+
     render() {
+        if (!this.props.data) {
+            return ( <View style={s.containerEmpty} /> );
+        }
+
+        const { type, header, related} = this.props.data;
+
         return (
-            <View style={s.container}>
-                <Text style={s.welcome}>Dining coming soon</Text>
-            </View>
+            <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
+                <ItemHeader type={type} data={header} onPress={this.onDirectionPress}/>
+                <TabView
+                    navigationState={this.state}
+                    renderScene={this.renderScene}
+                    onIndexChange={index => this.setState({ index })}
+                    initialLayout={{ width: windowW }}
+                    renderTabBar = {props =>
+                        <TabBar
+                            {...props}
+                            style={{ backgroundColor: 'transparent' }}
+                            labelStyle = {s.tabLabel}
+                            indicatorStyle={{ backgroundColor: colors.darkMain, paddingHorizontal:indent}}
+                        />
+                    }
+                />
+                <SimilarItems onItemPress={this.onItemClick} data={related} title={'Check other'}/>
+            </ScrollView>
         );
     }
-// <ButtonOrange onPress={this._logOut} title={'LOGOUT'}/>
-    _logOut = async () => {
-        const resp = await logOut();
-        if (Auth.AUTH_LOGOUT === resp) {
-            this.props.navigation.navigate('Auth');
-        }
-        // await AsyncStorage.clear();
-    };
 }
 
 export default Dining;

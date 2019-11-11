@@ -16,7 +16,7 @@ const button = (Icon, onPress, iId, iTitle) => {
                 <Icon width={iconSize} height={iconSize} style={s.btnIcon}/>
                 <IconsEllipse width={ellipseSize} height={ellipseSize} style={s.btnEllipse} />
             </View>
-            <Text style={s.btnTitle}>{iTitle}</Text>
+            <Text style={s.btnTitle} numberOfLines={1}>{iTitle}</Text>
         </TouchableOpacity>
     );
 };

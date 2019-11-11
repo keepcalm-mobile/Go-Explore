@@ -7,6 +7,11 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.facebook.imagepipeline.decoder.SimpleProgressiveJpegConfig;
+
 import com.reactlibrary.RNSimpleCompassPackage;
 import com.viromedia.bridge.ReactViroPackage;
 
@@ -47,5 +52,12 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+
+    ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
+        .setProgressiveJpegConfig(new SimpleProgressiveJpegConfig())
+        .setResizeAndRotateEnabledForNetwork(true)
+        .setDownsampleEnabled(true)
+        .build();
+      Fresco.initialize(this, config);
   }
 }

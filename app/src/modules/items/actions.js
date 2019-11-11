@@ -71,6 +71,13 @@ const tempData = {
         },
 };
 
+function updateMap(iData) {
+    return {
+        type: t.ITEM_UPDATE_MAP,
+        data: iData,
+    };
+}
+
 function hasErrored(iBool) {
     return {
         type: t.HAS_ERRORED,
@@ -104,6 +111,7 @@ function loadItemData(iItemId, iType, iDispatch) {
         .then((response) => response.json())
         .then((data) => {
             // data = tempData[iItemId] ? tempData[iItemId] : tempData['0001'];
+            console.log('I T E M  D A T A  :  '  + JSON.stringify(data))
             data.comments = tempData.comments;
             data.explore = tempData.explore;
             iDispatch(updateItemData({[iItemId]: data}));
@@ -142,6 +150,16 @@ function loadBookingCinemaData(iData, iDispatch) {
         .catch(() => iDispatch(hasErrored(true)));
 }
 
+export function setMapTarget(iLatitude = 0, iLongitude = 0, iStatus = false) {
+    return (dispatch, getState) => {
+        let _mapState = {mapIsOpen:iStatus};
+        if (iLatitude !== 0 && iLongitude !== 0){
+            _mapState.latitude = iLatitude;
+            _mapState.longitude = iLongitude;
+        }
+        dispatch(updateMap(_mapState));
+    };
+}
 
 export function getItem(iID, iType) {
     return (dispatch, getState) => {

@@ -82,8 +82,8 @@ class RangeSlider extends React.Component<Props> {
                 />
 
                 <View style={s.labelCnt}>
-                    <Text style={[s.labelTxt, s.labelTxtLeft, { left: left }]}> ${setMin} </Text>
-                    <Text style={[s.labelTxt, s.labelTxtRight, { right: right }]}>${setMax}</Text>
+                    <Text style={[s.labelTxt, s.labelTxtLeft, { left: left }]}> QAR{setMin} </Text>
+                    <Text style={[s.labelTxt, s.labelTxtRight, { right: right }]}>QAR{setMax}</Text>
                 </View>
             </View>
         );

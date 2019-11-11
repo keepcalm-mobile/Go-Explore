@@ -43,6 +43,7 @@
 		71CF99823CE445E6BCBE4438 /* logoFacebook.svg in Resources */ = {isa = PBXBuildFile; fileRef = 072A62E2392D43D8B54DFAB3 /* logoFacebook.svg */; };
 		723F716EA21A4EB5ADDFD59A /* dropdownArrow.svg in Resources */ = {isa = PBXBuildFile; fileRef = C84E771FD03D4E4F9997BF81 /* dropdownArrow.svg */; };
 		734319C7A9A04709BDE3C7A2 /* tabIndicator.svg in Resources */ = {isa = PBXBuildFile; fileRef = B9EAF8E674874B5A913020EA /* tabIndicator.svg */; };
+		741801B89FB347B0AB01CD59 /* navigateIcon.svg in Resources */ = {isa = PBXBuildFile; fileRef = EEEF9D5523D24E04BE42874A /* navigateIcon.svg */; };
 		89EB4F07DDB13A8BC6DF6913 /* libPods-goExploreApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39CBB2BD7DB340A687E6F9D3 /* libPods-goExploreApp.a */; };
 		8A85041B65A646F4AAF915C6 /* starEmpty.svg in Resources */ = {isa = PBXBuildFile; fileRef = B49B32B0C943492894595322 /* starEmpty.svg */; };
 		914608CABD864F16B67F37E9 /* iconDining.svg in Resources */ = {isa = PBXBuildFile; fileRef = 02030B62AD4A4C1CA38B1C3E /* iconDining.svg */; };
@@ -203,6 +204,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		08BA98C223759C3400088A3C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00A041AD7EFBBE682EF9137B /* libPods-goExploreApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-goExploreApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -216,7 +230,7 @@
 		0C4575C67E6D45C9B1A2F23C /* placeholder.jpg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = placeholder.jpg; path = ../app/assets/placeholder.jpg; sourceTree = "<group>"; };
 		0DD8F8023559E29FAAFB21C6 /* libPods-goExploreAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-goExploreAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		108AEC9DFB3D470183FCB2A0 /* iconClose.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = iconClose.svg; path = ../app/assets/categoriesIcons/iconClose.svg; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* goExploreApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = goExploreApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* GoExplore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoExplore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = goExploreApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = goExploreApp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -273,6 +287,7 @@
 		EC12256F537C47CDA1AA76DB /* backIconDrawer.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = backIconDrawer.svg; path = ../app/assets/serviceIcons/backIconDrawer.svg; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		EEEF9D5523D24E04BE42874A /* navigateIcon.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = navigateIcon.svg; path = ../app/assets/serviceIcons/navigateIcon.svg; sourceTree = "<group>"; };
 		EF9E568EAA5D4534916439BB /* iconShopping.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = iconShopping.svg; path = ../app/assets/categoriesIcons/iconShopping.svg; sourceTree = "<group>"; };
 		F2CFB8937BF307252304F940 /* Pods-goExploreApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-goExploreApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-goExploreApp-tvOSTests/Pods-goExploreApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		F3A7FCD731B347CA8D5E5F73 /* menuIcon.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = menuIcon.svg; path = ../app/assets/serviceIcons/menuIcon.svg; sourceTree = "<group>"; };
@@ -431,7 +446,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* goExploreApp.app */,
+				13B07F961A680F5B00A75B9A /* GoExplore.app */,
 				00E356EE1AD99517003FC87E /* goExploreAppTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* goExploreApp-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* goExploreApp-tvOSTests.xctest */,
@@ -486,6 +501,7 @@
 				7878B2C106D04A82991DCFCA /* settingsIcon.svg */,
 				B9EAF8E674874B5A913020EA /* tabIndicator.svg */,
 				E979B54E01134AC6BF1BC6EA /* waves.svg */,
+				EEEF9D5523D24E04BE42874A /* navigateIcon.svg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -539,6 +555,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				EDC3AFEE87DB5C06E2904C4B /* [CP] Copy Pods Resources */,
 				83F78EC90A37D6E72FDDFF75 /* [CP] Embed Pods Frameworks */,
+				08BA98C223759C3400088A3C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -546,7 +563,7 @@
 			);
 			name = goExploreApp;
 			productName = goExploreApp;
-			productReference = 13B07F961A680F5B00A75B9A /* goExploreApp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* GoExplore.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* goExploreApp-tvOS */ = {
@@ -823,6 +840,7 @@
 				E610D498F9BA4451875FEC7B /* settingsIcon.svg in Resources */,
 				734319C7A9A04709BDE3C7A2 /* tabIndicator.svg in Resources */,
 				F5AD70A6CBB74CC3A2609F0A /* waves.svg in Resources */,
+				741801B89FB347B0AB01CD59 /* navigateIcon.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -846,7 +864,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -854,7 +872,7 @@
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
@@ -987,11 +1005,15 @@
 				"${PODS_ROOT}/Target Support Files/Pods-goExploreApp/Pods-goExploreApp-resources.sh",
 				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/NYTPhotoViewer/NYTPhotoViewer.bundle",
+				"${PODS_ROOT}/YoutubePlayer-in-WKWebView/WKYTPlayerView/WKYTPlayerView.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/NYTPhotoViewer.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WKYTPlayerView.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1106,7 +1128,8 @@
 			baseConfigurationReference = B173E46D1E06994996000791 /* Pods-goExploreAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = XA37GAFGSW;
+				DEVELOPMENT_TEAM = YYJ9R9AM94;
+				ENABLE_BITCODE = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1129,7 +1152,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp.app/goExploreApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoExplore.app/GoExplore";
 			};
 			name = Debug;
 		};
@@ -1139,7 +1162,8 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = XA37GAFGSW;
+				DEVELOPMENT_TEAM = YYJ9R9AM94;
+				ENABLE_BITCODE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
@@ -1158,7 +1182,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/goExploreApp.app/goExploreApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GoExplore.app/GoExplore";
 			};
 			name = Release;
 		};
@@ -1170,7 +1194,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = YYJ9R9AM94;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",
@@ -1196,7 +1220,7 @@
 				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = YYJ9R9AM94;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-simple-compass/ios",

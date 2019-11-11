@@ -62,9 +62,9 @@ async function requestPermission() {
 }
 
 class Map extends React.Component<Props> {
-    static propTypes = {
-        onViewChanged: PropTypes.func,
-    };
+    // static propTypes = {
+    //     onViewChanged: PropTypes.func,
+    // };
 
     constructor(props) {
         super(props);
@@ -77,10 +77,10 @@ class Map extends React.Component<Props> {
                 latitude: 37.78825,
                 longitude: -122.4324,
             },
-            targetPosition: {
-                latitude: 37.78845,
-                longitude: -122.4364,
-            },
+            // targetPosition: {
+            //     latitude: 25.2854,//37.78845,
+            //     longitude: 51.5310,//-122.4364,
+            // },
             region: {
                 latitude: LATITUDE,
                 longitude: LONGITUDE,
@@ -128,12 +128,28 @@ class Map extends React.Component<Props> {
         });
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.mapTarget.mapIsOpen && !this.isOpen){
+            Animated.spring(this.state.pan, {
+                toValue: { x: 0, y: mapTopY},
+                friction: 5,
+                useNativeDriver: true,
+            }).start();
+
+            this.isOpen = true;
+        }
+    }
+
     get isOpen () : Boolean {
         return this._isOpen;
     }
 
     set isOpen (iValue : Boolean) {
         this._isOpen = iValue;
+        if (this.props.mapTarget.mapIsOpen && !iValue){
+            this.props.setMapTarget(0,0,false);
+        }
+
         if (this.props.onViewChanged){
             this.props.onViewChanged(iValue);
         }
@@ -178,9 +194,9 @@ class Map extends React.Component<Props> {
         }, 1000);
     }
 
-    setTargetPosition(position) {
-        this.setState({ targetPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude} });
-    }
+    // setTargetPosition = (iPosition) => {
+    //     this.setState({ targetPosition: {latitude: iPosition.coords.latitude, longitude: iPosition.coords.longitude} });
+    // };
 
     getCurrentPosition() {
         if (Platform.OS === 'android' && PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
@@ -192,10 +208,10 @@ class Map extends React.Component<Props> {
         Geolocation.getCurrentPosition(
             position => {
                 this.setPosition(position);
-                const target = position;
-                target.coords.latitude += 0.0020;
-                target.coords.longitude += 0.0020;
-                this.setTargetPosition(target);
+                // const target = position;
+                // target.coords.latitude += 0.0020;
+                // target.coords.longitude += 0.0020;
+                // this.setTargetPosition(target);
 
                 AsyncStorage.setItem('LastGPS', JSON.stringify(position));
 
@@ -229,19 +245,19 @@ class Map extends React.Component<Props> {
     /****
      * MAP
      ****/
-    onMapPress = (e) => {
-        // this.state.targetPosition = e.nativeEvent.coordinate;
-        let pos = e.nativeEvent.coordinate;
-        this.setState({ targetPosition : pos} );
-
-        if (this._targetMarker)
-        {this._targetMarker.animateMarkerToCoordinate(pos, 300);}
-
-        setTimeout(() => {
-            if (this._route)
-            {this._route.destination = pos;}
-        }, 400);
-    };
+    // onMapPress = (e) => {
+    //     // this.state.targetPosition = e.nativeEvent.coordinate;
+    //     let pos = e.nativeEvent.coordinate;
+    //     this.setState({ targetPosition : pos} );
+    //
+    //     if (this._targetMarker)
+    //     {this._targetMarker.animateMarkerToCoordinate(pos, 300);}
+    //
+    //     setTimeout(() => {
+    //         if (this._route)
+    //         {this._route.destination = pos;}
+    //     }, 400);
+    // };
 
     onMapReady = (result) => {
         if (this._lastGeolocation) {
@@ -272,10 +288,7 @@ class Map extends React.Component<Props> {
     };
 
     render() {
-
-        if (this.state.showMap === false) {
-            return null;
-        }
+        if (this.state.showMap === false) return null;
 
         const panStyle = { transform: this.state.pan.getTranslateTransform() };
 
@@ -290,7 +303,7 @@ class Map extends React.Component<Props> {
                     customMapStyle={mapStyles}
                     loadingEnabled={true}
                     ref={ref => this._map = ref}
-                    onPress={this.onMapPress}
+                    // onPress={this.onMapPress}
                     onMapReady={this.onMapReady}
                 >
                     <Marker
@@ -299,14 +312,14 @@ class Map extends React.Component<Props> {
                         description={'Imagine you are here'}
                     />
                     <Marker
-                        coordinate={this.state.targetPosition}
+                        coordinate={this.props.mapTarget}
                         title={'Point B'}
                         description={'This is where you want to get'}
                         ref={ref => this._targetMarker = ref}
                     />
                     <MapViewDirections
                         origin={this.state.currentPosition}
-                        destination={this.state.targetPosition}
+                        destination={this.props.mapTarget}
                         apikey={GOOGLE_MAPS_APIKEY}
                         strokeWidth={5}
                         strokeColor={"#9c9c9c"}

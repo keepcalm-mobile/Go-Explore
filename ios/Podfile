@@ -34,6 +34,8 @@ target 'goExploreApp' do
 
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
 
+  pod 'XCDYouTubeKit', '~> 2.8'
+
   # Viro Dependencies
   pod 'ViroReact', :path => '../node_modules/react-viro/ios/'
   pod 'ViroKit_static_lib', :path => '../node_modules/react-viro/ios/dist/ViroRenderer/static_lib'

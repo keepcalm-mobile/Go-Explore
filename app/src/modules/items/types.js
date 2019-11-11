@@ -1,5 +1,6 @@
 export default class {
   static HAS_ERRORED = 'ITEM_HAS_ERRORED';
   static ITEM_UPDATE_DATA = 'ITEM_UPDATE_DATA';
+  static ITEM_UPDATE_MAP = 'ITEM_UPDATE_MAP';
   static BOOKING_CINEMA_DATA = 'BOOKING_CINEMA_DATA';
 }

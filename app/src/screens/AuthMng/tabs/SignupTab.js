@@ -82,7 +82,7 @@ class SignupTab extends TabResizer {
     }
 
     _onSignUpPress = () => {
-        this.props.registration({login:this.state.fullName, email:this.state.email, phone:this.state.phoneNumber, password:this.state.password});
+        this.props.registration({Language:this.state.fullName, Email:this.state.email, Mobile:this.state.phoneNumber, Password:this.state.password});
     };
 }
 

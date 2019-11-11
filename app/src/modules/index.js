@@ -21,7 +21,7 @@ const reducers = combineReducers({
 
 export default reducers;
 export { default as ModMap } from './map';
-export { getItem, getCinemasData } from './items';
+export { getItem, getCinemasData, setMapTarget } from './items';
 export { setCurCategory, applyFilter, readFiltersData } from './categories';
 export { setScrollOffset } from './scrollOffset';
 

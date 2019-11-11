@@ -3,7 +3,7 @@ import ModMap from '../../../../../../../modules/map';
 import Cinema from './Cinema';
 import React, {forwardRef} from 'react';
 import PropTypes from 'prop-types';
-import {getItem, setScrollOffset} from '../../../../../../../modules';
+import {getItem, setMapTarget, setScrollOffset} from '../../../../../../../modules';
 
 Cinema.propTypes = {
     // curCategory: PropTypes.string.isRequired,
@@ -21,6 +21,7 @@ const dispatchToProps = (dispatch) => {
     return {
         getItem: (iID, iType) => dispatch(getItem(iID, iType)),
         setScrollOffset: (iValue) => dispatch(setScrollOffset(iValue)),
+        setMapTarget: (iValue) => dispatch(setMapTarget(iValue)),
     };
 };
 

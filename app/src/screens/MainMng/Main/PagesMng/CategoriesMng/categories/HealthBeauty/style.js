@@ -1,26 +1,31 @@
 import {StyleSheet} from 'react-native';
-import s, {colors} from '../../../../../../../styles';
+import s, {colors, doubleIndent, fontNames, fontSizes, indent} from '../../../../../../../styles';
 import {scale} from '../../../../../../../utils/resize';
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.bgApp,
+    containerEmpty:{
+        flex:1,
+        backgroundColor: colors.bgCategory,
     },
-    welcome: {
-        fontFamily: 'Poppins-Bold',
-        fontSize: scale(24),
-        lineHeight: 36,
+    container: {
+        // flex: 1,
+        backgroundColor: colors.bgCategory,
+        paddingBottom: doubleIndent,
+    },
+    tabLabel: {
+        fontFamily: fontNames.bold,
+        fontSize: fontSizes.small,
+        textAlign: 'center',
+        lineHeight: scale(18),
         color: colors.white,
-        // position: 'absolute',
-        // left: '5.6%',
-        // paddingTop:20,
-        // height: 36,
-        // top:'18%',
-        // textAlign: 'center',
-        // margin: 10,
+        margin:0,
+        // marginHorizontal: indent * 0.5,
+        // marginVertical: indent * 0.25,
+    },
+    tabCnt: {
+        // flex:1,
+        backgroundColor: 'transparent',
+        paddingVertical: indent,
     },
 });
 export default styles;

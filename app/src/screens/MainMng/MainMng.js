@@ -133,10 +133,7 @@ class MainMng extends React.Component{
                         <IconBack width={iconSize} height={iconSize}/>
                     </TouchableOpacity>
 
-                    <View style={s.searchArea}>
-                        <IconSearch width={iconSize} height={iconSize}/>
-                        <Text style={s.searchTitle}>Search</Text>
-                    </View>
+
 
                     <TouchableOpacity onPress = {this.openDrawer} activeOpacity={0.5} style={s.touchArea}>
                         <IconMenu width={iconSize} height={iconSize}/>
@@ -148,6 +145,13 @@ class MainMng extends React.Component{
         );
     }
 }
+
+
+// {/*<View style={s.searchArea}>*/}
+// {/*    <IconSearch width={iconSize} height={iconSize}/>*/}
+// {/*    <Text style={s.searchTitle}>Search</Text>*/}
+// {/*</View>*/}
+
 
 export default MainMng;
 //{/*<BlurView style={s.searchBg} viewRef={this.state.main} blurType="light" blurAmount={10} />*/}

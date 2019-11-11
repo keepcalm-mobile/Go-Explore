@@ -1,17 +1,16 @@
 import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View, Linking} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View, Linking, Platform} from 'react-native';
 import s from './style';
+import YouTube, { YouTubeStandaloneAndroid, YouTubeStandaloneIOS } from 'react-native-youtube';
 import ButtonOrange from '../../../../../../../components/ButtonOrange';
-import LinearGradient from 'react-native-linear-gradient';
-import {scale} from '../../../../../../../utils/resize';
-import Rating from '../../../../../../../components/Rating';
-import IconFilter from '../../../../../../../../assets/serviceIcons/playIcon.svg';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import {indent, windowW} from '../../../../../../../styles';
 import colors from '../../../../../../../styles/colors';
 import {CinemaOverview, CinemaGallery, Comments, Explore} from '../../subTabs';
 import ScrollablePage from '../../../ScrollablePage';
 import {screens} from '../../../../../../../constants';
+import ItemHeader from '../../subTabs/ItemHeader';
+import {OverlayLoader} from '../../../../../../../components';
 
 class Cinema extends ScrollablePage {
     constructor(props) {
@@ -23,6 +22,8 @@ class Cinema extends ScrollablePage {
         this.state = {
             curId: itemId,
             index: 0,
+            isPlayerOpen: false,
+            videoID: '',
             routes: [
                 { key: 'overview', title: 'OVERVIEW' },
                 { key: 'cinema', title: 'CINEMA' },
@@ -32,51 +33,47 @@ class Cinema extends ScrollablePage {
         };
     }
 
+    getYouTubeVideoId = (url) => {
+        const regExp = /^.*((www.youtube.com\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\??v?=?))([^#&\?]*).*/
+
+        const match = url.match(regExp);
+
+        if (match && match[7].length === 11) {
+            return match[7];
+        }
+        return false;
+    };
+
     onPlayBtnPress = () => {
-        Linking.canOpenURL(this.props.data.header.videoUrl).then(supported => {
-            if (supported) {
-                Linking.openURL(this.props.data.header.videoUrl);
+        // Linking.canOpenURL(this.props.data.header.videoUrl).then(supported => {
+        //     if (supported) {
+        //         Linking.openURL(this.props.data.header.videoUrl);
+        //     } else {
+        //         console.log("Don't know how to open URI: " + this.props.data.header.videoUrl);
+        //     }
+        // });
+        const videoID = this.getYouTubeVideoId(this.props.data.header.videoUrl);
+        if (videoID){
+            if (Platform.OS === 'android') {
+                YouTubeStandaloneAndroid.playVideo({
+                    apiKey: 'AIzaSyD8hmW3E184MjjKIdhdKK1IWiClEdl5iWw',
+                    videoId: videoID,
+                    autoplay: true,
+                })
+                    .then(() => console.log('Standalone Player Exited'))
+                    .catch(errorMessage => console.error(errorMessage));
             } else {
-                console.log("Don't know how to open URI: " + this.props.data.header.videoUrl);
+                YouTubeStandaloneIOS.playVideo(videoID)
+                    .then(message => console.log(message))
+                    .catch(errorMessage => console.error(errorMessage));
             }
-        });
+        }
     };
 
     onBookTicketPress = () => {
         // this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:'HO00005022'}, key:screens.BookingTickets + '0003' + 'Key'});
         const movie_ID = this.props.data.movieId ? this.props.data.movieId : this.state.curId;
         this.props.navigation.navigate({ routeName: screens.BookingTickets, params:{itemId:movie_ID, tempHeader:this.props.data.header}, key:screens.BookingTickets + this.state.curId + 'Key'});
-    };
-
-
-    header = (iType, iData) => {
-        const {image, title, tags, url} = iData;
-        const rating = iData.rating[0] ? iData.rating[0].split('/')[0] / 2 : 0;
-        const reviews = iData.rating[1] ? iData.rating[1].split(',')[0] : 0;
-        return (
-            <View key={iType + 'HeaderKey'} style={s.header}>
-                <Image resizeMode={'cover'} style={s.image} source={{uri: image}} progressiveRenderingEnabled={true}/>
-                <LinearGradient colors={['#00000000', '#000000CC', '#000000']} start={{ x: 0, y: 0 }} end={{ x: 0, y: 1 }} style={s.linearGradient} />
-
-                <View style={s.titleCnt}>
-                    <Text style={s.title}>{title}</Text>
-                    <TouchableOpacity onPress = {this.onPlayBtnPress} activeOpacity={0.5} style={s.rightBtn}>
-                        <IconFilter width={scale(40)} height={scale(40)}/>
-                    </TouchableOpacity>
-                </View>
-                <View style={s.ratingCnt}>
-                    <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
-                    <Text style={s.ratingInfo}>{reviews.toString() + ' Reviews'}</Text>
-                </View>
-                <View style={s.tagsCnt}>
-                    {tags.map( (item, key) => { return (
-                        <View key={key} style={s.tagCnt}>
-                            <Text style={s.tagTxt}> {tags[key].toString()} </Text>
-                        </View>
-                    ); })}
-                </View>
-            </View>
-        );
     };
 
 
@@ -104,7 +101,7 @@ class Cinema extends ScrollablePage {
 
         return (
             <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
-                {this.header(type, header)}
+                <ItemHeader type={type} data={header} onPress={this.onPlayBtnPress}/>
                 {movieId ? <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/> : null}
                 <TabView
                     navigationState={this.state}

@@ -21,7 +21,7 @@ class CarouselSmall extends React.Component<Props> {
 
     _renderItem = (item, index) => {
         const {id, title, type} = item;//image, type,
-        const image = item.image ? {uri:(MEDIA_PREF + item.image)} : require('../../../assets/placeholder.jpg');
+        const image = (item.image && item.image.includes('https')) ? {uri:(MEDIA_PREF + item.image)} : require('../../../assets/placeholder.jpg');
         return (
             <TouchableOpacity key={id} onPress = { () => { this.props.onItemClick(id, type); }} activeOpacity={0.75} style={s.slide}>
                 <Image resizeMode={'cover'} style={s.image} source={image} defaultSource={require('../../../assets/placeholder.jpg')} progressiveRenderingEnabled={true}/>

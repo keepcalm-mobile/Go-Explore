@@ -2,6 +2,12 @@ import {screens} from '../../constants';
 import {combineReducers} from 'redux';
 import t from './types';
 
+let mapTargetState = {
+    latitude: 25.2854,
+    longitude: 51.5310,
+    mapIsOpen: false,
+};
+
 let itemsState = {
 };
 
@@ -12,6 +18,18 @@ let bookingCinemaState = {
     ticketTypes:null,
     updated:0,
 };
+
+function mapTarget(state = mapTargetState, action) {
+    switch (action.type) {
+        case t.ITEM_UPDATE_MAP:
+            return {
+                ...state,
+                ...action.data,
+            };
+        default:
+            return state;
+    }
+}
 
 function items(state = itemsState, action) {
     switch (action.type) {
@@ -38,6 +56,7 @@ function bookingCinema(state = bookingCinemaState, action) {
 }
 
 const reducer = combineReducers({
+    mapTarget,
     items,
     bookingCinema,
 });
