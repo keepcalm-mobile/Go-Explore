@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
         height:windowH,
         borderRadius:10,
         marginLeft:indent,
-        marginTop:windowH - 75,
+        marginTop:windowH - scale(78),
         overflow: 'hidden',
     },
     mapView:{

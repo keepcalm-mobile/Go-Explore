@@ -19,7 +19,7 @@ const dispatchToProps = (dispatch) => {
     return {
         getItem: (iID, iType) => dispatch(getItem(iID, iType)),
         setScrollOffset: (iValue) => dispatch(setScrollOffset(iValue)),
-        setMapTarget: (iValue) => dispatch(setMapTarget(iValue)),
+        setMapTarget: (iLatitude, iLongitude, iStatus) => dispatch(setMapTarget(iLatitude, iLongitude, iStatus)),
     };
 };
 

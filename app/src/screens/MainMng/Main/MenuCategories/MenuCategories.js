@@ -3,7 +3,7 @@ import {Animated, PanResponder, Text, TouchableOpacity, View} from 'react-native
 import {scale} from '../../../../utils/resize';
 import LinearGradient from 'react-native-linear-gradient';
 import s, {iconSize, ellipseSize} from './style';
-import {bottomIndent, windowH} from '../../../../styles';
+import {barH, bottomIndent, windowH} from '../../../../styles';
 import PropTypes from 'prop-types';
 import {screens} from '../../../../constants';
 import IconClose from '../../../../../assets/categoriesIcons/iconClose.svg';
@@ -27,7 +27,7 @@ class MenuCategories extends React.Component<Props> {
     };
 
     state = {
-        areaMargin: new Animated.ValueXY({x:0,y:windowH + bottomIndent}),
+        areaMargin: new Animated.ValueXY({x:0,y:windowH + bottomIndent + barH}),
     };
 
     constructor(props) {
@@ -64,7 +64,7 @@ class MenuCategories extends React.Component<Props> {
 
     startAnimation = (iValue) => {
         Animated.spring(this.state.areaMargin, {
-            toValue: { x: 0, y: iValue ? 0 : windowH + bottomIndent},
+            toValue: { x: 0, y: iValue ? 0 : windowH + bottomIndent + barH},
             friction: 10,
             useNativeDriver: true,
         }).start();
