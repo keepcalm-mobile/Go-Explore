@@ -131,7 +131,7 @@ class ArgReal extends ScrollablePage {
             if (this.mapComponent && this.mapComponent !== null) {
                 this.mapComponent.setHeading(this.state.heading);
             }
-            
+
             if (EventsBridge.arScene !== null) {
                 EventsBridge.arScene.setHeading(this.state.heading);
             }
@@ -158,9 +158,9 @@ class ArgReal extends ScrollablePage {
         console.log("GPS difference = " + dif);
 
         if (dif >= this.state.poisUpdateDifference || (!this.fetchedPOIs)) {
-            
-            fetchData();
-            
+
+            this.fetchData();
+
         }
 
         this.mapComponent.setLocation(this.state.currentPosition);
