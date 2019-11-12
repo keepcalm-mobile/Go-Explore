@@ -116,8 +116,8 @@ class ARScene extends React.Component {
         this.state = {
             text : "Initializing AR...",
             text2: "Getting device heading...",
-            currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
-            initialPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
+            currentPosition: EventsBridge.currentLocation,
+            initialPosition: EventsBridge.currentLocation,
             normalizationMaximumPoint: null,
             initialHeading: this.props.heading,
             //heading: this.props.heading,
@@ -184,6 +184,11 @@ class ARScene extends React.Component {
     }
 
     componentDidMount() {
+
+        this.setState({initialPosition: EventsBridge.currentLocation});
+
+        console.log("Ar scene mounted, location:");
+        console.log(this.state.initialPosition);
 
         // console.log(PoisData);
         // console.log(JSON.stringify(PoisData));

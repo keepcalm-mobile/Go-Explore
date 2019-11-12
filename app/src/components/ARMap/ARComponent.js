@@ -13,6 +13,7 @@ import {
   ViroNode,
   ViroARSceneNavigator
 } from 'react-viro';
+import EventsBridge from '../../utils/EventsBridge';
 
 const InitialARScene = require('./ARScene');
 const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
@@ -35,16 +36,17 @@ class ARComponent extends React.Component {
       offersData: this.props.offersData,
       poisData: this.props.poisData,
       heading: this.props.heading,
-      currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
+      currentPosition: EventsBridge.currentLocation,
       onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {},
       onTrackingLost: props.onTrackingLost ? this.props.onTrackingLost : () => {}
     };
 
-    console.log('ar component props heading = ' + this.props.heading);
+    console.log('ar component props.location = ');
+    console.log(this.props.location);
   }
 
   componentDidMount() {
-
+    
   }
 
   render() {

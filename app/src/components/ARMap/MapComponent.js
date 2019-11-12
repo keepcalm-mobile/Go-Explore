@@ -33,6 +33,7 @@ const tripleWidth = windowW * 3;
 const maskOffset = windowH - 400;
 
 import mapStyles from './mapStyles.json';
+import EventsBridge from '../../utils/EventsBridge.js';
 const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
 const GOOGLE_MAPS_APIKEY = 'AIzaSyA7rncWjnX4Ugd5OoCnMNNT2D3KfDlgp6Y'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
@@ -65,7 +66,7 @@ export default class MapComponent extends Component {
         longitudeDelta: LONGITUDE_DELTA,
       },
       heading: props.heading ? props.heading : -1,
-      currentPosition: props.location ? props.location : {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
+      currentPosition: EventsBridge.currentLocation,
       origin: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
       destination: false,
       navigationMode: NavigationModes.IDLE,
@@ -81,7 +82,7 @@ export default class MapComponent extends Component {
   }
 
   componentDidMount() {
-
+    
   }
 
   render() {
@@ -115,7 +116,21 @@ export default class MapComponent extends Component {
                       longitudeDelta: 0.0421,
                     }}
                     onMapReady={(res) => {
+                      this.setState({currentPosition: EventsBridge.currentLocation});
 
+                      console.log("Map component set location:");
+                      console.log(this.state.currentPosition);
+
+                      if (this.refMap && this.refMap !== null)
+                      {
+                        this.refMap.animateCamera({
+                            center: {latitude: this.state.currentPosition.latitude, longitude: this.state.currentPosition.longitude},
+                            //         pitch: 5,
+                            //         heading: 0,
+                            //         altitude: 30, // for ios only
+                            zoom: 16 // gmaps only
+                        }, 1000);
+                      }
                     }}
                 >
                   <MapViewNavigation

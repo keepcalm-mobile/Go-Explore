@@ -20,7 +20,6 @@ import {
 } from 'react-native';
 
 import RNSimpleCompass from 'react-native-simple-compass';
-import Geolocation from 'react-native-geolocation-service';
 
 import ARComponent from '../../../../../../src/components/ARMap/ARComponent';
 import MapComponent from '../../../../../../src/components/ARMap/MapComponent';
@@ -50,7 +49,6 @@ class ArgReal extends ScrollablePage {
             readyForAR: false,
             arRunning: false, //was false
             heading: 0,
-            gpsGranted: false,
             initialPosition: null,
             specialOfferData: null,
             currentPosition: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
@@ -84,20 +82,14 @@ class ArgReal extends ScrollablePage {
 
     componentDidMount() {
         super.componentDidMount();
-        this.trackDeviceHeading();
 
         console.log('AR mounted');
 
-        if (this.state.gpsGranted === false && Platform.OS !== "ios") {
-            this.requestPermission();
-        }
-        else if (Platform.OS !== "ios") {
-            this.getCurrentPosition();
-        }
-        else {
-            // this.getCurrentPosition();
-            this.fetchData();
-        }
+        EventsBridge.arScreenRef = this;
+        this.setPosition(EventsBridge.currentLocation);
+        // this.fetchData();
+
+        this.trackDeviceHeading();
 
         // console.log('Map ref = ' + EventsBridge.mapRef);
         // EventsBridge.mapRef.showMap(false);
@@ -149,8 +141,8 @@ class ArgReal extends ScrollablePage {
         let curPos = {...this.state.currentPosition};
 
         this.setState({
-            currentPosition: {latitude: position.coords.latitude, longitude: position.coords.longitude},
-            prevPosition: this.state.prevPosition !== false ? curPos : {latitude: position.coords.latitude, longitude: position.coords.longitude}
+            currentPosition: {latitude: position.latitude, longitude: position.longitude},
+            prevPosition: this.state.prevPosition !== false ? curPos : {latitude: position.latitude, longitude: position.longitude}
         });
 
         let dif = Utils.getDistanceBetweenCoordinates(this.state.currentPosition.latitude, this.state.currentPosition.longitude, this.state.prevPosition.latitude, this.state.prevPosition.longitude);
@@ -218,26 +210,6 @@ class ArgReal extends ScrollablePage {
                   //     });
                   // }
             });
-    }
-
-    getCurrentPosition() {
-
-        // if(this.state.gpsGranted === false)
-        //   return;
-
-        console.log('AR: getting current position');
-
-        Geolocation.getCurrentPosition(
-            position => {
-                this.setPosition(position);
-            },
-            error => {
-                this.getCurrentPosition();
-            },
-            {enableHighAccuracy: true, timeout: GPS_TIMEOUT, maximumAge: GPS_MAXIMUM_AGE},
-        );
-
-        Geolocation.watchPosition(position => this.setPosition(position), error => {}, {enableHighAccuracy: true, timeout: GPS_TIMEOUT, maximumAge: GPS_MAXIMUM_AGE});
     }
 
     getTutorial() {
@@ -310,48 +282,6 @@ class ArgReal extends ScrollablePage {
         console.log('on tracking lost main script');
         this.setState({readyForAR: false, arRunning: false});
 
-    }
-
-    async requestPermission() {
-
-        // if ios
-        if (Platform.OS === "ios") {
-
-            console.log("PLATFORM === IOS");
-            this.setState({
-                gpsGranted: true
-            });
-
-            return;
-        }
-
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                {
-                    title: 'Cool Location Permission',
-                    message:
-                        'We need access to your geolocation, ' +
-                        'so you find things nearby.',
-                    buttonNeutral: 'Ask Me Later',
-                    buttonNegative: 'Cancel',
-                    buttonPositive: 'OK',
-                }
-            );
-
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.setState({
-                    gpsGranted: true
-                });
-
-                console.log('permission granted');
-
-                this.getCurrentPosition();
-            }
-
-        } catch (err) {
-            console.warn(err);
-        }
     }
 
     setPopupData(data) {
