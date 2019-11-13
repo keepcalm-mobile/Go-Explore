@@ -13,10 +13,10 @@ class EventsBridge {
     };
 
     static updateLocation(location) {
-        currentLocation = location;
+        this.currentLocation = location;
 
         console.log("EventsBridge, location:");
-        console.log(currentLocation);
+        console.log(this.currentLocation);
 
         if (this.mapRef != null) {
             this.mapRef.setLocation(location);
@@ -25,6 +25,11 @@ class EventsBridge {
         if (this.arScreenRef != null) {
             this.arScreenRef.setPosition(location);
         }
+
+        // setInterval(() => {
+        //     console.log("EventsBridge interval, location:");
+        //     console.log(this.currentLocation);
+        // }, 3000);
     }
 }
 

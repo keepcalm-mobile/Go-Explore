@@ -42,7 +42,7 @@ class ARComponent extends React.Component {
     };
 
     console.log('ar component props.location = ');
-    console.log(this.props.location);
+    console.log(EventsBridge.currentLocation);
   }
 
   componentDidMount() {
@@ -69,7 +69,7 @@ class ARComponent extends React.Component {
             {...this.state.sharedProps}
             initialScene={{scene:InitialARScene,
             passProps:{onClickHandler: this.onPOIClickHandler.bind(this), onTrackingLost: this.onTrackingLostHandler.bind(this),
-              location: this.state.currentPosition, heading: this.state.heading, poisData: this.state.poisData, offersData: this.state.offersData}}}
+              location: EventsBridge.currentLocation, heading: this.state.heading, poisData: this.state.poisData, offersData: this.state.offersData}}}
         />
     );
   }

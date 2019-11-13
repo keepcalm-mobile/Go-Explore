@@ -60,14 +60,14 @@ export default class MapComponent extends Component {
 
     this.state = {
       region: {
-        latitude: LATITUDE - 0.003,
-        longitude: LONGITUDE,
+        latitude: EventsBridge.currentLocation.latitude - 0.003,
+        longitude: EventsBridge.currentLocation.longitude,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
       heading: props.heading ? props.heading : -1,
       currentPosition: EventsBridge.currentLocation,
-      origin: {latitude: CURRENT_TEST_LOCATION[0], longitude: CURRENT_TEST_LOCATION[1]},
+      origin: {latitude: EventsBridge.currentLocation.latitude, longitude: EventsBridge.currentLocation.longitude},
       destination: false,
       navigationMode: NavigationModes.IDLE,
       travelMode: TravelModes.DRIVING,
@@ -110,8 +110,8 @@ export default class MapComponent extends Component {
                     style={{flex: 1}}
                     //customMapStyle={MapStyles}
                     initialRegion={{
-                      latitude: this.state.currentPosition.latitude,
-                      longitude: this.state.currentPosition.longitude,
+                      latitude: EventsBridge.currentLocation.latitude,
+                      longitude: EventsBridge.currentLocation.longitude,
                       latitudeDelta: 0.0922,
                       longitudeDelta: 0.0421,
                     }}
@@ -119,12 +119,12 @@ export default class MapComponent extends Component {
                       this.setState({currentPosition: EventsBridge.currentLocation});
 
                       console.log("Map component set location:");
-                      console.log(this.state.currentPosition);
+                      console.log(EventsBridge.currentLocation);
 
                       if (this.refMap && this.refMap !== null)
                       {
                         this.refMap.animateCamera({
-                            center: {latitude: this.state.currentPosition.latitude, longitude: this.state.currentPosition.longitude},
+                            center: {latitude: EventsBridge.currentLocation.latitude, longitude: EventsBridge.currentLocation.longitude},
                             //         pitch: 5,
                             //         heading: 0,
                             //         altitude: 30, // for ios only
@@ -192,12 +192,12 @@ export default class MapComponent extends Component {
 
   setLocation(location) {
 
-    console.log("Setting location = " + JSON.stringify(location));
+    console.log("Setting location = " + JSON.stringify(EventsBridge.currentLocation));
 
-    this.setState({currentPosition: location});
+    this.setState({currentPosition: EventsBridge.currentLocation});
 
     this.refMap.animateCamera({
-      center: {latitude: location.latitude, longitude: location.longitude},
+      center: {latitude: EventsBridge.currentLocation.latitude, longitude: EventsBridge.currentLocation.longitude},
       //         pitch: 5,
       //         heading: 0,
       //         altitude: 30, // for ios only
