@@ -45,7 +45,7 @@ class Header extends React.Component<Props> {
         );
     };
 
-    render = () => {
+    render() {
         const { items, onPress, onLayout } = this.props;
         return (
             <View style={s.container}>

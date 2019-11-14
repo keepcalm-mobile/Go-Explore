@@ -47,7 +47,7 @@ class OverlayLoader extends React.Component<Props> {
       color: this.props.color,
       fontSize: this.props.messageFontSize,
     };
-    if (typeof this.props.children !== 'undefined') {
+
       return (
         <Modal
           onRequestClose={() => {}}
@@ -61,39 +61,56 @@ class OverlayLoader extends React.Component<Props> {
           >
           <View style={[styles.container]}>
             <View style={[styles.innerContainer]}>
-              {this.props.children}
+            {
+                typeof this.props.children !== 'undefined'
+                    ?
+                this.props.children
+                    :
+                <>
+                    <ActivityIndicator
+                        style={[styles.indicator]}
+                        size={this.props.indicatorSize}
+                        color={this.props.color}
+                    />
+                    <Text style={[styles.message, messageStyle]}>
+                        {this.props.message}
+                    </Text>
+                </>
+            }
             </View>
           </View>
         </Modal>
       );
-    } else {
-      return (
-        <Modal
-          onRequestClose={() => {}}
-          animationType={'fade'}
-          transparent={true}
-          visible={this.props.visible}
-          supportedOrientations={['portrait', 'landscape']}
-          onOrientationChange={
-            evt => this.setState({currentOrientation: evt.nativeEvent.orientation})
-          }
-          >
-          <View style={[styles.container]}>
-            <View style={[styles.innerContainer]}>
-              <ActivityIndicator
-                style={[styles.indicator]}
-                size={this.props.indicatorSize}
-                color={this.props.color}
-                />
-              <Text style={[styles.message, messageStyle]}>
-                {this.props.message}
-              </Text>
-            </View>
-          </View>
-        </Modal>
-      );
-    }
   }
 }
 
 export default OverlayLoader;
+
+// if (typeof this.props.children !== 'undefined') {
+// } else {
+//   return (
+//     <Modal
+//       onRequestClose={() => {}}
+//       animationType={'fade'}
+//       transparent={true}
+//       visible={this.props.visible}
+//       supportedOrientations={['portrait', 'landscape']}
+//       onOrientationChange={
+//         evt => this.setState({currentOrientation: evt.nativeEvent.orientation})
+//       }
+//       >
+//       <View style={[styles.container]}>
+//         <View style={[styles.innerContainer]}>
+//           <ActivityIndicator
+//             style={[styles.indicator]}
+//             size={this.props.indicatorSize}
+//             color={this.props.color}
+//             />
+//           <Text style={[styles.message, messageStyle]}>
+//             {this.props.message}
+//           </Text>
+//         </View>
+//       </View>
+//     </Modal>
+//   );
+// }

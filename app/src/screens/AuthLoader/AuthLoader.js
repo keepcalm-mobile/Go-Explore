@@ -25,11 +25,11 @@ class AuthLoader extends React.Component<Props> {
     //     // nextProps.navigation.navigate( nextProps[ModMap.Auth].userInvalidate ? screens.AuthMng : screens.App);
     // }
 
-
+// <AuthBackground/>
     render() {
         return (
             <View style={s.container}>
-                <AuthBackground/>
+
                 <ActivityIndicator size={'small'} color={'#FFFFFF'}/>
                 <Text style={[s.welcome, s.row]}>Loading</Text>
             </View>
@@ -42,9 +42,12 @@ class AuthLoader extends React.Component<Props> {
     // }
 
     static getDerivedStateFromProps(props, state) {
-        if (!props.userIsReading) {
-            props.navigation.navigate(props.userInvalidate ? screens.AuthMng : screens.App);
-        }
+        // if (!props.userIsReading) {
+        //     props.navigation.navigate(props.userInvalidate ? screens.AuthMng : screens.App);
+        // }
+
+        if (!props.userIsReading) props.navigation.navigate(screens.App);
+
         return null;
     }
 

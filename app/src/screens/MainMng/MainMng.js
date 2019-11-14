@@ -13,6 +13,7 @@ import {getCurrentRoute, getCurrentRouteParams, getCurrentRouteKey} from '../../
 import {screens} from '../../constants';
 import LinearGradient from 'react-native-linear-gradient';
 import {OverlayLoader} from "../../components";
+import {Onboarding} from "../index";
 // import { BlurView, VibrancyView } from "@react-native-community/blur";
 
 const AnimatedGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -29,7 +30,7 @@ class MainMng extends React.Component{
             scrollOffset: props.scrollOffset,
             toHide: false,
             shadowIsHidden: true,
-            // main:0,
+            isLogged : !!props.auth.user,
         };
 
         this.panResponder = PanResponder.create({
@@ -107,9 +108,14 @@ class MainMng extends React.Component{
         // }
     };
 
+    _onboardingComplete = () => {
+        this.props.login();
+        this.setState({isLogged:true});
+    }
+
     render() {
-        const { navigation, isLoading } = this.props;
-        const { animVal } = this.state;
+        const { navigation, isLoading} = this.props;
+        const { animVal, isLogged } = this.state;
         const rotate = '0deg';
         const scale = 1;
         const translateX = 0;
@@ -140,7 +146,11 @@ class MainMng extends React.Component{
                     </TouchableOpacity>
 
                 </Animated.View>
-                <OverlayLoader visible={isLoading} message="Loading..." />
+                {
+                    !isLogged
+                        ? <Onboarding visible={true} finished={this._onboardingComplete}/>
+                        : <OverlayLoader visible={isLoading} message="Loading..."/>
+                }
             </View>
         );
     }

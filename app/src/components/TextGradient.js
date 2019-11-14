@@ -28,7 +28,7 @@ class TextGradient extends React.Component<Props> {
 
     render() {
         const {text, lineHeight, fontSize, fontFamily, fontWeight, style} = this.props;
-        const width = text.length * (fontSize * 0.56);
+        const width = text.length * (fontSize * 0.64);//0.56
         return (
             <Svg style={style} viewBox={'0 0 ' + width.toString() + ' ' + lineHeight.toString()} width={width} height={lineHeight.toString()} >
                 <Defs>

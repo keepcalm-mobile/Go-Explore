@@ -37,7 +37,7 @@ const RootNavigationView = createAppContainer(
             [screens.App]: MainMng,
             [screens.AuthMng]: AuthMng,
         },{
-            initialRouteName:screens.App,
+            initialRouteName:screens.InitialSetup,
         }
     )
 );
