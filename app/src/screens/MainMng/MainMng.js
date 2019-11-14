@@ -12,8 +12,8 @@ import IconBack from '../../../assets/serviceIcons/backIconMain.svg';
 import {getCurrentRoute, getCurrentRouteParams, getCurrentRouteKey} from '../../utils/navHelper';
 import {screens} from '../../constants';
 import LinearGradient from 'react-native-linear-gradient';
-import {OverlayLoader} from "../../components";
-import {Onboarding} from "../index";
+import {OverlayLoader} from '../../components';
+import {Onboarding} from '../index';
 // import { BlurView, VibrancyView } from "@react-native-community/blur";
 
 const AnimatedGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -111,7 +111,7 @@ class MainMng extends React.Component{
     _onboardingComplete = () => {
         this.props.login();
         this.setState({isLogged:true});
-    }
+    };
 
     render() {
         const { navigation, isLoading} = this.props;

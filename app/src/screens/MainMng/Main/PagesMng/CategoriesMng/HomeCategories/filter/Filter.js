@@ -1,15 +1,17 @@
 import React from 'react';
-import {Text, View, TextInput, Picker} from 'react-native';
-import s from './style';
+import {Text, View, TextInput, Picker, TouchableOpacity} from 'react-native';
+import s, {closeIconSize} from './style';
 import {colors, doubleIndent} from '../../../../../../../styles';
 import PropTypes from 'prop-types';
 
 import LinearGradient from 'react-native-linear-gradient';
 import {ButtonOrange, HorizontalLine} from '../../../../../../../components';
+import IconClose from '../../../../../../../../assets/serviceIcons/closeIcon.svg';
 
 class Filter extends React.Component<Props> {
     static propTypes = {
         onApplyClick: PropTypes.func.isRequired,
+        onCloseClick: PropTypes.func.isRequired,
         items: PropTypes.arrayOf(PropTypes.shape({
             id: PropTypes.string.isRequired,
             item: PropTypes.func.isRequired,
@@ -45,11 +47,17 @@ class Filter extends React.Component<Props> {
     };
 
     render() {
-        const {items, presets, filters} = this.props;
+        const {items, presets, filters, onCloseClick} = this.props;
 
         return (
             <LinearGradient style={s.filtersContainer} colors={[colors.darkSecondary, colors.lightSecondary]} useAngle={true} angle={92} angleCenter={{ x: 0.5, y: 0.5}}>
-                <Text style={s.filtersHeader}>Filters</Text>
+                <View key={'filterHeaderKey'} style={s.filtersHeaderCnt}>
+                    <View style={s.emptyHeader}/>
+                    <Text style={s.filtersHeader}>Filters</Text>
+                    <TouchableOpacity onPress = {onCloseClick} activeOpacity={0.5} style={[s.closeBtn]}>
+                        <IconClose width={closeIconSize}/>
+                    </TouchableOpacity>
+                </View>
 
                 {items.map( (item, key) => (
                     <>
@@ -60,7 +68,7 @@ class Filter extends React.Component<Props> {
                     </>
                 ))}
 
-                <ButtonOrange title={'APPLY FILTERS'} style={s.applyBtn} onPress={this.onApplyClick} />
+                <ButtonOrange key={'filterApplyBtnKey'} title={'APPLY FILTERS'} style={s.applyBtn} onPress={this.onApplyClick} />
             </LinearGradient>
         );
     }

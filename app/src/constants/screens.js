@@ -44,6 +44,7 @@ export default class {
             static Shopping = 'shopping';
             static Dining = 'dining';
             static HealthBeauty = 'health';
+            static Event = 'events';
 
     static SubMenu = 'SubMenu';
 
@@ -126,5 +127,6 @@ export default class {
 
     static ItemsActions = {
         [this.BookingTickets]:this.Cinema,
+        [this.Event]:this.Event,
     };
 }

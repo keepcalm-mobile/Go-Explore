@@ -141,7 +141,7 @@ class Onboarding extends React.Component<Props> {
                         loop={false}
                         inactiveSlideScale={1}
                         autoplay={false}
-                        scrollEnabled={false}
+                        scrollEnabled={true}
                         onSnapToItem={ this._setCurIdx }
                         // shouldOptimizeUpdates={false}
                         // containerCustomStyle={{marginTop:-20, alignContent:'flex-start', alignSelf:'flex-start'}}

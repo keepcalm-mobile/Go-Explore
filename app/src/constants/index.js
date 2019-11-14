@@ -16,6 +16,7 @@ const GET_ITEM_CATEGORY_API_ID = {
     [screens.HealthBeauty] : 'health/gethealthdetails',
     [screens.Shopping] : 'shopping/getshoppingdetails',
     [screens.Travel] : 'travel/gettraveldetails',
+    [screens.Event] : 'event/geteventdetails',
 };
 
 const GET_ITEM_CATEGORY_ID = {
@@ -25,6 +26,7 @@ const GET_ITEM_CATEGORY_ID = {
     [screens.HealthBeauty] : 'healthid',
     [screens.Shopping] : 'shoppingid',
     [screens.Travel] : 'travelid',
+    [screens.Event] : 'eventid',
 };
 
 export const MEDIA_PREF = '';

@@ -111,7 +111,6 @@ function loadItemData(iItemId, iType, iDispatch) {
         .then((response) => response.json())
         .then((data) => {
             // data = tempData[iItemId] ? tempData[iItemId] : tempData['0001'];
-            console.log('I T E M  D A T A  :  '  + JSON.stringify(data))
             data.comments = tempData.comments;
             data.explore = tempData.explore;
             iDispatch(updateItemData({[iItemId]: data}));

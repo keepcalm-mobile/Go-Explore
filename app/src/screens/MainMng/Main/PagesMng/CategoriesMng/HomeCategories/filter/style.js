@@ -2,6 +2,8 @@ import {StyleSheet} from 'react-native';
 import s, {colors, indent, fontNames, fontSizes, windowW, doubleIndent} from '../../../../../../../styles';
 import {scale} from '../../../../../../../utils/resize';
 
+export const closeIconSize = scale(22);
+
 const styles = StyleSheet.create({
     filtersContainer: {
         width: windowW - doubleIndent,
@@ -17,11 +19,28 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: indent,
     },
+    filtersHeaderCnt: {
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: scale(10),
+        width: '100%',
+    },
+    emptyHeader: {
+        width: closeIconSize + doubleIndent,
+        height: closeIconSize + doubleIndent,
+    },
     filtersHeader: {
         fontFamily: fontNames.bold,
         fontSize: fontSizes.big,
         color: colors.darkMain,
-        marginBottom: scale(10),
+        // marginLeft: closeIconSize + doubleIndent,
+    },
+    closeBtn:{
+        alignItems:'center',
+        justifyContent:'center',
+        width: closeIconSize + doubleIndent,
+        height: closeIconSize + doubleIndent,
     },
     filtersCategoryHeader: {
         color: '#ffffff',
@@ -35,5 +54,6 @@ const styles = StyleSheet.create({
         width:'100%',
         marginTop: doubleIndent,
     },
+
 });
 export default styles;

@@ -8,6 +8,7 @@ import Travel from './categories/Travel';
 import Shopping from './categories/Shopping';
 import Dining from './categories/Dining';
 import HealthBeauty from './categories/HealthBeauty';
+import Event from './categories/Event';
 import BookingTicket from './categories/Cinema/BookingTicket';
 import {colors} from '../../../../../styles';
 
@@ -20,6 +21,7 @@ const CategoriesNavi = createStackNavigator({
         [screens.Shopping]  : { screen: Shopping},
         [screens.Dining]  : { screen: Dining},
         [screens.HealthBeauty]  : { screen: HealthBeauty},
+        [screens.Event]  : { screen: Event},
         [screens.BookingTickets]  : { screen: BookingTicket},
     },{
         initialRouteName: screens.HotPicks,

@@ -28,8 +28,6 @@ class Main extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         const prevRouteName = getCurrentRoute(prevProps.navigation.state);
         const newRouteName = getCurrentRoute(this.props.navigation.state);
-        console.log('________ NAVI MAIN PREV ROUTE : ' + prevRouteName);
-        console.log('________ NAVI MAIN NEW ROUTE : ' + newRouteName);
 
         this._bottom.changeIcon(newRouteName);
 
