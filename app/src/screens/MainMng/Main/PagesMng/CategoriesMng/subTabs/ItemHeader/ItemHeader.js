@@ -14,6 +14,11 @@ class ItemHeader extends React.Component<Props> {
         data: PropTypes.object.isRequired,
         type: PropTypes.string.isRequired,
         onPress: PropTypes.func.isRequired,
+        hasDirection: PropTypes.bool,
+    };
+
+    static defaultProps = {
+        hasDirection: true,
     };
 
     constructor(props) {
@@ -25,7 +30,7 @@ class ItemHeader extends React.Component<Props> {
         const {image, title, tags, videoUrl} = this.props.data;
         const rating = this.props.data.rating[0] ? this.props.data.rating[0].split('/')[0] / 2 : 0;
         const reviews = this.props.data.rating[1] ? this.props.data.rating[1].split(',')[0] : 0;
-        const BtnIco = videoUrl === 'N/A' ? IconNavi : IconPlay;
+        const BtnIco = videoUrl === 'N/A' ? (this.props.hasDirection ? IconNavi : null) : IconPlay;
         return (
             <View key={this.props.type + 'HeaderKey'} style={s.header}>
                 <Image resizeMode={'cover'} style={s.image} source={{uri: image}} progressiveRenderingEnabled={true}/>
@@ -33,9 +38,12 @@ class ItemHeader extends React.Component<Props> {
 
                 <View style={s.titleCnt}>
                     <Text style={s.title}>{title}</Text>
-                    <TouchableOpacity onPress = {this.props.onPress} activeOpacity={0.5} style={s.rightBtn}>
-                        <BtnIco width={scale(40)} height={scale(40)}/>
-                    </TouchableOpacity>
+                    {BtnIco ?
+                        <TouchableOpacity onPress={this.props.onPress} activeOpacity={0.5} style={s.rightBtn}>
+                            <BtnIco width={scale(40)} height={scale(40)}/>
+                        </TouchableOpacity>
+                        : null
+                    }
                 </View>
                 <View style={s.ratingCnt}>
                     <Rating editable={false} max={5} rating={rating} iconWidth={scale(16.5)} iconHeight={scale(16.5)}/>
