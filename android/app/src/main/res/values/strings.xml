@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">goExploreApp</string>
+    <string name="app_name">goExplore</string>
     <string name="google_geo_id">AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA</string>
     <string name="facebook_app_id">2506051389610271</string>
     <string name="fb_login_protocol_scheme">fb2506051389610271</string>

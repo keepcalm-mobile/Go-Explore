@@ -107,8 +107,6 @@ PODS:
     - React-cxxreact (= 0.60.5)
     - React-jsi (= 0.60.5)
   - React-jsinspector (0.60.5)
-  - react-native-blur (0.8.0):
-    - React
   - react-native-fbsdk (1.0.3):
     - React
     - react-native-fbsdk/Core (= 1.0.3)
@@ -156,11 +154,11 @@ PODS:
     - React-Core (= 0.60.5)
   - React-RCTWebSocket (0.60.5):
     - React-Core (= 0.60.5)
-  - RNCAsyncStorage (1.6.1):
+  - RNCAsyncStorage (1.6.3):
     - React
-  - RNGestureHandler (1.4.1):
+  - RNGestureHandler (1.5.0):
     - React
-  - RNReanimated (1.2.0):
+  - RNReanimated (1.4.0):
     - React
   - RNSVG (9.8.4):
     - React
@@ -186,7 +184,6 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
@@ -251,8 +248,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-  react-native-blur:
-    :path: "../node_modules/@react-native-community/blur"
   react-native-fbsdk:
     :path: "../node_modules/react-native-fbsdk"
   react-native-geolocation:
@@ -320,7 +315,6 @@ SPEC CHECKSUMS:
   React-jsi: 4d8c9efb6312a9725b18d6fc818ffc103f60fec2
   React-jsiexecutor: 90ad2f9db09513fc763bc757fdc3c4ff8bde2a30
   React-jsinspector: e08662d1bf5b129a3d556eb9ea343a3f40353ae4
-  react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-fbsdk: 7bde3b84fc093d2c5e7fdccea03fe8fa9f112834
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-google-maps: 88d750ad441b19c24885f20d43a55ecac25939b5
@@ -336,9 +330,9 @@ SPEC CHECKSUMS:
   React-RCTText: b074d89033583d4f2eb5faf7ea2db3a13c7553a2
   React-RCTVibration: 2105b2e0e2b66a6408fc69a46c8a7fb5b2fdade0
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
-  RNCAsyncStorage: 621bad7a889b5bf1583a52547f2dcd3a4d1ff15e
-  RNGestureHandler: 4cb47a93019c1a201df2644413a0a1569a51c8aa
-  RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
+  RNCAsyncStorage: 6b57de0f6cb0dcfd17521af1681fa39001d3efff
+  RNGestureHandler: a4ddde1ffc6e590c8127b8b7eabfdade45475c74
+  RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
   RNSVG: a78b4c581e33a1bb72968997d167afabf72b05dc
   ViroKit_static_lib: ae9c112ac4b128f8d4466fc581c7b07a0264754d
   ViroReact: 7ec32276dcd1883662b4587eaedfff67f7fc3625

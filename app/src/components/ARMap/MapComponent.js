@@ -11,7 +11,8 @@ import {
   ToastAndroid,
   Alert
 } from 'react-native';
-
+import {scale} from '../../utils/resize';
+import {startY, windowH} from "../../styles";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import MapViewNavigation, { NavigationModes, TravelModeBox, TravelIcons, Geocoder, TravelModes, DirectionsListView, ManeuverView, DurationDistanceView } from 'react-native-maps-navigation';
 
@@ -27,13 +28,14 @@ const getMethods = (obj) => {
 //Disable warnings box
 console.disableYellowBox = true;
 
-const windowH = Dimensions.get('window').height;
+// const windowH = Dimensions.get('window').height;
 const windowW = Dimensions.get('window').width;
 const tripleWidth = windowW * 3;
-const maskOffset = windowH - 400;
+const maskOffset = windowH * 0.33;
 
 import mapStyles from './mapStyles.json';
 import EventsBridge from '../../utils/EventsBridge.js';
+
 const CURRENT_TEST_LOCATION = [40.6976637,-74.1197639];
 const GOOGLE_MAPS_APIKEY = 'AIzaSyA7rncWjnX4Ugd5OoCnMNNT2D3KfDlgp6Y'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
@@ -93,7 +95,7 @@ export default class MapComponent extends Component {
 
           {this.getExitNavigation()}
 
-          <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center', paddingTop: maskOffset}}>
+          <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center', paddingTop: maskOffset*2-scale(35)}}>
             <View style={{backgroundColor: '#a0a0ff', width: tripleWidth, height: tripleWidth, borderRadius: tripleWidth, overflow: 'hidden', justifyContent: 'flex-start', alignItems: 'center'}}>
               <View
                   style={{

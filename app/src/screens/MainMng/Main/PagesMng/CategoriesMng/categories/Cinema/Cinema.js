@@ -102,7 +102,7 @@ class Cinema extends ScrollablePage {
         return (
             <ScrollView contentContainerStyle={s.container} onScroll={this.onScroll}>
                 <ItemHeader type={type} data={header} onPress={this.onPlayBtnPress}/>
-                {movieId ? <ButtonOrange onPress={this.onBookTicketPress} title={'BOOK TICKET'}/> : null}
+                {movieId ? <ButtonOrange onPress={this.onBookTicketPress} title={'COMING SOON (BOOK TICKET)'}/> : null}
                 <TabView
                     navigationState={this.state}
                     renderScene={this.renderScene}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ScrollView, Text, TouchableOpacity, View, Linking} from 'react-native';
+import {Image, ScrollView, Text, TouchableOpacity, View, Linking, Platform} from 'react-native';
 import s from './style';
 import LinearGradient from 'react-native-linear-gradient';
 import Toast from 'react-native-simple-toast';
@@ -9,6 +9,7 @@ import IconFilter from '../../../../../../../../../assets/serviceIcons/playIcon.
 import ScrollablePage from '../../../../ScrollablePage';
 import {HorizontalLine, Location, ExperienceSelector, CinemaDate, CinemaTime, CinemaTicketType} from '../../../../../../../../components';
 import {windowH} from "../../../../../../../../styles";
+import {YouTubeStandaloneAndroid, YouTubeStandaloneIOS} from "react-native-youtube";
 
 class BookingTicket extends ScrollablePage {
     constructor(props) {
@@ -27,14 +28,40 @@ class BookingTicket extends ScrollablePage {
         this._filterSet = [];
     }
 
+    getYouTubeVideoId = (url) => {
+        const regExp = /^.*((www.youtube.com\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\??v?=?))([^#&\?]*).*/
+        const match = url.match(regExp);
+
+        if (match && match[7].length === 11) {
+            return match[7];
+        }
+        return false;
+    };
+
     onPlayBtnPress = () => {
-        Linking.canOpenURL(this.props.data.header.url).then(supported => {
-            if (supported) {
-                Linking.openURL(this.props.data.header.url);
+        // Linking.canOpenURL(this.props.data.header.videoUrl).then(supported => {
+        //     if (supported) {
+        //         Linking.openURL(this.props.data.header.videoUrl);
+        //     } else {
+        //         console.log("Don't know how to open URI: " + this.props.data.header.videoUrl);
+        //     }
+        // });
+        const videoID = this.getYouTubeVideoId(this.props.data.header.videoUrl);
+        if (videoID){
+            if (Platform.OS === 'android') {
+                YouTubeStandaloneAndroid.playVideo({
+                    apiKey: 'AIzaSyD8hmW3E184MjjKIdhdKK1IWiClEdl5iWw',
+                    videoId: videoID,
+                    autoplay: true,
+                })
+                    .then(() => console.log('Standalone Player Exited'))
+                    .catch(errorMessage => console.error(errorMessage));
             } else {
-                console.log("Don't know how to open URI: " + this.props.data.header.url);
+                YouTubeStandaloneIOS.playVideo(videoID)
+                    .then(message => console.log(message))
+                    .catch(errorMessage => console.error(errorMessage));
             }
-        });
+        }
     };
 
     onLocationSelect = (iValue) => {

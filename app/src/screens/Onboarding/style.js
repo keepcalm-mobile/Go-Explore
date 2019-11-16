@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     slide: {
         // flex: 1,
         height: '100%',
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-end',
         backgroundColor: 'transparent',
     },
     image: {
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
         top: '40%',
     },
     infoCnt: {
-        marginTop: 400,
+        // marginTop: scale(550),
+        marginBottom: scale(50),
     },
     titleCnt: {
         flexDirection:'row',
