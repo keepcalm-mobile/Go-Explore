@@ -59,10 +59,23 @@ export default class PointOfInterest extends React.Component {
         this.onClickHandler = this.onClickHandler.bind(this);
         this.onOfferClickHandler = this.onOfferClickHandler.bind(this);
         this.onOfferAnimationFinished = this.onOfferAnimationFinished.bind(this);
+        this.getOffers = this.getOffers.bind(this);
+        this.isMinimized = this.isMinimized.bind(this);
 
         this.showTest = true;
 
         console.log(this.state.title + "  ----  " + this.state.kind);
+    }
+
+    isMinimized() {
+        return this.state.isMinimized;
+    }
+
+    getOffers() {
+        if (typeof(this.props.offers !== 'undefined'))
+            return this.props.offers;
+        else
+            return [];
     }
 
     setPosition(position) {

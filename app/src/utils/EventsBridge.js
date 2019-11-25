@@ -6,6 +6,7 @@ class EventsBridge {
     static arScreenRef = null;
     static arSceneCurrentNavigationItem = null;
     static currentPlacesData = [];
+    static groupingARIteration = 0;
 
     static currentLocation = {
         latitude: 25.2864106,

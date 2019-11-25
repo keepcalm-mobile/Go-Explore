@@ -148,8 +148,8 @@ class ARScene extends React.Component {
 
         this.testPois = true;
 
-        // temp value here
-        for(let i=0;i<this.state.pois.length;i++) {
+        // temp value here, moved to groupPois
+        for(let i=0;i<MAX_AR_OBJECTS*2;i++) {
             this.PoiRefs.push(React.createRef());
         }
 
@@ -198,7 +198,7 @@ class ARScene extends React.Component {
 
         // console.log('After json: pois length = ' + POIs.length);
 
-        this.trackDeviceHeading(); // UNCOMMENT AFTER TEST
+        // this.trackDeviceHeading(); // UNCOMMENT AFTER TEST
 
         // if (this.testPois === true) {
         //     console.log("GOT POIS:");
@@ -254,36 +254,56 @@ class ARScene extends React.Component {
         // }
 
         let pointsOfInterest = [];
-        let currentPOIs = POIs;
 
         // console.log("type == "+typeof(currentPOIs));
         // console.log(currentPOIs);
 
-        if (this.state.poisReady) {
-            for (let i = 0; i < currentPOIs.length; i++) {
+        if (!POIs) {
+            return;
+        }
+
+        if (this.PoiRefs !== null && this.PoiRefs.length > 0) {
+            for (let i = 0; i < POIs.length; i++) {
+
+                if (typeof(POIs[i].position) === 'undefined')
+                {
+                    console.log('POIs[i].position failed');
+                    POIs[i].position = {x: 0, y: 0, z: 10};
+                    // continue;
+                }
+
                 pointsOfInterest.push(
                     <PointOfInterest
                         onClickHandler={this.onPOIClickedHandler}
                         key={i}
-                        position={[currentPOIs[i].position.x, currentPOIs[i].position.y, -currentPOIs[i].position.z]}
-                        coords={{latitude: currentPOIs[i].latitude, longitude: currentPOIs[i].longitude}}
-                        title={currentPOIs[i].title}
-                        subtitle={currentPOIs[i].subTitle}
-                        distance={getDistanceBetweenCoordinates(currentPOIs[i].latitude, currentPOIs[i].longitude, this.state.currentPosition.latitude, this.state.currentPosition.longitude)}
-                        rating={currentPOIs[i].rating}
-                        // votes={currentPOIs[i].votes}
-                        // icon={currentPOIs[i].icon}
-                        offerEndDate={currentPOIs[i].offerEndDate}
-                        offers={currentPOIs[i].offers}
-                        image={currentPOIs[i].image}
-                        kind={currentPOIs[i].kind}
+                        position={[POIs[i].position.x, POIs[i].position.y, -POIs[i].position.z]}
+                        coords={{latitude: POIs[i].latitude, longitude: POIs[i].longitude}}
+                        title={POIs[i].title}
+                        subtitle={POIs[i].subTitle}
+                        distance={getDistanceBetweenCoordinates(POIs[i].latitude, POIs[i].longitude, this.state.currentPosition.latitude, this.state.currentPosition.longitude)}
+                        rating={POIs[i].rating}
+                        // votes={POIs[i].votes}
+                        // icon={POIs[i].icon}
+                        offerEndDate={POIs[i].offerEndDate}
+                        offers={POIs[i].offers}
+                        image={POIs[i].image}
+                        kind={POIs[i].kind}
                         ref={(ref) => {
                             this.PoiRefs[i] = ref;
                         }}
                     />
                 );
             }
+
+            if (this.state.poisReady === false) {
+                console.log('POIS NOT READY');
+                this.setState({poisReady: true});
+                this.setPointsOfInterest();
+                // return;
+            }
         }
+
+        
 
         return (
             <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this.onCameraTransformUpdateHandler}>
@@ -349,6 +369,8 @@ class ARScene extends React.Component {
             clearInterval(this.updateTimer);
             this.updateTimer = null;
         }
+
+        EventsBridge.groupingARIteration = 0;
     }
 
     setCalibrationOffset() {
@@ -415,8 +437,8 @@ class ARScene extends React.Component {
                     // this.setState({northPosition: [3,1, -8]});
 
                     this.initialHeading = this.heading;
-
-                    this.setPointsOfInterest();
+                    this.trackDeviceHeading();
+                    // this.setPointsOfInterest();
                     // setTimeout(() => {
                     //     this.setPointsOfInterest();
                     // }, 1000);
@@ -461,12 +483,12 @@ class ARScene extends React.Component {
 
         //HEADING = degree;
 
-        let degree = this.heading;
+        // let degree = this.heading;
 
         // if (this.initialHeading === -1) {
             //this.setState({initialHeading: degree});
 
-            this.initialHeading = this.props.heading;
+            // this.initialHeading = this.props.heading;
             // console.log('Setting points of interest... initial heading set to = ' +  degree);
 
             //this.setPointsOfInterest();
@@ -487,11 +509,21 @@ class ARScene extends React.Component {
     }
 
     setPointsOfInterest() {
+
+        // return;
+
+        if (this.state.poisReady === false) {
+            console.log('setPointsOfInterest: POIS NOT READY');
+            return;
+        }
+
         updateCounter++;
 
         if (!this.state.pois || this.state.pois.length < 1) {
             return null;
         }
+
+        EventsBridge.groupingARIteration++;
 
         //// no more need in this
         // this._formARObjectsCollection(); // Merge Offers and POIs into a single array
@@ -517,11 +549,27 @@ class ARScene extends React.Component {
             // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
         }
 
-        // console.log('before grouping');
+        console.log('before grouping');
+
+        if (!this.PoiRefs || this.PoiRefs === null) {
+
+            console.log('SETUPING REFS!!!');
+
+            this.PoiRefs = [];
+            for(let i=0;i<MAX_AR_OBJECTS*2;i++) {
+                this.PoiRefs.push(React.createRef());
+            }
+        }
 
         this._groupPOIs();
 
-        // console.log('after grouping');
+        // if (this.state.poisReady === false) {
+        //     console.log('POIS NOT READY');
+        //     this.setState({poisReady: true});
+        //     // return;
+        // }
+
+        console.log('after grouping');
 
         // return;
 
@@ -630,16 +678,6 @@ class ARScene extends React.Component {
     }
 
     _groupPOIs() {
-
-        // let arr = [...POIs];
-        //
-        // ToastAndroid.showWithGravity(JSON.stringify(arr), ToastAndroid.LONG, ToastAndroid.CENTER);
-
-        // let difference = 10;
-        //
-        // //sort(POIs).asc(x => cartesianToPolar(x.position.x, x.position.z).degrees);
-        //
-
         let difference = 70;
 
         let height = 0.05;
@@ -665,12 +703,26 @@ class ARScene extends React.Component {
                 POIs[i].position.y = height;
                 height += inc;
 
-                if (typeof (this.PoiRefs[i]) !== 'undefined' && typeof (this.PoiRefs[i].state) !== 'undefined' && typeof (this.PoiRefs[i].state.offers) !== 'undefined' && this.PoiRefs[i].state.offers.length > 0) {
-                    if (this.PoiRefs[i].state.isMinimized === false)
-                        height += 1 * this.PoiRefs[i].state.offers.length; // TODO: Set offer height somewhere
-                    else
-                        height += 1;
-                }
+                // if (typeof (this.PoiRefs[i]) !== 'undefined' && this.PoiRefs[i] !== null
+                //     && typeof (this.PoiRefs[i].getOffers) !== 'undefined' 
+                //     && typeof (this.PoiRefs[i].getOffers()) !== 'undefined' && this.PoiRefs[i].getOffers().length > 0) {
+
+                    // if (this.PoiRefs[i].isMinimized() === false)
+                        height += 1 * this.PoiRefs[i].getOffers().length; // TODO: Set offer height somewhere
+                    // else
+                    //     height += 1;
+                // }
+                // else {
+                //     console.log('Error: something is null or undefined, failed to group places. methods:');
+
+                //     let classObj = this.PoiRefs[i];
+
+                //     console.log(Object.getOwnPropertyNames(classObj).filter(function (x) {
+                //         return typeof classObj[x] === 'function'
+                //       }));
+
+                //     continue;
+                // }
 
                 for (let k = 0; k < POIs.length; k++) {
                     if (k !== i) {
@@ -687,19 +739,17 @@ class ARScene extends React.Component {
                             POIs[k].position.y = height;
                             height += inc;
 
-                            if (typeof (this.PoiRefs[k]) !== 'undefined' && typeof (this.PoiRefs[k].state) !== 'undefined' && typeof (this.PoiRefs[k].state.offers) !== 'undefined' && this.PoiRefs[k].state.offers.length > 0) {
-                                if (this.PoiRefs[k].state.isMinimized === false)
-                                    height += 1 * this.PoiRefs[k].state.offers.length; // TODO: Set offer height somewhere
-                                else
-                                    height += 1;
+                            if (typeof (this.PoiRefs[k]) !== 'undefined' && typeof (this.PoiRefs[k].getOffers) !== 'undefined' && typeof (this.PoiRefs[k].getOffers()) !== 'undefined') {
+                                // if (this.PoiRefs[k].isMinimized() === false)
+                                    height += 1 * this.PoiRefs[k].getOffers().length; // TODO: Set offer height somewhere
+                                // else
+                                //     height += 1;
                             }
                         }
                     }
                 }
             }
         }
-
-        this.setState({poisReady: true});
     }
 
     _formARObjectsCollection() {
