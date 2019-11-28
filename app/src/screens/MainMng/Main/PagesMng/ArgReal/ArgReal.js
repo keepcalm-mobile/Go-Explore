@@ -231,6 +231,32 @@ class ArgReal extends ScrollablePage {
         }
     }
 
+    getWaitingOverlay() {
+        if (EventsBridge.groupingARIteration < 2) {
+            let tutorialText = 'Please, slowly move your phone around\nStarting AR...';
+
+            if (launchAR === false) {
+                tutorialText = 'Loading places data...';
+            }
+
+            return (
+                <View style={{
+                    position: 'absolute',
+                    top: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: '#000000',
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{fontSize: 22, color: '#dddddd', textAlign: 'center'}}>{tutorialText}</Text>
+                </View>
+            );
+        }
+        else {
+            return null;
+        }
+    }   
+
     getARButton() {
         if (this.state.arRunning === true) {
             return null;
@@ -373,6 +399,7 @@ class ArgReal extends ScrollablePage {
 
                 </View>
 
+                {this.getWaitingOverlay()}
                 {this.getSpecialOfferPopup()}
 
             </View>
