@@ -16,6 +16,7 @@ import {
 
 import PointOfInterest from './PointOfInterest';
 import EventsBridge from '../../utils/EventsBridge';
+import { _ } from 'core-js';
 // import PoisData from './pois.json';
 // import OffersData from './offers.json';
 
@@ -121,8 +122,8 @@ class ARScene extends React.Component {
             normalizationMaximumPoint: null,
             initialHeading: this.props.heading,
             //heading: this.props.heading,
-            pois: this.props.poisData,
-            offers: this.props.offersData,
+            pois: this.props.poisData ? this.props.poisData : [],
+            offers: this.props.offersData ? this.props.offersData : [],
             // placesOffersCollection: [],
             poisReady: false,
             northPosition: [0,0, -7],
@@ -309,7 +310,7 @@ class ARScene extends React.Component {
             <ViroARScene ref={(scene)=>{this.scene = scene}} onTrackingUpdated={this._onInitialized} onCameraTransformUpdate={this.onCameraTransformUpdateHandler}>
                 {/*<ViroText text={this.state.text2} scale={[.5, .5, .5]} position={[0, 0, -5]} style={styles.helloWorldTextStyle} ref={(ref) => { this.refText = ref }} />*/}
 
-                {/*{this.getTestPOI()}*/}
+                {/* {this.getTestPOI()} */}
 
                 {pointsOfInterest}
 
@@ -318,18 +319,21 @@ class ARScene extends React.Component {
     }
 
     getTestPOI() {
-        if (this.state.poisReady === true) {
+        // if (this.state.poisReady === true) {
             return (
                 <ViroFlexView ref={(ref) => {
                     this.testRef = ref;
-                }} position={this.state.northPosition} width={2} height={1} style={{backgroundColor: '#ffffff', justifyContent: 'center'}}>
+                }} onClick={(pos, src) => {
+                    console.log('CLIIIIIIIIICK !!!!');
+
+                }}  position={this.state.northPosition} width={2} height={1} style={{backgroundColor: '#ffffff', justifyContent: 'center'}}>
                     <ViroText text={'NORTH???'} width={2} height={0.5} style={styles.helloWorldTextStyle} />
                 </ViroFlexView>
             );
-        }
-        else {
-            return null;
-        }
+        // }
+        // else {
+        //     return null;
+        // }
     }
 
     setData(places, offers) {
@@ -497,11 +501,13 @@ class ARScene extends React.Component {
             //     this.setPointsOfInterest();
             // }, 1000);
 
+            this.setPointsOfInterest();            
+
             //setInterval
-        this.updateTimer = setInterval(() => {
+            this.updateTimer = setInterval(() => {
                 this.setPointsOfInterest();
                 // console.log('pois ready = ' + this.state.poisReady);
-            }, 2000);
+            }, 1500);
         // }
 
         // this.setState({text2: 'Initial: ' + this.state.initialHeading + '\n current: ' + this.state.heading});
@@ -549,7 +555,7 @@ class ARScene extends React.Component {
             // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees);
         }
 
-        console.log('before grouping');
+        // console.log('before grouping');
 
         if (!this.PoiRefs || this.PoiRefs === null) {
 
@@ -569,7 +575,7 @@ class ARScene extends React.Component {
         //     // return;
         // }
 
-        console.log('after grouping');
+        // console.log('after grouping');
 
         // return;
 
@@ -588,7 +594,7 @@ class ARScene extends React.Component {
                 // console.log("poi "+j+" angle: " + cartesianToPolar(POIs[j].position.x, POIs[j].position.z).degrees + "  Y = " + POIs[j].position.y);
             }
 
-            console.log('pois repositioned: ' + POIs.length);
+            // console.log('pois repositioned: ' + POIs.length);
         }
 
         //console.log('Skate park: ' + JSON.stringify(POIs[3].position) + '  ih = ' + this.state.initialHeading);
@@ -708,6 +714,7 @@ class ARScene extends React.Component {
                 //     && typeof (this.PoiRefs[i].getOffers()) !== 'undefined' && this.PoiRefs[i].getOffers().length > 0) {
 
                     // if (this.PoiRefs[i].isMinimized() === false)
+                    if (this.PoiRefs[i] && this.PoiRefs[i].getOffers && this.PoiRefs[i].getOffers())
                         height += 1 * this.PoiRefs[i].getOffers().length; // TODO: Set offer height somewhere
                     // else
                     //     height += 1;

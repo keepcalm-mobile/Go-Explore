@@ -107,8 +107,9 @@ export default class PointOfInterest extends React.Component {
     }
 
     onClickHandler(position, source) {
-        console.log('CLICKED: ' + this.state.title);
+        console.log('CLICKED (disabled for test): ' + this.state.title);
 
+        // return;
 
         //test
 

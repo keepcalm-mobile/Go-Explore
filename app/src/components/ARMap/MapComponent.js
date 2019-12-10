@@ -44,11 +44,11 @@ const LONGITUDE = CURRENT_TEST_LOCATION[1];
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
 
-const AppFonts = {
-  regular: 'Akkurat-Normal',
-  bold: 'Akkurat-Bold',
-  light: 'Akkurat-Light'
-};
+// const AppFonts = {
+//   regular: 'Akkurat-Normal',
+//   bold: 'Akkurat-Bold',
+//   light: 'Akkurat-Light'
+// };
 
 /**
  * Set to true to use the controls methods instead of props
@@ -91,11 +91,11 @@ export default class MapComponent extends Component {
 
     return (
 
-        <View style={{flex: 1, flexDirection: 'row', height: '100%'}}>
+        // <View style={{flex: 1, flexDirection: 'row', height: '100%'}}>
 
-          {this.getExitNavigation()}
+          // {this.getExitNavigation()}
 
-          <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center', paddingTop: maskOffset*2-scale(35)}}>
+          <View style={{flex: 1, justifyContent: 'flex-start', alignItems: 'center', marginTop: maskOffset*2-scale(35)}}>
             <View style={{backgroundColor: '#a0a0ff', width: tripleWidth, height: tripleWidth, borderRadius: tripleWidth, overflow: 'hidden', justifyContent: 'flex-start', alignItems: 'center'}}>
               <View
                   style={{
@@ -159,7 +159,7 @@ export default class MapComponent extends Component {
             </View>
           </View>
 
-        </View>
+        // </View>
     );
   }
 
@@ -214,6 +214,8 @@ export default class MapComponent extends Component {
     //   // this.navigationTimer = null;
     // }
 
+    console.log('NAVIGATING TO: ' + JSON.stringify(target));
+
     this.isPositionSet = false;
     this.startedNavigation = true;
     this.setState({destination: target});
@@ -222,6 +224,8 @@ export default class MapComponent extends Component {
       this.goDisplayRoute();
 
     //}, 1000);
+
+    console.log('Destination = : ' + JSON.stringify(target));
 
      setTimeout(() => {
 
@@ -245,7 +249,7 @@ export default class MapComponent extends Component {
       //
       // }, 500);
 
-    }, 200);
+    }, 2000);
   }
 
   getCurrentPositionMarker() {
@@ -290,8 +294,8 @@ export default class MapComponent extends Component {
         }}>
           <ManeuverView
               step={this.state.step}
-              fontFamily={AppFonts.light}
-              fontFamilyBold={AppFonts.bold}
+              //fontFamily={AppFonts.light}
+              //fontFamilyBold={AppFonts.bold}
               arrowColor={'#cccccc'}
           />
         </View>

@@ -131,11 +131,11 @@ class Main extends React.Component {
         const [translateX, translateY] = [pan.x, pan.y];
         const rotate = '0deg';
         const transformStyle = {transform: [{translateX}, {translateY}, {rotate}, {scale}]};
-        const animStyle = {borderRadius : scale.interpolate({ inputRange: [0.8, 1], outputRange: [20, 0] })};
+        const animStyle = {borderRadius : scale.interpolate({ inputRange: [0.8, 1], outputRange: [20, 0] })}; // removed it from styles due to AR objects clicking bug
 
         return (
             <Animated.View {...panHandlers} style={[s.container, transformStyle]} removeClippedSubviews={true} >
-                <Animated.View style={[s.containerOverflow, animStyle]} pointerEvents={this.state.cntEnable} >
+                <Animated.View style={[s.containerOverflow/*, animStyle*/]} pointerEvents={this.state.cntEnable} >
                     <PagesMng ref={c => this._pagesMng = c} navigation={navigation}/>
                     <Map ref={c => this._map = c}/>
                     <MenuPages ref={c => this._bottom = c} onButtonPress={this.openPage}/>

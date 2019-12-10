@@ -155,7 +155,8 @@ class ArgReal extends ScrollablePage {
 
         }
 
-        this.mapComponent.setLocation(this.state.currentPosition);
+        if (this.mapComponent)
+            this.mapComponent.setLocation(this.state.currentPosition);
 
         if (this.state.initialPosition === null) {
             this.setState({initialPosition: this.state.currentPosition});
@@ -297,7 +298,7 @@ class ArgReal extends ScrollablePage {
     }
 
     onPOIClickHandler(poi) {
-        // console.log('App CLICKED: ' + poi.title + ' coords: ' + JSON.stringify(poi.coords));
+        console.log('App CLICKED: ' + poi.title + ' coords: ' + JSON.stringify(poi.coords));
         //console.log('app this.state = ' + this.state);
 
         this.mapComponent.navigateTo(poi.coords);
@@ -392,12 +393,12 @@ class ArgReal extends ScrollablePage {
                     ref={ref => this.mapComponent = ref}
                 />
 
-                <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
+                {/* <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
 
                     {this.getTutorial()}
                     {this.getARButton()}
 
-                </View>
+                </View> */}
 
                 {this.getWaitingOverlay()}
                 {this.getSpecialOfferPopup()}
@@ -410,7 +411,7 @@ class ArgReal extends ScrollablePage {
 
 var styles = StyleSheet.create({
     popupText: {
-        fontFamily: 'Poppins, sans-serif',
+        //fontFamily: 'Poppins, sans-serif',
         color: '#ffffff',
         fontSize: 14
     },
@@ -464,7 +465,7 @@ var styles = StyleSheet.create({
     headerText: {
         fontWeight: 'bold',
         fontSize: 20,
-        fontFamily: 'Poppins, sans-serif',
+        //fontFamily: 'Poppins, sans-serif',
         color: '#ffffff'
     },
 
@@ -488,13 +489,13 @@ var styles = StyleSheet.create({
         fontSize: 14,
         color: '#f2c94c',
         fontWeight: 'bold',
-        fontFamily: 'Poppins, sans-serif',
+        //fontFamily: 'Poppins, sans-serif',
     },
 
     subtext : {
         fontSize: 10,
         color: '#939393',
-        fontFamily: 'Poppins, sans-serif',
+        //fontFamily: 'Poppins, sans-serif',
     },
 
     borderContainer: {
@@ -557,7 +558,7 @@ var styles = StyleSheet.create({
 
     footerText : {
         fontSize: 14,
-        fontFamily: 'Poppins, sans-serif',
+        //fontFamily: 'Poppins, sans-serif',
         color: '#ffffff'
     },
 
