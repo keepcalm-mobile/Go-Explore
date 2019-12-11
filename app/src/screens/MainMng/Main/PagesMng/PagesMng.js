@@ -109,12 +109,12 @@ class PagesMng extends React.Component<Props> {
 
     setPosition(position) {
 
-        console.log("Position updated:");
-        console.log(position);
+        console.log("Position updated");
+        // console.log(position);
 
         let pos = {latitude: position.coords.latitude, longitude: position.coords.longitude};
 
-        console.log(JSON.stringify(position));
+        // console.log(JSON.stringify(position));
 
         this.setState({
             currentPosition: pos,

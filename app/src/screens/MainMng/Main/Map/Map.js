@@ -98,6 +98,9 @@ class Map extends React.Component<Props> {
 
             this.isOpen = true;
         }
+
+        // console.log('CUR LOCATION:');
+        // console.log(JSON.stringify(EventsBridge.currentLocation));
     }
 
     get isOpen () : Boolean {
@@ -136,6 +139,9 @@ class Map extends React.Component<Props> {
      * NAVIGATION
     ****/
     async componentDidMount() {
+
+        console.log('-- MAP mounted');
+
         this._lastGeolocation = await AsyncStorage.getItem('LastGPS');
 
         EventsBridge.mapRef = this;

@@ -71,6 +71,7 @@ class ArgReal extends ScrollablePage {
         this._interval = null;
         RNSimpleCompass.stop();
         this.exitNavigation();
+        launchAR = false;
         this.setState({heading: 0, readyForAR: false, arRunning: false});
     };
 
@@ -226,7 +227,7 @@ class ArgReal extends ScrollablePage {
                   //         console.log(respJson);
                   //     });
                   // }
-            });
+            }).catch(err => {console.log('Failed to load places');});
     }
 
     getTutorial() {

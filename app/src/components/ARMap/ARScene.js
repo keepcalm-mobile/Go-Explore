@@ -435,7 +435,7 @@ class ARScene extends React.Component {
 
             this.scene.getCameraOrientationAsync().then(
                 (orientation)=>{
-                    console.log(orientation);
+                    // console.log(orientation);
 
                     this.cameraPosition = orientation.position;
                     // this.setState({northPosition: [3,1, -8]});

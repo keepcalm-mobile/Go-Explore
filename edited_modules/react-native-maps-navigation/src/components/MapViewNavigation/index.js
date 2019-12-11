@@ -21,6 +21,8 @@ import {Circle, Polygon, Polyline} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {ToastAndroid} from  'react-native';
 
+import Toast from 'react-native-simple-toast';
+
 const GPS_TIMEOUT = 30000;
 const GPS_MAXIMUM_AGE = 60000;
 
@@ -421,7 +423,7 @@ export default class MapViewNavigation extends Component {
     prepareRoute(origin, destination, options = false, testForRoute = false) // testForRoute was false
     {
 
-        console.log('prepare route start...');
+        // console.log('prepare route start...');
 
         if(testForRoute && this.state.route) {
             return Promise.resolve(this.state.route);
@@ -429,19 +431,27 @@ export default class MapViewNavigation extends Component {
 
         try {
 
-            console.log('*** debugging active, origin: ' + JSON.stringify(origin) + '  ' + JSON.stringify(destination));
+            // console.log('*** debugging active, origin: ' + JSON.stringify(origin) + '  ' + JSON.stringify(destination));
 
             options = Object.assign({}, {mode: this.state.travelMode}, {mode: this.props.travelMode}, options.constructor == Object ? options : {});
 
-            console.log('options ok');
+            // console.log('options ok');
 
             return this.directionsCoder.fetch(origin, destination, options).then(routes => {
 
                 console.log('routes = ' + routes + '  routes.length = ' + routes.length);
 
+                // https://maps.google.com/maps/api/directions/json?origin=46.9545171%2C31.9889207&destination=46.960744%2C31.9778278&key=AIzaSyA7rncWjnX4Ugd5OoCnMNNT2D3KfDlgp6Y&mode=driving
+
                 if(routes.length) {
 
                     const route = routes[0];
+
+                    console.log('--> route steps = ' + route.steps.length);
+
+                    if (route.steps.length >= 40) {
+                        Toast.showWithGravity('This route might be too complex to display.', Toast.LONG, Toast.CENTER);
+                    }
 
                     this.props.onRouteChange && this.props.onRouteChange(route);
 

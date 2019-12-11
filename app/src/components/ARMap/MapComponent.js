@@ -16,6 +16,8 @@ import {startY, windowH} from "../../styles";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import MapViewNavigation, { NavigationModes, TravelModeBox, TravelIcons, Geocoder, TravelModes, DirectionsListView, ManeuverView, DurationDistanceView } from 'react-native-maps-navigation';
 
+import Toast from 'react-native-simple-toast';
+
 const getMethods = (obj) => {
   let properties = new Set();
   let currentObj = obj;
@@ -342,12 +344,19 @@ export default class MapComponent extends Component {
             mode: this.state.travelMode
           }
       ).then(route => {
+
+        console.log('goDisplayRoute: everythings fine');
         this.startedNavigation = true;
         EventsBridge.startedNavigation = true;
         this.goNavigateRoute();
 
         // console.log(route);
-      }).catch(err => {console.log('Shit happened while displaying the route'); });
+      }).catch(err => {
+        console.log('Shit happened while displaying the route');
+
+        Toast.showWithGravity('Failed to display the route.', Toast.LONG, Toast.CENTER);
+
+      });
 
     } else {
 
@@ -384,10 +393,17 @@ export default class MapComponent extends Component {
             mode: this.state.travelMode
           }
       ).then(route => {
+
+        console.log('goNavigateRoute: everythings fine');
+
+        //!2019Granddevs2016
         this.setState({
           isNavigation: true
         })
-      }).catch(err => {console.log('shit happened while executing goNavigateRoute');});
+      }).catch(err => {
+        console.log('shit happened while executing goNavigateRoute');
+        Toast.showWithGravity('Failed to display the route.', Toast.LONG, Toast.CENTER);
+      });
 
     } else {
 
