@@ -151,8 +151,8 @@ export default class MapComponent extends Component {
                       map={() => this.refMap}
                       apiKey={GOOGLE_MAPS_APIKEY}
                       simulate={false}
-                      onRouteChange={route => this.setState({route})}
-                      onStepChange={(step, nextStep) => this.setState({step, nextStep})}
+                      onRouteChange={route => {this.setState({route}); EventsBridge.currentRoute = route;}}
+                      onStepChange={(step, nextStep) => {this.setState({step, nextStep}); EventsBridge.currentRouteStep = nextStep;}}
                       displayDebugMarkers={true}
                       onNavigationStarted={route => console.log("Navigation Started")}
                       onNavigationCompleted={route => this.setState({isNavigation: false})}
@@ -343,6 +343,7 @@ export default class MapComponent extends Component {
           }
       ).then(route => {
         this.startedNavigation = true;
+        EventsBridge.startedNavigation = true;
         this.goNavigateRoute();
 
         // console.log(route);
@@ -420,6 +421,7 @@ export default class MapComponent extends Component {
 
     this.refNavigation.clearRoute();
     this.startedNavigation = false;
+    EventsBridge.startedNavigation = false;
 
     this.refNavigation.setPosition({
       ...this.state.currentPosition,

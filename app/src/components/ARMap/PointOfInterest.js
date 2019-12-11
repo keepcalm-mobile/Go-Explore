@@ -107,7 +107,14 @@ export default class PointOfInterest extends React.Component {
     }
 
     onClickHandler(position, source) {
-        console.log('CLICKED (disabled for test): ' + this.state.title);
+
+        // if (EventsBridge.arSceneCurrentNavigationItem)
+        // {
+        //     // test, prevent multiple clicks
+        //     return;
+        // }
+
+        console.log('CLICKED: ' + this.state.title);
 
         // return;
 
@@ -129,13 +136,6 @@ export default class PointOfInterest extends React.Component {
             return;
         }
 
-        //TODO: pass the whole POI, so it can be added to the list to other pois
-
-        this.state.onClickHandler({
-            title: this.state.title,
-            coords: this.state.coords
-        });
-
         // {latitude: 85, longitude: -135.0005567, distance: 0, position: [0,10,0], title: 'NORTH poi', rating: 0, votes: '0', type: 'custom'},
         EventsBridge.arSceneCurrentNavigationItem = {
             latitude: this.state.coords.latitude,
@@ -147,6 +147,15 @@ export default class PointOfInterest extends React.Component {
             votes: this.state.votes,
             kind: this.state.kind
         };
+
+        //TODO: pass the whole POI, so it can be added to the list to other pois
+
+        this.state.onClickHandler({
+            title: this.state.title,
+            coords: this.state.coords
+        });
+
+        
     }
 
     onOfferClickHandler(index = 0) {
@@ -162,6 +171,20 @@ export default class PointOfInterest extends React.Component {
 
         console.log('Clicked on an offer');
         console.log(offers[index]);
+
+        //TEST a LOCAL PLACE:
+        // 46.9505569,31.9944943
+
+        EventsBridge.arSceneCurrentNavigationItem = {
+            latitude: this.state.coords.latitude,
+            longitude: this.state.coords.longitude,
+            distance: 0,
+            position: this.state.position,
+            title: this.state.title,
+            rating: this.state.rating,
+            votes: this.state.votes,
+            kind: this.state.kind
+        };
 
         EventsBridge.arComponent.setPopupData({
             coords: this.state.coords,

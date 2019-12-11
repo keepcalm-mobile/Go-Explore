@@ -92,11 +92,11 @@ class PagesMng extends React.Component<Props> {
 
                 if (PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)) {
 
-                    ToastAndroid.showWithGravity(
-                        'GPS granted After request',
-                        ToastAndroid.SHORT,
-                        ToastAndroid.CENTER,
-                    );
+                    // ToastAndroid.showWithGravity(
+                    //     'GPS granted After request',
+                    //     ToastAndroid.SHORT,
+                    //     ToastAndroid.CENTER,
+                    // );
 
                     this.setState({gpsGranted: true});
                     this.getCurrentPosition();

@@ -363,6 +363,14 @@ export default class MapViewNavigation extends Component {
 
         if (this.props.onRouteChange)
             this.props.onRouteChange(false);
+
+        this.props.map().animateCamera({
+            //center: {latitude: this.state.position.latitude, longitude: this.state.position.longitude},
+            //pitch: 5,
+            heading: 0,
+            altitude: 0, // for ios only
+            //zoom: this.state.navigationZoomLevel // gmaps only
+        }, false);
     }
 
     /**

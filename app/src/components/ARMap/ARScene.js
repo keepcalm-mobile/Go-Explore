@@ -746,7 +746,7 @@ class ARScene extends React.Component {
                             POIs[k].position.y = height;
                             height += inc;
 
-                            if (typeof (this.PoiRefs[k]) !== 'undefined' && typeof (this.PoiRefs[k].getOffers) !== 'undefined' && typeof (this.PoiRefs[k].getOffers()) !== 'undefined') {
+                            if (this.PoiRefs[k] && this.PoiRefs[k].getOffers && this.PoiRefs[k].getOffers() && this.PoiRefs[k].getOffers().length) {
                                 // if (this.PoiRefs[k].isMinimized() === false)
                                     height += 1 * this.PoiRefs[k].getOffers().length; // TODO: Set offer height somewhere
                                 // else

@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 
 import RNSimpleCompass from 'react-native-simple-compass';
+import MapViewNavigation, { NavigationModes, TravelModeBox, TravelIcons, Geocoder, TravelModes, DirectionsListView, ManeuverView, DurationDistanceView } from 'react-native-maps-navigation';
 
 import ARComponent from '../../../../../../src/components/ARMap/ARComponent';
 import MapComponent from '../../../../../../src/components/ARMap/MapComponent';
@@ -60,6 +61,9 @@ class ArgReal extends ScrollablePage {
 
         this.fetchedPOIs = false;
         EventsBridge.arComponent = this;
+
+        // this.getExitNavigation = this.getExitNavigation.bind(this);
+        // this.exitNavigation = this.exitNavigation.bind(this);
     }
 
     reset = () => {
@@ -74,9 +78,12 @@ class ArgReal extends ScrollablePage {
         if (this.mapComponent) {
             this.mapComponent.exitNavigation();
         }
+
+        EventsBridge.startedNavigation = false;
     }
 
     onBackPress = () => {
+        this.reset();
         this.props.navigation.goBack();
     };
 
@@ -107,6 +114,15 @@ class ArgReal extends ScrollablePage {
         const degree_update_rate = 3; // Number of degrees changed before the callback is triggered
         RNSimpleCompass.start(degree_update_rate, (degree) => {
             this.setState({heading: degree});
+
+            if (this.mapComponent && this.mapComponent !== null) {
+                this.mapComponent.setHeading(this.state.heading);
+            }
+
+            if (EventsBridge.arScene !== null) {
+                EventsBridge.arScene.setHeading(this.state.heading);
+            }
+
             // this.mapComponent.setHeading(degree);
 
             // if (EventsBridge.arScene !== null) {
@@ -119,16 +135,16 @@ class ArgReal extends ScrollablePage {
             // }
         });
 
-        this._interval = setInterval(() => {
-            if (this.mapComponent && this.mapComponent !== null) {
-                this.mapComponent.setHeading(this.state.heading);
-            }
+        // this._interval = setInterval(() => {
+        //     if (this.mapComponent && this.mapComponent !== null) {
+        //         this.mapComponent.setHeading(this.state.heading);
+        //     }
 
-            if (EventsBridge.arScene !== null) {
-                EventsBridge.arScene.setHeading(this.state.heading);
-            }
-            // console.log('updating heading to ' + this.state.heading);
-        }, 1000);
+        //     if (EventsBridge.arScene !== null) {
+        //         EventsBridge.arScene.setHeading(this.state.heading);
+        //     }
+        //     // console.log('updating heading to ' + this.state.heading);
+        // }, 1000);
     }
 
     setPosition(position) {
@@ -275,6 +291,44 @@ class ArgReal extends ScrollablePage {
         }, 1000);
     }
 
+    getExitNavigation() {
+        if (EventsBridge.startedNavigation === false) {
+          return null;
+        }
+    
+        return (
+            <TouchableOpacity style={{position: 'absolute', left: 0, top: 50, width: '100%', height: 70, backgroundColor: '#6b67ff', justifyContent: 'center'}}
+                              onPress={this.exitNavigation.bind(this)}>
+              <Text style={{fontSize: 16, color: '#ffffff', textAlign: 'center'}}>Exit navigation</Text>
+            </TouchableOpacity>
+        );
+    }
+
+    getManeuverView() {
+        // return null;
+    
+        if (EventsBridge.currentRoute === false) {
+          return null;
+        }
+    
+        return (
+            <View style={{
+              position: 'absolute',
+              width: '100%',
+              top: 120,
+              //left: 0,
+              //backgroundColor: '#aa66dd'
+            }}>
+              <ManeuverView
+                  step={EventsBridge.currentRouteStep}
+                  //fontFamily={AppFonts.light}
+                  //fontFamilyBold={AppFonts.bold}
+                  arrowColor={'#cccccc'}
+              />
+            </View>
+        );
+      }
+
     getARComponent() {
         if (launchAR === false){
             return null;
@@ -392,6 +446,9 @@ class ArgReal extends ScrollablePage {
                     location={this.state.currentPosition}
                     ref={ref => this.mapComponent = ref}
                 />
+
+                {this.getManeuverView()}
+                {this.getExitNavigation()}
 
                 {/* <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
 
