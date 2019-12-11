@@ -44,6 +44,9 @@ const LONGITUDE = CURRENT_TEST_LOCATION[1];
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.01;
 
+var ORIGIN = {latitude: LATITUDE, longitude: LONGITUDE};
+var DESTINATION = false;
+
 // const AppFonts = {
 //   regular: 'Akkurat-Normal',
 //   bold: 'Akkurat-Bold',
@@ -69,8 +72,8 @@ export default class MapComponent extends Component {
       },
       heading: props.heading ? props.heading : -1,
       currentPosition: EventsBridge.currentLocation,
-      origin: {latitude: EventsBridge.currentLocation.latitude, longitude: EventsBridge.currentLocation.longitude},
-      destination: false,
+      // origin: {latitude: EventsBridge.currentLocation.latitude, longitude: EventsBridge.currentLocation.longitude},
+      // destination: false,
       navigationMode: NavigationModes.IDLE,
       travelMode: TravelModes.DRIVING,
       isNavigation: false,
@@ -81,6 +84,10 @@ export default class MapComponent extends Component {
     //this.navigationTimer = null;
     this.startedNavigation = false;
     this.isPositionSet = false;
+
+    this.navigateTo = this.navigateTo.bind(this);
+    this.goDisplayRoute = this.goDisplayRoute.bind(this);
+    this.goNavigateRoute = this.goNavigateRoute.bind(this);
   }
 
   componentDidMount() {
@@ -136,8 +143,8 @@ export default class MapComponent extends Component {
                     }}
                 >
                   <MapViewNavigation
-                      origin={this.state.origin}
-                      destination={this.state.destination}
+                      origin={ORIGIN}
+                      destination={DESTINATION}
                       navigationMode={this.state.navigationMode}
                       travelMode={this.state.travelMode}
                       ref={ref => this.refNavigation = ref}
@@ -214,42 +221,52 @@ export default class MapComponent extends Component {
     //   // this.navigationTimer = null;
     // }
 
-    console.log('NAVIGATING TO: ' + JSON.stringify(target));
+    // let properTarget = {
+    //   latitude: EventsBridge.arSceneCurrentNavigationItem.latitude,
+    //   longitude: EventsBridge.arSceneCurrentNavigationItem.longitude
+    // };
+
+    ORIGIN = {latitude: EventsBridge.currentLocation.latitude, longitude: EventsBridge.currentLocation.longitude};
+
+    DESTINATION = {
+      latitude: EventsBridge.arSceneCurrentNavigationItem.latitude,
+      longitude: EventsBridge.arSceneCurrentNavigationItem.longitude
+    };
+    // console.log('NAVIGATING TO: ' + JSON.stringify(DESTINATION));
 
     this.isPositionSet = false;
-    this.startedNavigation = true;
-    this.setState({destination: target});
+    // this.startedNavigation = true;
+    // this.setState({destination: properTarget});
 
-    //setTimeout(() => {
-      this.goDisplayRoute();
+    // console.log('--- Destination: ' + JSON.stringify(DESTINATION));
 
-    //}, 1000);
+    this.goDisplayRoute();
 
-    console.log('Destination = : ' + JSON.stringify(target));
+    return;
 
-     setTimeout(() => {
+    //  setTimeout(() => {
 
-       if (this.startedNavigation === true) {
-         this.goNavigateRoute();
-       }
+    //    if (this.startedNavigation === true) {
+    //      this.goNavigateRoute();
+    //    }
 
 
-       // if (this.state.navigationMode !== NavigationModes.IDLE) {
-       //   // clearInterval(this.navigationTimer);
-       //   // this.navigationTimer = null;
-       // }
+    //    // if (this.state.navigationMode !== NavigationModes.IDLE) {
+    //    //   // clearInterval(this.navigationTimer);
+    //    //   // this.navigationTimer = null;
+    //    // }
 
-      //  this.navigationTimer = setInterval(() => {
-      //   this.refNavigation.setPosition({
-      //     ...this.state.currentPosition,
-      //     heading: this.state.heading,
-      //   });
-      //
-      //   this.refNavigation.allowUpdate(false); // TODO: add ability to update the map?
-      //
-      // }, 500);
+    //   //  this.navigationTimer = setInterval(() => {
+    //   //   this.refNavigation.setPosition({
+    //   //     ...this.state.currentPosition,
+    //   //     heading: this.state.heading,
+    //   //   });
+    //   //
+    //   //   this.refNavigation.allowUpdate(false); // TODO: add ability to update the map?
+    //   //
+    //   // }, 500);
 
-    }, 2000);
+    // }, 1500);
   }
 
   getCurrentPositionMarker() {
@@ -280,6 +297,8 @@ export default class MapComponent extends Component {
   }
 
   getManeuverView() {
+    return null;
+
     if (this.state.route === false) {
       return null;
     }
@@ -317,14 +336,17 @@ export default class MapComponent extends Component {
     if(USE_METHODS) {
 
       this.refNavigation.displayRoute(
-          this.state.origin,
-          this.state.destination,
+          ORIGIN,
+          DESTINATION,
           {
             mode: this.state.travelMode
           }
       ).then(route => {
-        console.log(route);
-      });
+        this.startedNavigation = true;
+        this.goNavigateRoute();
+
+        // console.log(route);
+      }).catch(err => {console.log('Shit happened while displaying the route'); });
 
     } else {
 
@@ -341,6 +363,7 @@ export default class MapComponent extends Component {
   goNavigateRoute()
   {
 
+    console.log('goNavigateRoute === ' + DESTINATION);
     //ToastAndroid.showWithGravity('Navigation...', ToastAndroid.LONG, ToastAndroid.CENTER);
 
     if (!this.validateRoute()) return;
@@ -354,8 +377,8 @@ export default class MapComponent extends Component {
     if (USE_METHODS) {
 
       this.refNavigation.navigateRoute(
-          this.state.origin,
-          this.state.destination,
+          ORIGIN,
+          DESTINATION,
           {
             mode: this.state.travelMode
           }
@@ -363,7 +386,7 @@ export default class MapComponent extends Component {
         this.setState({
           isNavigation: true
         })
-      });
+      }).catch(err => {console.log('shit happened while executing goNavigateRoute');});
 
     } else {
 

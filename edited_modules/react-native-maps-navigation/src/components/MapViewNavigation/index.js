@@ -375,19 +375,23 @@ export default class MapViewNavigation extends Component {
     {
         //return; //  helped
 
+        console.log('UPDATIONG ROUTE');
+
         try {
             origin = origin || this.props.origin;
             destination = destination || this.props.destination;
             navigationMode = navigationMode || this.props.navigationMode;
 
+            console.log('navigationMode = ' + navigationMode);
+
             switch(navigationMode) {
                 case NavigationModes.ROUTE:
                     console.log('*** ROUTE', origin, destination);
-                    this.displayRoute(origin, destination);
+                    this.displayRoute(origin, destination).catch(err => {console.log('Failed to update the route: ROUTE');});
                     break;
 
                 case NavigationModes.NAVIGATION:
-                    this.navigateRoute(origin, destination);
+                    this.navigateRoute(origin, destination).catch(err => {console.log('Failed to update the route: NAVIGATION');});
                     break;
             }
         }
@@ -408,6 +412,9 @@ export default class MapViewNavigation extends Component {
      */
     prepareRoute(origin, destination, options = false, testForRoute = false) // testForRoute was false
     {
+
+        console.log('prepare route start...');
+
         if(testForRoute && this.state.route) {
             return Promise.resolve(this.state.route);
         }
@@ -418,7 +425,11 @@ export default class MapViewNavigation extends Component {
 
             options = Object.assign({}, {mode: this.state.travelMode}, {mode: this.props.travelMode}, options.constructor == Object ? options : {});
 
+            console.log('options ok');
+
             return this.directionsCoder.fetch(origin, destination, options).then(routes => {
+
+                console.log('routes = ' + routes + '  routes.length = ' + routes.length);
 
                 if(routes.length) {
 
@@ -435,7 +446,7 @@ export default class MapViewNavigation extends Component {
 
                 return Promise.reject();
 
-            });
+            }).catch(err => { console.log('Failed to navigate: ' + err); return Promise.reject(); });
 
         }
         catch (e) {
@@ -459,9 +470,11 @@ export default class MapViewNavigation extends Component {
     {
         //return Promise.reject(); // helped
 
+        // console.log('DISPLAYING route: ');
+
         return this.prepareRoute(origin, destination, options).then(route => {
 
-            //console.log('prepared route: ' + JSON.stringify(origin) + '   ' + destination);
+            // console.log('prepared route: ' + JSON.stringify(origin) + '   ' + destination);
 
             const region = {
                 //...route.bounds.center,
@@ -478,7 +491,7 @@ export default class MapViewNavigation extends Component {
             }
 
             return Promise.resolve(route);
-        });
+        }).catch(err => {console.log('Failed to prepare the route'); return Promise.reject();});
     }
 
     /**
@@ -490,6 +503,9 @@ export default class MapViewNavigation extends Component {
      */
     navigateRoute(origin, destination, options = false)
     {
+
+        // console.log('---- navigate route, dest = '+destination);
+
         return this.prepareRoute(origin, destination, options, true).then(route => {
 
             let region = {

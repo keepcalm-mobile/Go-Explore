@@ -51,12 +51,16 @@ export default class Directions {
 
         const url = `https://maps.google.com/maps/api/directions/json?${toQueryParams(queryParams)}`;
 
+        // console.log('URL = ' + url);
+
         return fetch(url)
             .then(response => response.json())
             .then(json => {
 
+                // console.log('got json');
+
                 if (json.status !== 'OK') {
-                    const errorMessage = json.error_message || 'Unknown error';
+                    const errorMessage = json.error_message || 'GOT Unknown error';
                     return Promise.reject(errorMessage);
                 }
 
