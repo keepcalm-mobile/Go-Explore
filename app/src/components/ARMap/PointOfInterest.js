@@ -52,6 +52,7 @@ export default class PointOfInterest extends React.Component {
             coords: props.coords ? props.coords : {latitude: 0, longitude: 0},
             icon: props.icon ? props.icon : 'coffee',
             scale: [1,1,1],
+            containerScale: [0,0,0], // hidden unless positioned
             offers: props.offers ? props.offers : undefined,
             onClickHandler: props.onClickHandler ? props.onClickHandler : (poi) => {}
         };
@@ -96,9 +97,15 @@ export default class PointOfInterest extends React.Component {
 
         //this.setState({title: 'y = ' + position[1]});
 
+        let conScale = [1,1,1];
+
+        if (this.state.kind !== 'poi') {
+            conScale = [0.75,0.75,0.75];
+        }
+
         // if there are multiple POIs in the same direction, they are ordered by Y and it will be > 0
         // if (position[1] > 0 || this.state.kind != 'poi') {
-            this.setState({scale: [0.75,0.75,0.75]});
+            this.setState({scale: [0.75,0.75,0.75], containerScale: conScale});
         // }
     }
 
@@ -442,7 +449,7 @@ export default class PointOfInterest extends React.Component {
                 // let textToShow = this.state.offerEndDate.substring(6, 19);
 
                 return (
-                    <ViroNode position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
+                    <ViroNode scale={this.state.containerScale} position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
                               animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
                                   onFinish: this.onOfferAnimationFinished}}>
                         <ViroImage  height={1} width={5} source={frame} />
@@ -456,7 +463,7 @@ export default class PointOfInterest extends React.Component {
             }
 
             return (
-                <ViroNode position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
+                <ViroNode scale={this.state.containerScale} position={pos} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}
                           animation={{name : this.state.objectAnimation, run : this.state.runObjectAnimation, loop : false,
                               onFinish: this.onOfferAnimationFinished}}>
                     <ViroImage height={1} width={5} source={frame} />
@@ -542,7 +549,7 @@ export default class PointOfInterest extends React.Component {
         let textToShow = this.state.title.substring(0, 13);
 
         return (
-            <ViroNode>
+            <ViroNode scale={this.state.containerScale}>
                 <ViroNode position={this.state.position} scale={this.state.scale} transformBehaviors={["billboard"]} ref={(ref) => { this.node = ref }} onClick={this.onClickHandler}>
                     <ViroImage  height={1} width={5} source={frame} />
                     <ViroImage position={[-1.9,0,0.25]}  height={0.8} width={0.8} source={currentIcon} />

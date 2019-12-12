@@ -48,11 +48,17 @@ class Main extends React.Component {
             }
         } else if (prevRouteName === screens.VirtualReality) {
             this._map.showMap(true);
-            // if (EventsBridge.arComponent != null)
-            //     EventsBridge.arComponent.reset();
+            // EventsBridge.updateLocation(EventsBridge.currentLocation);
 
-            // if (EventsBridge.arScene != null)
-            //     EventsBridge.arScene.reset();
+            // setTimeout(() => {
+                // console.log('UPDATING GPS-----> ' + JSON.stringify(EventsBridge.currentLocation));
+                // EventsBridge.getCurrentPosition();
+
+                // if (EventsBridge.mapRef) {
+                //     EventsBridge.mapRef.setLocation(EventsBridge.currentLocation);
+                // }
+
+            // }, 2000);
         }
     }
 

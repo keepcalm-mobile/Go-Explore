@@ -450,7 +450,8 @@ export default class MapViewNavigation extends Component {
                     console.log('--> route steps = ' + route.steps.length);
 
                     if (route.steps.length >= 40) {
-                        Toast.showWithGravity('This route might be too complex to display.', Toast.LONG, Toast.CENTER);
+                        // Toast.showWithGravity('This route might be too complex to display.', Toast.LONG, Toast.CENTER);
+                        return Promise.reject();
                     }
 
                     this.props.onRouteChange && this.props.onRouteChange(route);

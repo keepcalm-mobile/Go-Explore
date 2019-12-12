@@ -51,6 +51,8 @@ class Map extends React.Component<Props> {
             showMap: true, // to render map or not
         };
 
+        this.setLocation = this.setLocation.bind(this);
+
         this._val = { x:0, y:0 };
         this.state.pan.addListener((value) => {
             this._val = value;
@@ -99,7 +101,6 @@ class Map extends React.Component<Props> {
             this.isOpen = true;
         }
 
-        // console.log('CUR LOCATION:');
         // console.log(JSON.stringify(EventsBridge.currentLocation));
     }
 
@@ -133,6 +134,13 @@ class Map extends React.Component<Props> {
 
     showMap = (show) => {
       this.setState({showMap: show});
+
+      if (show) {
+        console.log('SETTING MAP LOCATION...');
+        setTimeout(() => {
+            this.setLocation(EventsBridge.currentLocation);
+        }, 300);
+      }
     };
 
     /****

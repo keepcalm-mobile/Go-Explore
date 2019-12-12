@@ -93,6 +93,8 @@ class ArgReal extends ScrollablePage {
         this.setPosition(EventsBridge.currentLocation);
 
         this.trackDeviceHeading();
+
+        this.setPopupData(null);
     }
 
     exitNavigation() {
