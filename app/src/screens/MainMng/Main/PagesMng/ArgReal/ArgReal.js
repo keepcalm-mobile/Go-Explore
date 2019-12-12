@@ -62,21 +62,41 @@ class ArgReal extends ScrollablePage {
         this.fetchedPOIs = false;
         EventsBridge.arComponent = this;
 
+        this.reset = this.reset.bind(this);
+        this.initAR = this.initAR.bind(this);
         // this.getExitNavigation = this.getExitNavigation.bind(this);
         // this.exitNavigation = this.exitNavigation.bind(this);
     }
 
     reset = () => {
-        clearInterval(this._interval);
-        this._interval = null;
+        // if (this._interval)
+        //     clearInterval(this._interval);
+        // this._interval = null;
         RNSimpleCompass.stop();
         this.exitNavigation();
         launchAR = false;
-        this.setState({heading: 0, readyForAR: false, arRunning: false});
+        EventsBridge.groupingARIteration = 0;
+        this.setState({heading: 0, readyForAR: false, arRunning: false}); // causes a crash
+
+        POIs = [];
+        OFFERS = [];
+
+        console.log('AR reset');
+
     };
 
+    // called from Main
+    initAR = () => {
+        console.log('AR init...');
+
+        EventsBridge.arScreenRef = this;
+        this.setPosition(EventsBridge.currentLocation);
+
+        this.trackDeviceHeading();
+    }
+
     exitNavigation() {
-        if (this.mapComponent) {
+        if (this.mapComponent && EventsBridge.startedNavigation) {
             this.mapComponent.exitNavigation();
         }
 
@@ -84,8 +104,8 @@ class ArgReal extends ScrollablePage {
     }
 
     onBackPress = () => {
-        this.reset();
-        this.props.navigation.goBack();
+        // this.reset();
+        // this.props.navigation.goBack();
     };
 
     componentDidMount() {
@@ -93,22 +113,14 @@ class ArgReal extends ScrollablePage {
 
         console.log('AR mounted');
 
-        EventsBridge.arScreenRef = this;
-        this.setPosition(EventsBridge.currentLocation);
-        // this.fetchData();
-
-        this.trackDeviceHeading();
-
-        // console.log('Map ref = ' + EventsBridge.mapRef);
-        // EventsBridge.mapRef.showMap(false);
-
-        //
-        //this.startAR();
+        this.initAR(); // called once here, cuz component mounts only once
     }
 
     componentWillUnmount() {
         super.componentWillUnmount();
         this.reset();
+
+        console.log('AR - componentWillUnmount');
     }
 
     trackDeviceHeading() {
@@ -201,7 +213,7 @@ class ArgReal extends ScrollablePage {
                   POIs = responseJson.places;
                   OFFERS = responseJson.offers;
                   launchAR = true;
-                  // this.startAR();
+                  this.startAR();
 
                   console.log("Loaded places, arScene = " + EventsBridge.arScene);
 
@@ -227,7 +239,7 @@ class ArgReal extends ScrollablePage {
                   //         console.log(respJson);
                   //     });
                   // }
-            }).catch(err => {console.log('Failed to load places');});
+            }).catch(err => {console.log('Failed to load places'); this.startAR(); });
     }
 
     getTutorial() {
@@ -250,11 +262,15 @@ class ArgReal extends ScrollablePage {
     }
 
     getWaitingOverlay() {
-        if (EventsBridge.groupingARIteration < 2) {
+        if (/*EventsBridge.groupingARIteration < 2 && */launchAR === false) {
             let tutorialText = 'Please, slowly move your phone around\nStarting AR...';
 
             if (launchAR === false) {
                 tutorialText = 'Loading places data...';
+            }
+
+            if (EventsBridge.isARPaused) {
+                tutorialText = 'AR is paused';
             }
 
             return (
@@ -266,7 +282,7 @@ class ArgReal extends ScrollablePage {
                     backgroundColor: '#000000',
                     justifyContent: 'center'
                 }}>
-                    <Text style={{fontSize: 22, color: '#dddddd', textAlign: 'center'}}>{tutorialText}</Text>
+                    <Text style={{fontSize: 21, color: '#dddddd', textAlign: 'center'}}>{tutorialText}</Text>
                 </View>
             );
         }
@@ -362,7 +378,7 @@ class ArgReal extends ScrollablePage {
     onTrackingLostHandler() {
 
         console.log('on tracking lost main script');
-        this.setState({readyForAR: false, arRunning: false});
+        // this.setState({readyForAR: false, arRunning: false});
 
     }
 
@@ -441,6 +457,7 @@ class ArgReal extends ScrollablePage {
             <View style={{flex: 1}}>
 
                 {this.getARComponent()}
+                {this.getWaitingOverlay()}
 
                 <MapComponent
                     heading={this.state.heading}
@@ -458,7 +475,7 @@ class ArgReal extends ScrollablePage {
 
                 </View> */}
 
-                {this.getWaitingOverlay()}
+                
                 {this.getSpecialOfferPopup()}
 
             </View>

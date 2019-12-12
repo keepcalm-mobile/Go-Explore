@@ -26,6 +26,9 @@ class Main extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+
+        console.log('--componentDidUpdate');
+
         const prevRouteName = getCurrentRoute(prevProps.navigation.state);
         const newRouteName = getCurrentRoute(this.props.navigation.state);
 
@@ -36,19 +39,27 @@ class Main extends React.Component {
 
             if (EventsBridge.arComponent != null) {
                 // EventsBridge.arComponent.exitNavigation();
-                EventsBridge.arComponent.startAR();
+
+                if (EventsBridge.isARPaused === false) {
+                    EventsBridge.arComponent.initAR();
+                } else {
+                    EventsBridge.arComponent.reset();
+                }
             }
         } else if (prevRouteName === screens.VirtualReality) {
             this._map.showMap(true);
-            if (EventsBridge.arComponent != null)
-                EventsBridge.arComponent.reset();
+            // if (EventsBridge.arComponent != null)
+            //     EventsBridge.arComponent.reset();
 
-            if (EventsBridge.arScene != null)
-                EventsBridge.arScene.reset();
+            // if (EventsBridge.arScene != null)
+            //     EventsBridge.arScene.reset();
         }
     }
 
     minimize = () => {
+
+        console.log('--MINIMIZE');
+
         this.state.scale.flattenOffset();
         this.state.pan.flattenOffset();
         Animated.parallel([
@@ -65,9 +76,14 @@ class Main extends React.Component {
         ]).start();
 
         this.setState({cntEnable: 'none'});
+
+        EventsBridge.isARPaused = true;
     };
 
     maximize = () => {
+
+        console.log('--MINIMIZE');
+
         this.state.scale.flattenOffset();
         this.state.pan.flattenOffset();
         Animated.parallel([
@@ -84,6 +100,8 @@ class Main extends React.Component {
         ]).start();
 
         this.setState({cntEnable: 'auto'});
+
+        EventsBridge.isARPaused = false;
     };
 
     setTransformOffset = (iValue) => {
@@ -102,6 +120,13 @@ class Main extends React.Component {
 
     openPage = (iTabId, iJump = false) => {
         console.log('OPEN PAGE!! : ' + iTabId);
+
+        if (iTabId !== screens.VirtualReality) {
+            if (EventsBridge.arScreenRef) {
+                EventsBridge.arScreenRef.reset();
+            }
+        }
+
         if (iTabId === screens.DataPages && !iJump){
             this._panel.show();
         } else {
@@ -120,8 +145,22 @@ class Main extends React.Component {
     };
 
     hideAllPanels = () => {
-        this._map.hide();
-        this._panel.hide();
+
+        const routeName = getCurrentRoute(this.props.navigation.state);
+        let backFromAR = (routeName === screens.VirtualReality);
+        console.log('Hide all panels, route = ' + routeName);
+
+        if (backFromAR) {
+            if (EventsBridge.arScreenRef) {
+                EventsBridge.arScreenRef.reset();
+            }
+        }
+        else {
+            this._map.hide();
+            this._panel.hide();
+        }
+
+        return backFromAR;
     };
 
     render() {

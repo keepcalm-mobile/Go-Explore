@@ -64,7 +64,7 @@ export default class PointOfInterest extends React.Component {
 
         this.showTest = true;
 
-        console.log(this.state.title + "  ----  " + this.state.kind);
+        // console.log(this.state.title + "  ----  " + this.state.kind);
     }
 
     isMinimized() {

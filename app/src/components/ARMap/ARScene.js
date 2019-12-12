@@ -420,7 +420,7 @@ class ARScene extends React.Component {
     onPOIClickedHandler(poi) {
 
         console.log('AR Scene CLICKED: ' + poi.title);
-        console.log('AR Scene state = ' + this.state);
+        // console.log('AR Scene state = ' + this.state);
 
         this.state.onClickHandler(poi);
     }
@@ -471,7 +471,7 @@ class ARScene extends React.Component {
             this.setState({poisReady: false, trackingLostCount: trackingLostCount});
 
             if (trackingLostCount >= 2) {
-                this.reset();
+                // this.reset();
                 this.state.onTrackingLost();
             }
         }

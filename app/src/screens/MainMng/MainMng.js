@@ -97,8 +97,17 @@ class MainMng extends React.Component{
     };
 
     onBackPress = () => {
-        this.main.hideAllPanels();
-        this.props.navigation.goBack(getCurrentRoute(this.props.navigation.state, 'key'));
+
+        console.log('BACK PRESSED');
+
+        let prevScreenIsAR = this.main.hideAllPanels();
+
+        if (!prevScreenIsAR) {
+            this.props.navigation.goBack(getCurrentRoute(this.props.navigation.state, 'key'));
+        } else {
+            console.log('BACK FROM AR');
+            this.props.navigation.goBack(getCurrentRoute(this.props.navigation.state, 'key'));
+        }
     };
 
     onMainRef = iMain => {

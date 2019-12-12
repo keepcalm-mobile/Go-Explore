@@ -67,10 +67,11 @@ class PagesMng extends React.Component<Props> {
 
     componentDidMount() {
         if (Platform.OS === 'android' && this.state.gpsGranted !== true) {
-            this.requestPermission();
+            //this.requestPermission();
+            EventsBridge.requestPermission();
         }
         else {
-            this.getCurrentPosition();
+            EventsBridge.getCurrentPosition();
         }
     }
 
