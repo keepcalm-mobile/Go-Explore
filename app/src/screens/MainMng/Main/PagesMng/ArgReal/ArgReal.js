@@ -64,6 +64,7 @@ class ArgReal extends ScrollablePage {
 
         this.reset = this.reset.bind(this);
         this.initAR = this.initAR.bind(this);
+        this.getTutorial = this.getTutorial.bind(this);
         // this.getExitNavigation = this.getExitNavigation.bind(this);
         // this.exitNavigation = this.exitNavigation.bind(this);
     }
@@ -245,17 +246,17 @@ class ArgReal extends ScrollablePage {
     }
 
     getTutorial() {
-        if (this.state.readyForAR === false) {
-            let tutorialText = 'Place your phone vertically\nLook around until it\'s zero, meaning you\'re heading North\nHeading = ' + this.state.heading;
-
-            tutorialText = 'Please keep your phone stable\nStarting AR...\nHeading =' + this.state.heading;
-
-            if (this.state.arRunning === false) {
-                tutorialText = 'Probably it was too dark or too bright, try pointing your camera to better lighting conditions and hit the button\nHeading =' + this.state.heading;
-            }
+        if (this.state.readyForAR === false && this.state.arRunning === false && EventsBridge.isARPaused === false) {
+            let tutorialText = 'Probably it was too dark or too bright, try pointing your camera to better lighting conditions and hit the button.';
 
             return (
+                <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
+
                     <Text style={{fontSize: 22, color: '#dddddd', textAlign: 'center'}}>{tutorialText}</Text>
+                    <ButtonOrange title={'Launch AR'} onPress={this.initAR} style={{marginTop: 15}} />
+
+                </View>
+                    
             );
         }
         else {
@@ -380,7 +381,7 @@ class ArgReal extends ScrollablePage {
     onTrackingLostHandler() {
 
         console.log('on tracking lost main script');
-        // this.setState({readyForAR: false, arRunning: false});
+        this.setState({readyForAR: false, arRunning: false});
 
     }
 
@@ -469,14 +470,7 @@ class ArgReal extends ScrollablePage {
 
                 {this.getManeuverView()}
                 {this.getExitNavigation()}
-
-                {/* <View style={{width: '100%', position: 'absolute', top: 0, paddingTop: 100, paddingRight: 50, paddingLeft: 50}}>
-
-                    {this.getTutorial()}
-                    {this.getARButton()}
-
-                </View> */}
-
+                {this.getTutorial()}
                 
                 {this.getSpecialOfferPopup()}
 
