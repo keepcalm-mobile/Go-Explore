@@ -1225,7 +1225,7 @@
 			baseConfigurationReference = A9FC82E311990CEB312B0537 /* Pods-goExploreApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = YYJ9R9AM94;
 				ENABLE_BITCODE = NO;
@@ -1235,7 +1235,7 @@
 				);
 				INFOPLIST_FILE = goExploreApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1252,7 +1252,7 @@
 			baseConfigurationReference = 5022D9235E8F30D138473046 /* Pods-goExploreApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = YYJ9R9AM94;
 				ENABLE_BITCODE = NO;
@@ -1262,7 +1262,7 @@
 				);
 				INFOPLIST_FILE = goExploreApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
