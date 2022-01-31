@@ -202,7 +202,7 @@ class ArgReal extends ScrollablePage {
 
         //TODO: send a request to receive the list of new POIs, save current poi active in navigation and add it to the received list
         console.log("Sending a request to receive new POIs...");
-        let GMAPS_KEY = "AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA";
+        let GMAPS_KEY = "***************************************";
 
             let requestQuery = "https://goexploreapi.azure-api.net/testmobile/getnearme?cat=attractions&latitude=25.3846118&longitude=51.5228745&subscription-key=bbc34cdbc2df4e09b177542c6da3fb35";
             let geocodingQuery = "https://maps.googleapis.com/maps/api/geocode/json?key="+GMAPS_KEY+"&address=";
