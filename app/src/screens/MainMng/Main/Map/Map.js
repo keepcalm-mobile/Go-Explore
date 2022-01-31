@@ -14,7 +14,7 @@ import EventsBridge from '../../../../utils/EventsBridge';
 
 const mapTopY = -Math.round(windowH * 0.8);
 
-const GOOGLE_MAPS_APIKEY = 'AIzaSyAfGgE2PLIlFX_TcMMnW0p75_q29o1U2hA'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
+const GOOGLE_MAPS_APIKEY = '***************************************'; // TODO: Change it to a proper key, currently it is only for testing (In AndroidManifest.xml too)
 
 const LATITUDE = 25.2864106;
 const LONGITUDE = 51.5271888;
